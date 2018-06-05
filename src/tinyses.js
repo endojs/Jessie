@@ -1,7 +1,7 @@
 // Options: --free-variable-checker --require --validate
 /*global module require*/
 
-// See https://github.com/erights/quasiParserGenerator/blob/master/test/tinyses/tinyses.md
+// See https://github.com/Agoric/TinySES/blob/master/README.md
 // for documentation of the TinySES grammar defined here.
 
 module.exports = (function() {
