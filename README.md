@@ -5,6 +5,7 @@
 
 TinySES is a small safe ocap subset of JavaScript that
    * can easily run within a JavaScript system,
+   * can be safely linked with adversarial SES code,
    * can be easily implemented for standalone use,
    * can be transmitted as lightweight safe mobile code,
    * is amenable to a range of static analysis,
