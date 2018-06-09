@@ -97,7 +97,7 @@ compiler or interpreter in a wide range of other languages.
 ## TinySES as a syntactic subset of SES
 
 
-The [TinySES grammar](tinyses.js) is based on the [ECMAScript 2017
+The [TinySES grammar](src/tinyses.js) is based on the [ECMAScript 2017
 Grammar
 Summary](http://www.ecma-international.org/ecma-262/8.0/#sec-grammar-summary).
 Unlike the Ecma page, lexical productions in the TinySES grammar are
