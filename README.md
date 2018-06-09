@@ -38,6 +38,8 @@ modification, but not an *internal modification*.)  A smaller language
 which is not absorbed may often be *transpiled* (<T) into the larger
 language by source-to-source transformation.
 
+The following diagram illustrates the subsetting relationship between various subsets of EcmaScript. The vertical dimension represents syntactic subsetting by static means. The horizontal dimension represents semantic subsetting by either static or dynamic means. The word cloud in the contour between each language and its subset represents the features of the containing language omitted by that next smaller subset. The relative sizes of the feature names reflects only its explanatory significance.
+
 ![EcmaScript subsets Venn diagram](docs/ecmascript-subsets-solid.png "EcmaScript
  subsets Venn diagram")
 
@@ -52,7 +54,7 @@ absorbed subset of full EcmaScript by definition. (Historically, the
 strict sublanguage started by approximating a static and dynamic
 subset of the sloppy language, excluding `with` and throwing errors
 where the sloppy language would instead silently act insane. But this
-approximation has too many exceptions to remain useful.)
+approximation has too many exceptions to remain useful.) Unlike full EcmaScript, ES-strict is statically scoped, ES-strict functions are strongly encapsulated, and implicit access to the global object is severely restricted.
 
 **SES** is a dynamic, absorbed subset of ES-strict. SES
 statically accepts all programs accepted by ES-strict and can run
