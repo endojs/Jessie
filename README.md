@@ -284,11 +284,9 @@ The [`import` expression]() and [`import.meta` expression]()
 proposals, by themselves, introduce a security hole in JavaScript. The
 [Realm proposal](https://github.com/tc39/proposal-realms)'s traps
 provide the mechanism needed to plug these holes. On those platforms
-provide either of the security breaking features but not providing
-native support for Realms, Realms, Frozen Realms, and SES can only be
-shimmed at the price of a full parse. This is the current situation on
-some browsers.
-
+that provide either of the security breaking features but do not provide
+native support for Realms, safety can only be shimmed at the price of 
+a full parse. This is the current situation on some browsers.
 
 Beyond subsetting EcmaScript, the TinySES grammar also includes the
 infix bang `!` (eventually) operator from Dr.SES. We hope infix bang
@@ -321,7 +319,7 @@ that this does not produce a hazard for the TinySES code.
 
 Once EcmaScript supports BigInts, SES and TinySES will as well. Thus
 we need to add the bitwise operators back into the TinySES grammar. In
-fact, these was no good reason to omit them.
+fact, there was no good reason to omit them.
 
 Should we add do/while back into the TinySES grammar? There's no
 hazard here. We omitted it just for minimalism.
