@@ -259,8 +259,8 @@ module.exports = (function() {
     / "continue" ";"                                       ${(_,_2) => ['continue']}
     / "throw" expr ";"                                     ${(_,e,_2) => ['throw',e]};
 
-    # No generator or "class" declaration.
-    # No async function yet, but might get added.
+    # No "class" declaration.
+    # No generator, async, or async iterator function.
     declaration ::=
       declOp binding ** "," ";"                            ${(op,decls,_) => [op, decls]}
     / functionDecl;
