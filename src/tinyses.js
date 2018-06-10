@@ -68,7 +68,6 @@ module.exports = (function() {
 
     # Unused by TinySES but enumerated here, in order to omit them
     # from the IDENT token.
-    # TODO: Should add "new" back into TinySES.
     RESERVED_KEYWORD ::=
       "class"
     / "delete" / "do"
