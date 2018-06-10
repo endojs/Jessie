@@ -151,7 +151,6 @@ module.exports = (function() {
     # No "new", "super", or MetaProperty. Without "new" we don't need
     # separate MemberExpr and CallExpr productions.
     # Recognize b!foo(x) as distinct from calling b!foo post-parse.
-    # TODO: Should add "new" back into TinySES.
     postExpr ::= primaryExpr postOp*                       ${binary};
     postOp ::=
       "." identName                                        ${(_,id) => ['get',id]}
