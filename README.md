@@ -333,8 +333,7 @@ differently on different platforms, or even as script vs module code
 on the same platform.
 
 
-## "Typed TinySES" and "Typed Tiny Dr.SES"
-
+### "Typed TinySES" and "Typed Tiny Dr.SES"
 
 Can TinySES be soundly statically typed with a structural type system?
 What about trademarks/nominal-types and auditors? How would this map
