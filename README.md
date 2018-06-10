@@ -38,32 +38,55 @@ modification, but not an *internal modification*.)  A smaller language
 which is not absorbed may often be *transpiled* (<T) into the larger
 language by source-to-source transformation.
 
-The following diagram illustrates the subsetting relationship between various subsets of EcmaScript. The vertical dimension represents syntactic subsetting by static means. The horizontal dimension represents semantic subsetting by either static or dynamic means. The word cloud in the contour between each language and its subset represents the features of the containing language omitted by that next smaller subset. The relative sizes of the feature names reflects only its explanatory significance.
+The following diagram illustrates the subsetting relationship between
+various subsets of EcmaScript. The vertical dimension represents
+syntactic subsetting by static means. The horizontal dimension
+represents semantic subsetting by either static or dynamic means. The
+word cloud in the contour between each language and its subset
+represents the features of the containing language omitted by that
+next smaller subset. The relative sizes of feature names reflects only
+their explanatory significance.
 
-![EcmaScript subsets Venn diagram](docs/ecmascript-subsets-solid.png "EcmaScript
- subsets Venn diagram")
+![EcmaScript subsets Venn diagram](docs/ecmascript-subsets-solid.png
+ "EcmaScript subsets Venn diagram")
 
 <p align="center"><b>JSON</b> &lt;SA <b>TinySES</b> &lt;SA <b>SES</b>
   &lt;DA <b>ES-strict</b> &lt;SDA <b>EcmaScript</b></p>
 
 Each step needs to be explained. Proceeding from larger to smaller.
 
-**EcmaScript** code may be in either strict mode or sloppy
-mode, so the **ES-strict** sublanguage is a static, dynamic,
-absorbed subset of full EcmaScript by definition. (Historically, the
-strict sublanguage started by approximating a static and dynamic
-subset of the sloppy language, excluding `with` and throwing errors
-where the sloppy language would instead silently act insane. But this
-approximation has too many exceptions to remain useful.) Unlike full EcmaScript, ES-strict is statically scoped, ES-strict functions are strongly encapsulated, and implicit access to the global object is severely restricted.
+**EcmaScript** code may be in either strict mode or sloppy mode, so
+the **ES-strict** sublanguage is a static, dynamic, absorbed subset of
+full EcmaScript by definition. (Historically, the strict sublanguage
+started by approximating a static and dynamic subset of the sloppy
+language, excluding `with` and throwing errors where the sloppy
+language would instead silently act insane. But this approximation has
+too many exceptions to remain useful.) EcmaScript classes and modules
+are implicitly strict, so the vestigial sloppy language is best seen
+as an EcmaScript 3 compatibility mode.
 
-**SES** is a dynamic, absorbed subset of ES-strict. SES
-statically accepts all programs accepted by ES-strict and can run
-on ES-strict without internal modification.  SES freezes the
-primordials, so mutations that would succeed in ES-strict might
-instead throw a `TypeError` in SES.  SES restricts the global scope,
-so attempts to dereference a variable named, for example, `document`
-that might succeed in ES-strict on a given host might instead
-throw a `ReferenceError` within a SES environment run on that host.
+Unlike full EcmaScript, ES-strict is statically scoped, ES-strict
+functions are strongly encapsulated, and implicit access to the global
+object is severely restricted. These are necessary steps towards ocap
+safety, but are not sufficient by themselves.
+
+**SES**, or *Secure EcmaScript*, is a dynamic, absorbed subset of
+ES-strict. To achieve this subsetting, SES builds on [Frozen
+Realms](https://github.com/tc39/proposal-frozen-realms/) which builds
+on [Realms](https://github.com/tc39/proposal-realms/). (Shims at
+[Realms
+shim](https://github.com/tc39/proposal-realms/tree/master/shim) and
+[Frozen Realms
+shim](https://github.com/tc39/proposal-frozen-realms/tree/master/shim).)
+SES statically accepts all programs accepted by ES-strict and can run
+on ES-strict without internal modification.
+
+Via Realms, SES removes ambient authority from the global scope, so
+attempts to dereference a variable named, for example, `document` that
+might succeed in ES-strict on a given host might instead throw a
+`ReferenceError` within a SES environment run on that host. Via Frozen
+Realms, SES freezes the primordials, so mutations that would succeed
+in ES-strict might instead throw a `TypeError` in SES.
 
 SES is the largest subset of ES-strict which is still an ocap
 language. Its purpose is to run as many conventional EcmaScript
@@ -82,7 +105,7 @@ imposes static validation rules that are easy to check locally,
 to ensure that objects are tamper-proofed before they escape.
 Statically valid TinySES programs enable sound static analysis of
 useful safety properties. A SES IDE can thereby flag which code
-is in TinySES and provide static analysis info for that code.
+is in TinySES and provide sound static analysis info for that code.
 
 Used outside of SES, TinySES can be implemented (compiled or
 interpreted) easily and with high confidence.
@@ -115,11 +138,12 @@ never consume anything. It should fail if the whitespace to skip
 over contains a newline. TODO: Currently this placeholder always
 succeeds.
 
-TinySES omits the `RegularExpressionLiteral`, instead including the
+TinySES omits the `RegularExpressionLiteral`. Some TinySES
+environments may instead include the
 [`RegExp.make`](https://github.com/mikesamuel/regexp-make-js) template
 string tag. By omitting `RegularExpressionLiteral` and automatic
-semicolon insertion, our lexical grammar avoids the context dependencies
-that are most difficult for JavaScript lexers.
+semicolon insertion, our lexical grammar avoids the context
+dependencies that are most difficult for JavaScript lexers.
 
 In TinySES, all reserved words are unconditionally reserved. By
 contrast, in EcmaScript and SES, `yield`, `await`, `implements`, etc
@@ -160,23 +184,20 @@ they are effectively keywords in strict code.  TinySES does include
 ellipses `...` both as rest and spread, which provides the useful
 functionality of `arguments` with less confusion.
 
-TinySES omits computed property names. TinySES has syntax for
-mutating only number-named properties, which include floating
-point, `NaN`, `Infinity`, and `-Infinity`. TinySES omits syntactic
-support for mutating other property names. TinySES has syntax for
-computed lookup and mutation of number-named properties, but not
-other property names. However, TinySES programs may still perform
-these operations using the `Reflect` API.
+TinySES omits computed property names. TinySES has syntax for mutating
+only number-named properties, which include integers, floating point,
+`NaN`, `Infinity`, and `-Infinity`. TinySES omits syntactic support
+for mutating other property names. TinySES has syntax for computed
+lookup and mutation of number-named properties, but not other property
+names. However, some TinySES environments may provide access to the
+`Reflect` API, enabling explicit reflective property access.
 
 TinySES includes arrow functions, `function` functions, concise method
-syntax, and accessor (getter / setter) syntax.  TinySES may eventually
-grow to accept generators, async functions, async iterator functions,
-all in their `function`, arrow, and method form. TinySES does not
-currently support symbols or general computed property access, but may
-grow to as well, once we understand its impact on static
-analyzability. However, TinySES will continue to omit `this` as the
-central defining difference between SES and TinySES. TinySES will
-therefore continue to omit `class` as well.
+syntax, and accessor (getter / setter) syntax.  TinySES omits
+generators, async functions, async iterator functions in all their
+syntactic forms: `function` functions, arrow functions, and concise
+method syntax. TinySES omits symbols and general computed property
+access.
 
 The TinySES `switch` statement grammar requires that all cases be
 terminated by a terminating statement, `return`, `break`, `continue`
@@ -187,7 +208,7 @@ All control-flow branches, including `switch` cases, must be blocks,
 not naked statements, avoiding hazards and giving each branch its own
 lexical block scope.
 
-TinySES has no for/in statememt, and so does not inherit the
+TinySES has no for/in statement, and so does not inherit the
 non-determinism regarding property modification during for/in
 enumeration. Everything useful about for/in is still available by
 reflection but without this non-determinism issue.
@@ -199,30 +220,38 @@ reflection but without this non-determinism issue.
 The following static restrictions are specified as if they occur
 post-parsing, by analyzing the abstract syntax tree.
 
-The EcmaScript-strict `eval` can be used for both direct and indirect
-eval. SES and TinySES as absorbed into EcmaScript has no direct eval,
-although we may support it based on future versions that support
-Realms and Frozen Realms. So that this future repair of TinySES does
-not break old programs, TinySES excludes expressions in the syntactic
-form of direct eval.
+The ES-strict `eval` can be used for both direct and indirect
+eval. SES and TinySES both support indirect eval. The Realms and
+Frozen Realms shims cannot support direct eval. Direct eval can only
+be supported once platforms provide native support for Realms. Till
+then, to avoid confusion, SES and TinySES implementations will omit
+the syntax of direct eval. However, this syntax remains part of SES as
+specified. TinySES omits direct eval by design.
 
 SES can create objects whose API surface is not tamper-proofed and
 expose these to clients. This is easy to do accidentally, and
 hazardous when it happens. Even if the object was designed to be
 directly mutated by its clients, any client may freeze the object,
-preventing other clients from directly mutating it. To help the
-TinySES programmer avoid these hazards, all objects made by literal
-expressions (object literals, array literals, the many forms of
-function literals) must be tamper-proofed with `def` before it can
-escape from its static context of origin. Thus, direct mutation can
-still be used to prepare an object for release. Use of `def` then
-marks the object as being ready for use by its clients.
+preventing other clients from directly mutating it. Further, no purely
+static type system for EcmaScript can be both useful and sound in the
+face of the pervasive possibility of reflective property mutation.
+
+To enable sound static reasoning, in TinySES all objects made by
+literal expressions (object literals, array literals, the many forms
+of function literals) must be tamper-proofed with `def` before they
+can be aliased or escape from their static context of origin. Thus,
+direct property mutation can only be used to prepare an object for
+release. Use of `def` then marks the object as being ready for use by
+its clients, who are thereby unable to mutate its properties. During
+an object's initialization phase, due to the lack of aliasing, each
+mutation can be reasoned about as-if it replaces the object in place
+with a derived object holding the new property.
 
 Looking up a function in an array and calling it would naturally be
 coded as
 
 ```js
-array[i](arg)
+array[+i](arg)
 ```
 
 However, if the called function were written in SES it could use
@@ -231,7 +260,7 @@ statically rejects this call, forcing the programmer to write instead
 something like
 
 ```js
-(1,array[i])(arg)
+(1,array[+i])(arg)
 ```
 
 which is safe. However, the TinySES programmer might still encounter
@@ -243,24 +272,29 @@ record.field(args)
 ```
 
 This would still give the SES function access to the record as its
-`this` argument.
+`this` argument. We need sound static type checking to prevent this
+case while allowing this syntax in general.
 
 
 ## Caveats
 
-### Aniticipating future EcmaScript changes
+### Anticipating future EcmaScript changes
 
-ES-strict does not include the `import` expression or the
-`import.meta` expression. Once ES20xx-strict does include these, SES
-must either exclude these by becoming a static subset, or it must
-restrict their semantics, require transpilation if embedded into the
-full language. Either embedding requires a full parse.
+The [`import` expression]() and [`import.meta` expression]()
+proposals, by themselves, introduce a security hole in JavaScript. The
+[Realm proposal](https://github.com/tc39/proposal-realms)'s traps
+provide the mechanism needed to plug these holes. On those platforms
+provide either of the security breaking features but not providing
+native support for Realms, Realms, Frozen Realms, and SES can only be
+shimmed at the price of a full parse. This is the current situation on
+some browsers.
 
-Beyond subsetting EcmaScript, this grammar also includes the infix bang
-`!` (eventually) operator from Dr.SES. We hope infix bang `!` will
-become part of the standard EcmaScript grammar. But until then, infix
-bang `!` trivially transpiles into calls to the Dr.SES extended
-promise API. See [Distributed Electronic Rights in
+
+Beyond subsetting EcmaScript, the TinySES grammar also includes the
+infix bang `!` (eventually) operator from Dr.SES. We hope infix bang
+`!` will become part of the standard EcmaScript grammar. But until
+then, infix bang `!` trivially transpiles into calls to the Dr.SES
+extended promise API. See [Distributed Electronic Rights in
 JavaScript](http://research.google.com/pubs/pub40673.html).
 
 We will add BigInt to TinySES, even though it will only be in
@@ -279,34 +313,29 @@ are detectable by means other than errors.
 Arrow functions and concise methods have a [[Call]] behavior and no
 [[Construct]] behavior, preventing them from being called as a
 constructor, such as with `new`. However, TinySES `function` functions
-can be called in this manner. Without `this` it is hard to see how
+can be called by SES code with `new`. Without `this` it is hard to see how
 this could confuse a `function` function, but I am not yet confident
-that this does not produce a hazard.
+that this does not produce a hazard for the TinySES code.
 
-### Possible changes to current TinySES definition
+### Possible changes to the current TinySES definition
 
-We need to add `new` back into the TinySES grammar.
-
-Should we add the bitwise operators back into the TinySES grammar?
-There's little hazard here.
+Once EcmaScript supports BigInts, SES and TinySES will as well. Thus
+we need to add the bitwise operators back into the TinySES grammar. In
+fact, these was no good reason to omit them.
 
 Should we add do/while back into the TinySES grammar? There's no
 hazard here. We omitted it just for minimalism.
 
-We will probably add `async`/`await` functions back in. There is some
-hazard here, but probably less that trying to do without them. Can
-better static analysis help avoid stateful hazards at `await` points?
-
-What about generators or async iterators?
-
-TODO: We must ensure that code containing "&lt;!--" or "--&gt;" that
-could be parsed as an html comment according to the EcmaScript
-Appendix B grammar is instead statically rejected. Otherwise the same
-source may parse differently on different platforms, or even as script
-vs module code on the same platform.
+TODO: We must ensure that code containing ``"<!--"`` or ``"-->"`` that
+could be parsed as an [html comment according to the EcmaScript
+Appendix B
+grammar](http://www.ecma-international.org/ecma-262/8.0/#sec-html-like-comments)
+is instead statically rejected. Otherwise the same source may parse
+differently on different platforms, or even as script vs module code
+on the same platform.
 
 
-## Open Questions
+## "Typed TinySES" and "Typed Tiny Dr.SES"
 
 
 Can TinySES be soundly statically typed with a structural type system?
@@ -314,12 +343,14 @@ What about trademarks/nominal-types and auditors? How would this map
 to the wasm type system which does tag checking but no deep
 parameterized type checking?  If static checking makes sense, should
 we add some of TypeScript's or Flow's syntax for optional type
-declarations?  Given function types (parameter and return value), can
-the rest generally be inferred?  How would these types play with the
-Cap'n Proto types? What about subtyping? What about contravariance?
+declarations? Let's call such a variant ***Typed TinySES***. Given
+declared function types for parameters and return values, can Typed
+TinySES infer the rest?  How would these types play with the Cap'n
+Proto types? What about subtyping? What about contravariance?
 
-It is possible that **Typed TinySES** can be soundly statically typed
-without implicit runtime checks, but we have not yet investigated
+It is plausible that Typed TinySES can be soundly statically typed
+without implicit runtime checks, but we have not yet verified
 this. The distributed messages of **Tiny Dr.SES** are likely to be
-typed, hopefully using the same type system, so that **Typed Tiny
-Dr.SES** will be straightforward.
+typed, to be explicit about what API dependencies are exposed as
+protocols on the wire. These two purposes should use the same type
+system, so that **Typed Tiny Dr.SES** can be simpler.
