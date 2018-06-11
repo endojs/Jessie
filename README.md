@@ -271,6 +271,10 @@ an object's initialization phase, due to the lack of aliasing, each
 mutation can be reasoned about as-if it replaces the object in place
 with a derived object holding the new property.
 
+
+### Avoid this-capture Hazards
+
+
 Looking up a function in an array and calling it would naturally be
 coded as
 
