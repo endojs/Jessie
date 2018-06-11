@@ -221,13 +221,18 @@ The Realms and Frozen Realms shims are designed to accommodate
 initialize-time vetted shim code, to customize the realm's primordials
 prior to freezing. A component of SES is just such a shim, which
 customizes the primordials to better support defensive
-programming. Even when the primordials are frozen, the instances of
+programming. In Frozen Realms by themselves, even when the primordials
+are frozen, the instances of
 `Set`, `Map`, `WeakSet`, `WeakMap`, and `Promise` have mutable own
 properties. This mutability of their API surface does not help them
 serve the purpose of these abstractions, but does present opportunity
 for one piece of code to confuse another. The SES shim wraps these
-constructors to freeze their instance before returning it.
+constructors to freeze their instances before returning them.
 
+For `Promise` we also need to ensure that new promises made by promise
+operations are similarly frozen. We use the `constructor` species mechanism
+when we can. Otherwise, we also wrap the relevant `Promise` methods to
+return frozen promises.
 
 ## Additional Static Restrictions of TinySES
 
