@@ -217,7 +217,7 @@ reflection but without this non-determinism issue.
 ## Additional Dynamic Restrictions of SES
 
 
-The Realms and Frozen Realms shim are designed to accommodate
+The Realms and Frozen Realms shims are designed to accommodate
 initialize-time vetted shim code, to customize the realm's primordials
 prior to freezing. A component of SES is just such a shim, which
 customizes the primordials to better support defensive
