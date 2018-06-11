@@ -214,11 +214,28 @@ enumeration. Everything useful about for/in is still available by
 reflection but without this non-determinism issue.
 
 
+## Additional Dynamic Restrictions of SES
+
+
+The Realms and Frozen Realms shim are designed to accommodate
+initialize-time vetted shim code, to customize the realm's primordials
+prior to freezing. A component of SES is just such a shim, which
+customizes the primordials to better support defensive
+programming. Even when the primordials are frozen, the instances of
+`Set`, `Map`, `WeakSet`, `WeakMap`, and `Promise` have mutable own
+properties. This mutability of their API surface does not help them
+serve the purpose of these abstractions, but does present opportunity
+for one piece of code to confuse another. The SES shim wraps these
+constructors to freeze their instance before returning it.
+
+
 ## Additional Static Restrictions of TinySES
 
 
 The following static restrictions are specified as if they occur
 post-parsing, by analyzing the abstract syntax tree.
+
+### No Direct eval
 
 The ES-strict `eval` can be used for both direct and indirect
 eval. SES and TinySES both support indirect eval. The Realms and
@@ -227,6 +244,8 @@ be supported once platforms provide native support for Realms. Till
 then, to avoid confusion, SES and TinySES implementations will omit
 the syntax of direct eval. However, this syntax remains part of SES as
 specified. TinySES omits direct eval by design.
+
+### Must freeze API Surface Before Use.
 
 SES can create objects whose API surface is not tamper-proofed and
 expose these to clients. This is easy to do accidentally, and
@@ -276,7 +295,89 @@ This would still give the SES function access to the record as its
 case while allowing this syntax in general.
 
 
+### No Global Objects or Compartments
+
+
+SES code can access the per-compartment global object using the same
+syntax that JavaScript has always used to access the per-realm global
+object --- a top-level `this`. Like E, TinySES code has no notion of a
+global object, and so is statically prohibited from naming it. Thus,
+TinySES also does not need SES's notion of "compartment".
+
+
+### Limited Global Scope
+
+
+All the SES whitelisted globals are safe to provide to TinySES
+code. However, we omit some of these from the definition of TinySES,
+like `RegExp` and `Date`, to reduce the effort needed to implement a
+standalone TinySES on a non-JavaScript host. Thus, we prohibit TinySES
+code from naming these freely. However, when TinySES is linked with
+SES, the SES code can always pass these in, enabling the TinySES code
+to use them.
+
+
+### No Top-level Mutability
+
+
+In JavaScript, module instances can have top-level mutable
+state. Thus, if modules A and B both `import` or `require` module C, A
+and B can communicate with each other via C. Thus, each SES
+compartment needs its own loader. By contrast, TinySES has no
+loader. Instead, TinySES modules have no top-level mutability, and all
+exported values must be tamper-proofed. [A Capability-Based Module
+System for Authority
+Control](http://reports-archive.adm.cs.cmu.edu/anon/home/anon/isr2017/CMU-ISR-17-106R.pdf),
+explains why such module instances safe to share between mutually
+suspicious objects. Indeed, TinySES modules can be seen as a immutable
+extension of a Frozen Realm's immutable primordials.
+
+
 ## Caveats
+
+
+### SES and TinySES Libraries
+
+
+SES will bundle some convenience libraries to support ocap programming
+patterns, such as a [membrane
+library](https://github.com/ajvincent/es-membrane). However, since
+these are additions to standard JavaScript, they are not shown on the
+subsetting diagram.
+
+Although `Proxy` itself is not available in TinySES, the membrane
+library built on `Proxy` and `WeakMap` is. A standalone TinySES
+implementation can directly provide a membrane library adequate for
+standalone TinySES use without implementing `Proxy`.
+
+
+### TinySES Admits Mutable Arrays.
+
+
+For the goals of SES, we cannot freeze arrays before releasing them to
+clients. Such freezing would break tremendous amounts of legacy code
+unnecessarily. Handing out mutable arrays, and mutating them, violates
+no ocap principles. However, TinySES cannot soundly statically type
+objects whose properties can be arbitrarily mutated and
+overridden. Thus, TinySES can only type arrays that are made directly
+by TinySES array literals, or those that TinySES code tamper-proofs
+immediately when obtaining a fresh array from builtins like
+`Array.prototype.map`. In the following legal TinySES code
+
+```js
+def(def([x, y, x]).map(f))
+```
+
+if TinySES knows that the array produced by `.map` is pristine and
+fresh, it could soundly consider it a typed frozen object with no
+extraneous or overriding properties. However, keeping track of such
+freshness requires more type mechanism than we wish to require for
+TinySES.
+
+Without the outer `def` the code above is still valid TinySES
+code. But TinySES would consider the resulting value to be as untyped
+as values received from SES code.
+
 
 ### Anticipating future EcmaScript changes
 
@@ -285,7 +386,7 @@ proposals, by themselves, introduce a security hole in JavaScript. The
 [Realm proposal](https://github.com/tc39/proposal-realms)'s traps
 provide the mechanism needed to plug these holes. On those platforms
 that provide either of the security breaking features but do not provide
-native support for Realms, safety can only be shimmed at the price of 
+native support for Realms, safety can only be shimmed at the price of
 a full parse. This is the current situation on some browsers.
 
 Beyond subsetting EcmaScript, the TinySES grammar also includes the
