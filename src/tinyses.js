@@ -282,11 +282,11 @@ module.exports = (function() {
 
 
     functionExpr ::=
-      "function" defVar? "(" params ")" block          ${(_,n,_2,p,_3,b) => ['functionExpr',n,p,b]};
+      "function" defVar? "(" param ** "," ")" block          ${(_,n,_2,p,_3,b) => ['functionExpr',n,p,b]};
     functionDecl ::=
-      "function" defVar "(" params ")" block           ${(_,n,_2,p,_3,b) => ['functionDecl',n,p,b]};
+      "function" defVar "(" param ** "," ")" block           ${(_,n,_2,p,_3,b) => ['functionDecl',n,p,b]};
     methodDef
-      propName "(" params ")" block                    ${(n,_,p,_2,b) => ['methodDef',n,p,b]}
+      propName "(" param ** "," ")" block                    ${(n,_,p,_2,b) => ['methodDef',n,p,b]}
     / identGet propName "(" ")" block                  ${(_,n,_2,_3,b) => ['getter',n,[],b]}
     / identSet propName "(" param ")" block            ${(_,n,_2,p,_3,b) => ['setter',n,[p],b]};
 
