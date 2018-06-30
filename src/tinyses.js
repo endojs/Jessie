@@ -222,9 +222,9 @@ module.exports = (function() {
     # The expr form must come after the block form, to make proper use
     # of PEG prioritized choice.
     arrow ::=
-      params NO_NEWLINE "=>" block                         ${(ps,_,_2,b) => ['arrow',ps,b]}
-    / params NO_NEWLINE "=>" expr                          ${(ps,_,_2,e) => ['lambda',ps,e]};
-    params ::=
+      arrowParams NO_NEWLINE "=>" block                         ${(ps,_,_2,b) => ['arrow',ps,b]}
+    / arrowParams NO_NEWLINE "=>" expr                          ${(ps,_,_2,e) => ['lambda',ps,e]};
+    arrowParams ::=
       IDENT                                                ${id => [['def',id]]}
     / "(" param ** "," ")"                                 ${(_,ps,_2) => ps};
 
