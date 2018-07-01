@@ -50,7 +50,7 @@ their explanatory significance.
 ![EcmaScript subsets Venn diagram](docs/ecmascript-subsets-solid.png
  "EcmaScript subsets Venn diagram")
 
-<p align="center"><b>JSON</b> &lt;SA <b>TinySES</b> &lt;SA <b>SES</b>
+<p align="center"><b>JSON</b> &lt;SA <b>JS-E</b> &lt;DT <b>TinySES</b> &lt;SA <b>SES</b>
   &lt;DA <b>ES-strict</b> &lt;SDA <b>EcmaScript</b></p>
 
 Each step needs to be explained. Proceeding from larger to smaller.
@@ -107,17 +107,22 @@ Statically valid TinySES programs enable sound static analysis of
 useful safety properties. A SES IDE can thereby flag which code
 is in TinySES and provide sound static analysis info for that code.
 
-Used outside of SES, TinySES can be implemented (compiled or
-interpreted) easily and with high confidence.
+**JS-E** is a dynamic subset of TinySES. JS-E has the same syntax as
+TinySES but omits much of JavaScripts semantics and standard
+library. Whereas TinySES is meant to be linked with SES code, JS-E is
+meant to be used in a standalone implementation.
 
 **JSON** is a static, absorbed subset of all the languages above.
 
-JSON is popular as a safe interchange format for data. Each
-language that accepts JSON has its own JSON parser and "compiler" for
-turning parsed data into data that this language can process. SES and
-TinySES are interchange formats for data and behavior, i.e., safe
-mobile code. TinySES is small enough to be easily implemented as a
-compiler or interpreter in a wide range of other languages.
+JSON is a universal safe interchange format for data. Each language
+that accepts JSON has its own JSON parser and "compiler" for turning
+parsed data into data that this language can process. Likewise, JS-E
+is intended as a universal safe interchange formats for data and
+behavior, i.e., safe mobile code. JS-E is small enough to be easily
+implemented as a compiler or interpreter in a wide range of other
+languages. Of course, JavaScript and all its subsets are already
+universal safe interchange formats for data and behavior, but only for
+hosts with a full implementation of JavaScript.
 
 
 ## TinySES as a syntactic subset of SES
