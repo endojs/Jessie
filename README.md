@@ -1,9 +1,17 @@
-# TinySES
+# Jessie, simple universal safe mobile code
 
 ***This document is an early draft. Comments appreciated! Thanks.***
 
+Today, JavaScript is the pervasive representation for (somewhat) safe
+mobile code. For another representation to achieve universality
+quickly, it must be a subset of JavaScript, and so run everywhere
+JavaScript runs.
 
-TinySES is a small safe ocap subset of JavaScript that
+Whereas JSON is a simple universal representation for safe mobile
+data, Jessie is a simple universal representation for safe mobile data
+and behavior.
+
+Jessie is a small safe ocap subset of JavaScript that
    * can easily run within a JavaScript system,
    * can be safely linked with adversarial SES code,
    * can be easily implemented for standalone use,
@@ -11,13 +19,21 @@ TinySES is a small safe ocap subset of JavaScript that
    * is amenable to a range of static analysis,
    * omits most of JavaScript's bad parts,
    * non-experts can use to write non-trivial non-exploitable
-     smart contracts,
+     smart contracts.
+
 
 ##  Subsetting EcmaScript
 
 Unless stated otherwise, all references to EcmaScript refer to
 [EcmaScript 2017](http://www.ecma-international.org/ecma-262/8.0/),
 the eighth edition of the standard.
+
+![EcmaScript subsets Venn diagram](docs/jessie.png
+ "EcmaScript subsets Venn diagram")
+
+<p align="center"><b>JSON</b> &lt;SA <b>Jessie</b> &lt;DT
+  <b>TinySES</b> &lt;SA <b>SES</b> &lt;DA <b>ES-strict</b> &lt;SDA
+  <b>EcmaScript</b></p>
 
 One language is a *static subset* (<S) of another if every program
 statically accepted by the smaller language is also statically
@@ -38,7 +54,7 @@ modification, but not an *internal modification*.)  A smaller language
 which is not absorbed may often be *transpiled* (<T) into the larger
 language by source-to-source transformation.
 
-The following diagram illustrates the subsetting relationship between
+The diagram above illustrates the subsetting relationship between
 various subsets of EcmaScript. The vertical dimension represents
 syntactic subsetting by static means. The horizontal dimension
 represents semantic subsetting by either static or dynamic means. The
@@ -46,12 +62,6 @@ word cloud in the contour between each language and its subset
 represents the features of the containing language omitted by that
 next smaller subset. The relative sizes of feature names reflects only
 their explanatory significance.
-
-![EcmaScript subsets Venn diagram](docs/jessie.png
- "EcmaScript subsets Venn diagram")
-
-<p align="center"><b>JSON</b> &lt;SA <b>JS-E</b> &lt;DT <b>TinySES</b> &lt;SA <b>SES</b>
-  &lt;DA <b>ES-strict</b> &lt;SDA <b>EcmaScript</b></p>
 
 Each step needs to be explained. Proceeding from larger to smaller.
 
@@ -100,62 +110,76 @@ object must be tamper-proofed before exposure to clients.
 TinySES is not intended to run legacy code or code that uses
 inheritance.
 
-The TinySES grammar is simple enough to be parsed easily. TinySES
-imposes static validation rules that are easy to check locally,
-to ensure that objects are tamper-proofed before they escape.
-Statically valid TinySES programs enable sound static analysis of
-useful safety properties. A SES IDE can thereby flag which code
-is in TinySES and provide sound static analysis info for that code.
+**Jessie** is a dynamic subset of TinySES. Jessie and TinySES have the
+same grammar and static restrictions. The Jessie/TinySES grammar is
+simple enough to be parsed easily. Jessie/TinySES imposes static
+validation rules that are easy to check locally, to ensure that
+objects are tamper-proofed before they escape.  Statically valid
+Jessie/TinySES programs enable sound static analysis of useful safety
+properties. A SES IDE can thereby flag which code is withiin the
+Jessie static restrictions and provide sound static analysis info for
+that code.
 
-**JS-E** is a dynamic subset of TinySES. JS-E has the same syntax as
-TinySES but omits much of JavaScripts semantics and standard
-library. Whereas TinySES is meant to be linked with SES code, JS-E is
-meant to be used in a standalone implementation.
+The only difference between TinySES and Jessie is that correct TinySES
+programs may rely on the presence of the entire SES runtime. Correct
+Jessie programs may only rely on a minimal subset of the SES runtime
+that standalone Jessie implementations can implement for reasonable
+effort. However, correct Jessie programs also cannot rely on the
+*absence* of the rest of the SES runtime. Jessie and TinySES programs
+may be linked with programs written in SES, and thereby constrained by
+SES's ocap rules.
+
+Thus, every correct Jessie program is also a correct TinySES and SES
+program, and works unmodified within a SES environment run on a normal
+JavaScript implementation. Correct Jessie programs will also run on a
+standalone implementation of Jessie in which it is linked only with
+other Jessie code.
+
+TODO: Cite Defensive JavaScript (DJS) and ProScript, as subsets
+similar in many way to Jessie.
 
 **JSON** is a static, absorbed subset of all the languages above.
 
-JSON is a universal safe interchange format for data. Each language
-that accepts JSON has its own JSON parser and "compiler" for turning
-parsed data into data that this language can process. Likewise, JS-E
-is intended as a universal safe interchange formats for data and
-behavior, i.e., safe mobile code. JS-E is small enough to be easily
-implemented as a compiler or interpreter in a wide range of other
-languages. Of course, JavaScript and all its subsets are already
-universal safe interchange formats for data and behavior, but only for
-hosts with a full implementation of JavaScript.
+JSON achieved universal adoption because
+   * it was a subset of JavaScript, which was already pervasive
+   * it was easy to implement on any language and any platform
+
+Likewise, Jessie is small enough to be easily implemented as a
+compiler or interpreter in a wide range of other languages and
+platforms. Its character resembles a simple Scheme with records.
 
 
-## TinySES as a syntactic subset of SES
+## Jessie as a subset of SES
 
 
-The [TinySES grammar](src/tinyses.js) is based on the [ECMAScript 2017
+The [Jessie grammar](src/tinyses.js) is based on the [ECMAScript 2017
 Grammar
 Summary](http://www.ecma-international.org/ecma-262/8.0/#sec-grammar-summary).
-Unlike the Ecma page, lexical productions in the TinySES grammar are
+Unlike the Ecma page, lexical productions in the Jessie grammar are
 named in all upper case.
 
-Unlike EcmaScript and SES, TinySES has no semicolon insertion, and so
-does not need a parser able to handle that. However, TinySES must
+Unlike EcmaScript and SES, Jessie has no semicolon insertion, and so
+does not need a parser able to handle that. However, Jessie must
 impose the `NO_NEWLINE` constraints from EcmaScript, so that every
-non-rejected TinySES program is accepted as the same SES
+non-rejected Jessie program is accepted as the same SES
 program. `NO_NEWLINE` is a lexical-level placeholder that must
 never consume anything. It should fail if the whitespace to skip
 over contains a newline. TODO: Currently this placeholder always
 succeeds.
 
-TinySES omits the `RegularExpressionLiteral`. Some TinySES
+Jessie omits the `RegularExpressionLiteral`. Some Jessie
 environments may instead include the
 [`RegExp.make`](https://github.com/mikesamuel/regexp-make-js) template
 string tag. By omitting `RegularExpressionLiteral` and automatic
 semicolon insertion, our lexical grammar avoids the context
 dependencies that are most difficult for JavaScript lexers.
 
-In TinySES, all reserved words are unconditionally reserved. By
+In Jessie, all reserved words are unconditionally reserved. By
 contrast, in EcmaScript and SES, `yield`, `await`, `implements`, etc
 are conditionally reserved. Thus we avoid the need for parameterized
 lexical-level productions.
 
-TinySES omits both the `in` expression and the for/in loop,
+Jessie omits both the `in` expression and the for/in loop,
 and thus avoids the need for parameterized parser-level
 productions.
 
@@ -173,38 +197,43 @@ Outside the lexical grammar, other differences from [ECMAScript 2017
 Grammar
 Summary](http://www.ecma-international.org/ecma-262/8.0/#sec-grammar-summary)
 are noted as comments within the grammar.  The Ecma page uses a cover
-grammar to avoid unbounded lookahead. Because TinySES grammar is
+grammar to avoid unbounded lookahead. Because Jessie grammar is
 defined using a PEG (parsing expression grammar) which supports
 unbounded lookahead, we avoid the need for a cover grammar. TODO:
-Determine where difficulties arise parsing according to this TinySES
+Determine where difficulties arise parsing according to this Jessie
 grammar with bounded lookahead. If difficult, we may reintroduce a
 cover grammar.
 
-TinySES array literals omit elision (i.e., nothing between
+Jessie array literals omit elision (i.e., nothing between
 commas).
 
-TinySES treats `async`, `arguments`, and `eval` as reserved keywords.
+Jessie treats `async`, `arguments`, and `eval` as reserved keywords.
 Strict mode already limits `arguments` and `eval` to the point that
-they are effectively keywords in strict code.  TinySES does include
+they are effectively keywords in strict code.  Jessie does include
 ellipses `...` both as rest and spread, which provides the useful
 functionality of `arguments` with less confusion.
 
-TinySES omits computed property names. TinySES has syntax for mutating
+Jessie omits computed property names. Jessie has syntax for mutating
 only number-named properties, which include integers, floating point,
-`NaN`, `Infinity`, and `-Infinity`. TinySES omits syntactic support
-for mutating other property names. TinySES has syntax for computed
-lookup and mutation of number-named properties, but not other property
-names. However, some TinySES environments may provide access to the
-`Reflect` API, enabling explicit reflective property access.
+`NaN`, `Infinity`, and `-Infinity`. Jessie omits syntactic support for
+mutating other property names. Jessie has syntax for computed lookup
+and mutation of number-named properties, but not other property
+names. However, the SES environment provides access to the `Reflect`
+API, enabling explicit reflective property Jessie. TinySES programs
+may rely on `Reflect` to manipulate properties via EcmaScript property
+descriptors. Jessie programs may not rely on the presence or absence
+of `Reflect` or other elements of the SES runtime. Jessie programs
+thus cannot use property descriptors, but must assume that the code it
+is linked with may.
 
-TinySES includes arrow functions, `function` functions, concise method
-syntax, and accessor (getter / setter) syntax.  TinySES omits
+Jessie includes arrow functions, `function` functions, concise method
+syntax, and accessor (getter / setter) syntax.  Jessie omits
 generators, async functions, async iterator functions in all their
 syntactic forms: `function` functions, arrow functions, and concise
-method syntax. TinySES omits symbols and general computed property
+method syntax. Jessie omits symbols and general computed property
 access.
 
-The TinySES `switch` statement grammar requires that all cases be
+The Jessie `switch` statement grammar requires that all cases be
 terminated by a terminating statement, `return`, `break`, `continue`
 or `throw`, avoiding a perpetually annoying hazard of C-like
 languages.
@@ -213,7 +242,7 @@ All control-flow branches, including `switch` cases, must be blocks,
 not naked statements, avoiding hazards and giving each branch its own
 lexical block scope.
 
-TinySES has no for/in statement, and so does not inherit the
+Jessie has no for/in statement, and so does not inherit the
 non-determinism regarding property modification during for/in
 enumeration. Everything useful about for/in is still available by
 reflection but without this non-determinism issue.
@@ -239,7 +268,7 @@ operations are similarly frozen. We use the `constructor` species mechanism
 when we can. Otherwise, we also wrap the relevant `Promise` methods to
 return frozen promises.
 
-## Additional Static Restrictions of TinySES
+## Additional Static Restrictions of Jessie
 
 
 The following static restrictions are specified as if they occur
@@ -248,12 +277,12 @@ post-parsing, by analyzing the abstract syntax tree.
 ### No Direct eval
 
 The ES-strict `eval` can be used for both direct and indirect
-eval. SES and TinySES both support indirect eval. The Realms and
-Frozen Realms shims cannot support direct eval. Direct eval can only
-be supported once platforms provide native support for Realms. Till
-then, to avoid confusion, SES and TinySES implementations will omit
-the syntax of direct eval. However, this syntax remains part of SES as
-specified. TinySES omits direct eval by design.
+eval. SES, TinySES, and Jessie all support indirect eval. The Realms
+shim cannot support direct eval. Direct eval can only be supported
+once platforms provide native support for Realms. Till then, to avoid
+confusion, SES, TinySES, and Jessie implementations omit the syntax of
+direct eval. However, this syntax remains part of SES as
+specified. TinySES and Jessie omit direct eval by design.
 
 ### Must freeze API Surface Before Use.
 
@@ -265,7 +294,7 @@ preventing other clients from directly mutating it. Further, no purely
 static type system for EcmaScript can be both useful and sound in the
 face of the pervasive possibility of reflective property mutation.
 
-To enable sound static reasoning, in TinySES all objects made by
+To enable sound static reasoning, in Jessie all objects made by
 literal expressions (object literals, array literals, the many forms
 of function literals) must be tamper-proofed with `def` before they
 can be aliased or escape from their static context of origin. Thus,
@@ -288,7 +317,7 @@ array[+i](arg)
 ```
 
 However, if the called function were written in SES it could use
-`this` to capture the array itself. To protect against this, TinySES
+`this` to capture the array itself. To protect against this, Jessie
 statically rejects this call, forcing the programmer to write instead
 something like
 
@@ -296,7 +325,7 @@ something like
 (1,array[+i])(arg)
 ```
 
-which is safe. However, the TinySES programmer might still encounter
+which is safe. However, the Jessie programmer might still encounter
 this hazard if storing a SES function on a named field of a
 record, looking it up by name and immediately calling it:
 
@@ -314,9 +343,9 @@ case while allowing this syntax in general.
 
 SES code can access the per-compartment global object using the same
 syntax that JavaScript has always used to access the per-realm global
-object --- a top-level `this`. Like E, TinySES code has no notion of a
+object --- a top-level `this`. Like E, Jessie code has no notion of a
 global object, and so is statically prohibited from naming it. Thus,
-TinySES also does not need SES's notion of "compartment".
+Jessie does not need SES's notion of "compartment".
 
 
 ### Limited Global Scope
@@ -325,10 +354,7 @@ TinySES also does not need SES's notion of "compartment".
 All the SES whitelisted globals are safe to provide to TinySES
 code. However, we omit some of these from the definition of TinySES,
 like `RegExp` and `Date`, to reduce the effort needed to implement a
-standalone TinySES on a non-JavaScript host. Thus, we prohibit TinySES
-code from naming these freely. However, when TinySES is linked with
-SES, the SES code can always pass these in, enabling the TinySES code
-to use them.
+standalone Jessie on a non-JavaScript host.
 
 
 ### No Top-level Mutability
@@ -337,8 +363,8 @@ to use them.
 In JavaScript, module instances can have top-level mutable
 state. Thus, if modules A and B both `import` or `require` module C, A
 and B can communicate with each other via C. Thus, each SES
-compartment needs its own loader. By contrast, TinySES has no
-loader. Instead, TinySES modules have no top-level mutability, and all
+compartment needs its own loader. By contrast, Jessie has no
+loader. Instead, Jessie modules have no top-level mutability, and all
 exported values must be tamper-proofed. [A Capability-Based Module
 System for Authority
 Control](http://reports-archive.adm.cs.cmu.edu/anon/home/anon/isr2017/CMU-ISR-17-106R.pdf),
@@ -350,7 +376,7 @@ extension of a Frozen Realm's immutable primordials.
 ## Caveats
 
 
-### SES and TinySES Libraries
+### SES and Jessie Libraries
 
 
 SES will bundle some convenience libraries to support ocap programming
@@ -359,10 +385,10 @@ library](https://github.com/ajvincent/es-membrane). However, since
 these are additions to standard JavaScript, they are not shown on the
 subsetting diagram.
 
-Although `Proxy` itself is not available in TinySES, the membrane
-library built on `Proxy` and `WeakMap` is. A standalone TinySES
+Although `Proxy` itself is not available in Jessie, the membrane
+library built on `Proxy` and `WeakMap` is. A standalone Jessie
 implementation can directly provide a membrane library adequate for
-standalone TinySES use without implementing `Proxy`.
+standalone Jessie use without implementing `Proxy`.
 
 
 ### TinySES Admits Mutable Arrays.
