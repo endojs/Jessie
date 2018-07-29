@@ -4,14 +4,15 @@
 
 Today, JavaScript is the pervasive representation for (somewhat) safe
 mobile code. For another representation to achieve universality
-quickly, it must be a subset of JavaScript, and so run everywhere
-JavaScript runs.
+quickly, it must be a subset of JavaScript, and so runs at least
+everywhere JavaScript runs.
 
 Whereas JSON is a simple universal representation for safe mobile
 data, Jessie is a simple universal representation for safe mobile data
 and behavior.
 
 Jessie is a small safe ocap subset of JavaScript that
+   * is pleasant and expressive to program in,
    * can easily run within a JavaScript system,
    * can be safely linked with adversarial SES code,
    * can be easily implemented for standalone use,
