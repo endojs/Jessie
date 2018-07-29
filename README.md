@@ -113,7 +113,7 @@ inheritance.
 
 **Jessie** is a dynamic subset of TinySES. Jessie and TinySES have the
 same grammar and static restrictions. The Jessie/TinySES grammar is
-simple enough to be parsed easily. Jessie/TinySES imposes static
+simple enough to be parsed easily. Jess˘ie/TinySES imposes static
 validation rules that are easy to check locally, to ensure that
 objects are tamper-proofed before they escape.  Statically valid
 Jessie/TinySES programs enable sound static analysis of useful safety
@@ -139,9 +139,8 @@ other Jessie code.
 TODO: Cite Defensive JavaScript (DJS) and ProScript, as subsets
 similar in many way to Jessie.
 
-**JSON** is a static, absorbed subset of all the languages above.
-
-JSON achieved universal adoption because
+**JSON** is a static, absorbed subset of all the languages above. JSON
+achieved universal adoption because
    * it was a subset of JavaScript, which was already pervasive
    * it was easy to implement on any language and any platform
 
