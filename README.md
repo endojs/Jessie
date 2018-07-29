@@ -104,22 +104,20 @@ language. Its purpose is to run as many conventional EcmaScript
 programs as possible while staying within ocap rules.
 
 **TinySES** is a static, absorbed subset of SES. TinySES approximates
-the smallest useful subset of SES that is still pleasant to
-program in using the objects-as-closures pattern. TinySES omits
-`this` and classes. Once initialized, the API surface of a TinySES
-object must be tamper-proofed before exposure to clients.
-TinySES is not intended to run legacy code or code that uses
-inheritance.
+the smallest useful subset of SES that is still pleasant to program in
+using the objects-as-closures pattern. TinySES omits `this` and
+classes. Once initialized, the API surface of a TinySES object must be
+tamper-proofed before exposure to clients.  TinySES is not intended to
+run legacy code or code that uses inheritance.
 
 **Jessie** is a dynamic subset of TinySES. Jessie and TinySES have the
-same grammar and static restrictions. The Jessie/TinySES grammar is
-simple enough to be parsed easily. Jess˘ie/TinySES imposes static
-validation rules that are easy to check locally, to ensure that
-objects are tamper-proofed before they escape.  Statically valid
-Jessie/TinySES programs enable sound static analysis of useful safety
-properties. A SES IDE can thereby flag which code is withiin the
-Jessie static restrictions and provide sound static analysis info for
-that code.
+same grammar and static restrictions. The Jessie grammar is simple
+enough to be parsed easily. Jessie imposes static validation rules
+that are easy to check locally, to ensure that objects are
+tamper-proofed before they escape.  Statically valid Jessie programs
+enable sound static analysis of useful safety properties. A SES IDE
+can thereby flag which code is withiin the Jessie static restrictions
+and provide sound static analysis info for that code.
 
 The only difference between TinySES and Jessie is that correct TinySES
 programs may rely on the presence of the entire SES runtime. Correct
@@ -127,8 +125,8 @@ Jessie programs may only rely on a minimal subset of the SES runtime
 that standalone Jessie implementations can implement for reasonable
 effort. However, correct Jessie programs also cannot rely on the
 *absence* of the rest of the SES runtime. Jessie and TinySES programs
-may be linked with programs written in SES, and thereby constrained by
-SES's ocap rules.
+may be linked with programs written in SES, and so may rely SES's ocap
+rules to constrain these other programs.  .
 
 Thus, every correct Jessie program is also a correct TinySES and SES
 program, and works unmodified within a SES environment run on a normal
@@ -352,7 +350,7 @@ Jessie does not need SES's notion of "compartment".
 
 
 All the SES whitelisted globals are safe to provide to TinySES
-code. However, we omit some of these from the definition of TinySES,
+code. However, we omit some of these from the definition of Jessie,
 like `RegExp` and `Date`, to reduce the effort needed to implement a
 standalone Jessie on a non-JavaScript host.
 
@@ -369,7 +367,7 @@ exported values must be tamper-proofed. [A Capability-Based Module
 System for Authority
 Control](http://reports-archive.adm.cs.cmu.edu/anon/home/anon/isr2017/CMU-ISR-17-106R.pdf),
 explains why such module instances safe to share between mutually
-suspicious objects. Indeed, TinySES modules can be seen as a immutable
+suspicious objects. Indeed, Jessie modules can be seen as a immutable
 extension of a Frozen Realm's immutable primordials.
 
 
@@ -429,21 +427,21 @@ that provide either of the security breaking features but do not provide
 native support for Realms, safety can only be shimmed at the price of
 a full parse. This is the current situation on some browsers.
 
-Beyond subsetting EcmaScript, the TinySES grammar also includes the
+Beyond subsetting EcmaScript, the Jessie grammar also includes the
 infix bang `!` (eventually) operator from Dr.SES. We hope infix bang
 `!` will become part of the standard EcmaScript grammar. But until
 then, infix bang `!` trivially transpiles into calls to the Dr.SES
 extended promise API. See [Distributed Electronic Rights in
 JavaScript](http://research.google.com/pubs/pub40673.html).
 
-We will add BigInt to TinySES, even though it will only be in
+We will add BigInt to Jessie, even though it will only be in
 EcmaScript well after ES2017.
 
 ### Exceptions to the subsetting claims
 
 Freezing the primordials does more that just turn non-errors into
 errors. It also changes how reflection describes these properties and
-objects. Thus, SES and TinySES are technically not subsets of
+objects. Thus, SES and Jessie are technically not subsets of
 ES-strict for programs using reflection, since these differences
 are detectable by means other than errors.
 
@@ -451,18 +449,18 @@ are detectable by means other than errors.
 
 Arrow functions and concise methods have a [[Call]] behavior and no
 [[Construct]] behavior, preventing them from being called as a
-constructor, such as with `new`. However, TinySES `function` functions
+constructor, such as with `new`. However, Jessie `function` functions
 can be called by SES code with `new`. Without `this` it is hard to see how
 this could confuse a `function` function, but I am not yet confident
-that this does not produce a hazard for the TinySES code.
+that this does not produce a hazard for the Jessie code.
 
-### Possible changes to the current TinySES definition
+### Possible changes to the current Jessie definition
 
-Once EcmaScript supports BigInts, SES and TinySES will as well. Thus
-we need to add the bitwise operators back into the TinySES grammar. In
+Once EcmaScript supports BigInts, SES and Jessie will as well. Thus
+we need to add the bitwise operators back into the Jessie grammar. In
 fact, there was no good reason to omit them.
 
-Should we add do/while back into the TinySES grammar? There's no
+Should we add `do/while` back into the Jessie grammar? There's no
 hazard here. We omitted it just for minimalism.
 
 TODO: We must ensure that code containing ``"<!--"`` or ``"-->"`` that
@@ -474,21 +472,21 @@ differently on different platforms, or even as script vs module code
 on the same platform.
 
 
-### "Typed TinySES" and "Typed Tiny Dr.SES"
+### "Typed Jessie" and "Typed Distributed Jessie"
 
-Can TinySES be soundly statically typed with a structural type system?
+Can Jessie be soundly statically typed with a structural type system?
 What about trademarks/nominal-types and auditors? How would this map
 to the wasm type system which does tag checking but no deep
 parameterized type checking?  If static checking makes sense, should
 we add some of TypeScript's or Flow's syntax for optional type
-declarations? Let's call such a variant ***Typed TinySES***. Given
+declarations? Let's call such a variant ***Typed Jessie***. Given
 declared function types for parameters and return values, can Typed
-TinySES infer the rest?  How would these types play with the Cap'n
+Jessie infer the rest?  How would these types play with the Cap'n
 Proto types? What about subtyping? What about contravariance?
 
-It is plausible that Typed TinySES can be soundly statically typed
+It is plausible that Typed Jessie can be soundly statically typed
 without implicit runtime checks, but we have not yet verified
-this. The distributed messages of **Tiny Dr.SES** are likely to be
-typed, to be explicit about what API dependencies are exposed as
+this. The distributed messages of **Distributed Jessie** are likely to
+be typed, to be explicit about what API dependencies are exposed as
 protocols on the wire. These two purposes should use the same type
-system, so that **Typed Tiny Dr.SES** can be simpler.
+system, so that **Typed Distributed Jessie** can be simpler.
