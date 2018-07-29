@@ -47,7 +47,7 @@ represents the features of the containing language omitted by that
 next smaller subset. The relative sizes of feature names reflects only
 their explanatory significance.
 
-![EcmaScript subsets Venn diagram](docs/ecmascript-subsets-solid.png
+![EcmaScript subsets Venn diagram](docs/jessie.png
  "EcmaScript subsets Venn diagram")
 
 <p align="center"><b>JSON</b> &lt;SA <b>JS-E</b> &lt;DT <b>TinySES</b> &lt;SA <b>SES</b>
