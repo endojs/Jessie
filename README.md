@@ -32,7 +32,7 @@ the eighth edition of the standard.
 ![EcmaScript subsets Venn diagram](docs/jessie.png
  "EcmaScript subsets Venn diagram")
 
-<p align="center"><b>JSON</b> &lt;SA <b>Jessie</b> &lt;DT
+<p align="center"><b>JSON</b> &lt;SA <b>Jessie</b> &lt;DAT
   <b>TinySES</b> &lt;SA <b>SES</b> &lt;DA <b>ES-strict</b> &lt;SDA
   <b>EcmaScript</b></p>
 
