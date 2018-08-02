@@ -32,7 +32,7 @@ the eighth edition of the standard.
 ![EcmaScript subsets Venn diagram](docs/jessie.png
  "EcmaScript subsets Venn diagram")
 
-<p align="center"><b>JSON</b> &lt;SA <b>Jessie</b> &lt;DAT
+<p align="center"><b>JSON</b> &lt;SA <b>Jessie</b> &lt;DA
   <b>TinySES</b> &lt;SA <b>SES</b> &lt;DA <b>ES-strict</b> &lt;SDA
   <b>EcmaScript</b></p>
 
@@ -49,9 +49,8 @@ it does not provoke them itself, would generally become incorrect as
 programs in the larger language.
 
 One language is *absorbed* (<A) by another if code in the smaller
-language can be run as code in the larger language without internal
-modification. (Surrounding the code with a prelude and postlude is a
-modification, but not an *internal modification*.)  A smaller language
+language can be run as code in the larger language without 
+modification. A smaller language
 which is not absorbed may often be *transpiled* (<T) into the larger
 language by source-to-source transformation.
 
