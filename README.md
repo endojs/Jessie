@@ -124,7 +124,7 @@ Jessie programs may only rely on a minimal subset of the SES runtime
 that standalone Jessie implementations can implement for reasonable
 effort. However, correct Jessie programs also cannot rely on the
 *absence* of the rest of the SES runtime. Jessie and TinySES programs
-may be linked with programs written in SES, and so may rely SES's ocap
+may be linked with programs written in SES, and so may rely on SES's ocap
 rules to constrain these other programs.  .
 
 Thus, every correct Jessie program is also a correct TinySES and SES
