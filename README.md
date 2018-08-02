@@ -32,7 +32,7 @@ the eighth edition of the standard.
 ![EcmaScript subsets Venn diagram](docs/jessie.png
  "EcmaScript subsets Venn diagram")
 
-<p align="center"><b>JSON</b> &lt;SA <b>Jessie</b> &lt;DA
+<p align="center"><b>JSON</b> &lt;SA <b>Jessie</b> &lt;DAT
   <b>TinySES</b> &lt;SA <b>SES</b> &lt;DA <b>ES-strict</b> &lt;SDA
   <b>EcmaScript</b></p>
 
@@ -216,7 +216,7 @@ only number-named properties, which include integers, floating point,
 mutating other property names. Jessie has syntax for computed lookup
 and mutation of number-named properties, but not other property
 names. However, the SES environment provides access to the `Reflect`
-API, enabling explicit reflective property Jessie. TinySES programs
+API, enabling explicit reflective property access. TinySES programs
 may rely on `Reflect` to manipulate properties via EcmaScript property
 descriptors. Jessie programs may not rely on the presence or absence
 of `Reflect` or other elements of the SES runtime. Jessie programs
