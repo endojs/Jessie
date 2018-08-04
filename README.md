@@ -49,7 +49,7 @@ it does not provoke them itself, would generally become incorrect as
 programs in the larger language.
 
 One language is *absorbed* (<A) by another if code in the smaller
-language can be run as code in the larger language without 
+language can be run as code in the larger language without
 modification. A smaller language
 which is not absorbed may often be *transpiled* (<T) into the larger
 language by source-to-source transformation.
@@ -132,9 +132,6 @@ program, and works unmodified within a SES environment run on a normal
 JavaScript implementation. Correct Jessie programs will also run on a
 standalone implementation of Jessie in which it is linked only with
 other Jessie code.
-
-TODO: Cite Defensive JavaScript (DJS) and ProScript, as subsets
-similar in many way to Jessie.
 
 **JSON** is a static, absorbed subset of all the languages above. JSON
 achieved universal adoption because
@@ -489,3 +486,19 @@ this. The distributed messages of **Distributed Jessie** are likely to
 be typed, to be explicit about what API dependencies are exposed as
 protocols on the wire. These two purposes should use the same type
 system, so that **Typed Distributed Jessie** can be simpler.
+
+
+### Jessie and mechanized static reasoning
+
+[Defensive JavaScript (DJS)](http://www.defensivejs.com/)
+and
+[ProScript](https://github.com/Inria-Prosecco/proscript-messaging), as
+subsets similar in many way to Jessie, build to support mechanized
+formal reasoning by translation to
+[ProVerif](http://prosecco.gforge.inria.fr/personal/bblanche/proverif/).
+However, the designs are somewhat different, as are the goals of the
+formal reasoning. TODO: Investigate whether Jessie could repurpose
+this work. Is the intersection of Jessie and DJS a reasonable language
+for us? Could Jessie be translated to ProVerif in a similar manner? Is
+ProVerif helpful for verifying the security properties we are
+interested in verifying?
