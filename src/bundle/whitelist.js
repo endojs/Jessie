@@ -21,7 +21,7 @@
 export function buildWhitelist() {
   "use strict";
 
-  var j = true;  // included in the Jessie runtimef
+  var j = true;  // included in the Jessie runtime
 
   const whitelist = {
     cajaVM: {                        // Caja support
