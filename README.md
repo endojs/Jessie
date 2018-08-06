@@ -119,13 +119,15 @@ can thereby flag which code is withiin the Jessie static restrictions
 and provide sound static analysis info for that code.
 
 The only difference between TinySES and Jessie is that correct TinySES
-programs may rely on the presence of the entire SES runtime. Correct
-Jessie programs may only rely on a minimal subset of the SES runtime
+programs may rely on the presence of the [entire SES 
+runtime](https://github.com/Agoric/SES/blob/master/src/bundle/whitelist.js).
+Correct Jessie programs may only rely on a [minimal subset of the SES 
+runtime](https://github.com/Agoric/Jessie/blob/master/src/bundle/whitelist.js)
 that standalone Jessie implementations can implement for reasonable
 effort. However, correct Jessie programs also cannot rely on the
 *absence* of the rest of the SES runtime. Jessie and TinySES programs
 may be linked with programs written in SES, and so may rely on SES's ocap
-rules to constrain these other programs.  .
+rules to constrain these other programs.
 
 Thus, every correct Jessie program is also a correct TinySES and SES
 program, and works unmodified within a SES environment run on a normal
