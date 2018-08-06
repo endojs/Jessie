@@ -213,7 +213,7 @@ module.exports = (function() {
 
     fieldExpr ::=
       primaryExpr "." identName                            ${(pe,_,id) => ['get',pe,id]}
-    / primaryExpr later "." identName                      ${(pe,_,_2,id) => ['getLater',pe,id]}
+    / primaryExpr later identName                          ${(pe,_,id) => ['getLater',pe,id]}
     / elementExpr;
 
     # No bitwise operators
@@ -222,8 +222,8 @@ module.exports = (function() {
     # The expr form must come after the block form, to make proper use
     # of PEG prioritized choice.
     arrow ::=
-      arrowParams NO_NEWLINE "=>" block                         ${(ps,_,_2,b) => ['arrow',ps,b]}
-    / arrowParams NO_NEWLINE "=>" expr                          ${(ps,_,_2,e) => ['lambda',ps,e]};
+      arrowParams NO_NEWLINE "=>" block                    ${(ps,_,_2,b) => ['arrow',ps,b]}
+    / arrowParams NO_NEWLINE "=>" expr                     ${(ps,_,_2,e) => ['lambda',ps,e]};
     arrowParams ::=
       IDENT                                                ${id => [['def',id]]}
     / "(" param ** "," ")"                                 ${(_,ps,_2) => ps};
@@ -285,7 +285,7 @@ module.exports = (function() {
       "function" defVar? "(" param ** "," ")" block          ${(_,n,_2,p,_3,b) => ['functionExpr',n,p,b]};
     functionDecl ::=
       "function" defVar "(" param ** "," ")" block           ${(_,n,_2,p,_3,b) => ['functionDecl',n,p,b]};
-    methodDef
+    methodDef ::=
       propName "(" param ** "," ")" block                    ${(n,_,p,_2,b) => ['methodDef',n,p,b]}
     / identGet propName "(" ")" block                  ${(_,n,_2,_3,b) => ['getter',n,[],b]}
     / identSet propName "(" param ")" block            ${(_,n,_2,p,_3,b) => ['setter',n,[p],b]};
