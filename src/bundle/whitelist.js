@@ -14,98 +14,13 @@
 // limitations under the License.
 
 /**
- * @fileoverview Exports {@code ses.whitelist}, a recursively defined
- * JSON record enumerating all the naming paths in the ES5.1 spec,
- * those de-facto extensions that we judge to be safe, and SES and
- * Dr. SES extensions provided by the SES runtime.
+ * Based on https://github.com/Agoric/SES/blob/master/src/bundle/whitelist.js
  *
- * <p>Assumes only ES3. Compatible with ES5, ES5-strict, or
- * anticipated ES6.
- *
- * //provides ses.whitelist
  * @author Mark S. Miller,
- * @overrides ses, whitelistModule
- */
-
-/**
- * <p>Each JSON record enumerates the disposition of the properties on
- * some corresponding primordial object, with the root record
- * representing the global object. For each such record, the values
- * associated with its property names can be
- * <ul>
- * <li>Another record, in which case this property is simply
- *     whitelisted and that next record represents the disposition of
- *     the object which is its value. For example, {@code "Object"}
- *     leads to another record explaining what properties {@code
- *     "Object"} may have and how each such property, if present,
- *     and its value should be tamed.
- * <li>true, in which case this property is simply whitelisted. The
- *     value associated with that property is still traversed and
- *     tamed, but only according to the taming of the objects that
- *     object inherits from. For example, {@code "Object.freeze"} leads
- *     to true, meaning that the {@code "freeze"} property of {@code
- *     Object} should be whitelisted and the value of the property (a
- *     function) should be further tamed only according to the
- *     markings of the other objects it inherits from, like {@code
- *     "Function.prototype"} and {@code "Object.prototype").
- *     If the property is an accessor property, it is not
- *     whitelisted (as invoking an accessor might not be meaningful,
- *     yet the accessor might return a value needing taming).
- * <li>"maybeAccessor", in which case this accessor property is simply
- *     whitelisted and its getter and/or setter are tamed according to
- *     inheritance. If the property is not an accessor property, its
- *     value is tamed according to inheritance.
- * <li>"*", in which case this property on this object is whitelisted,
- *     as is this property as inherited by all objects that inherit
- *     from this object. The values associated with all such properties
- *     are still traversed and tamed, but only according to the taming
- *     of the objects that object inherits from. For example, {@code
- *     "Object.prototype.constructor"} leads to "*", meaning that we
- *     whitelist the {@code "constructor"} property on {@code
- *     Object.prototype} and on every object that inherits from {@code
- *     Object.prototype} that does not have a conflicting mark. Each
- *     of these is tamed as if with true, so that the value of the
- *     property is further tamed according to what other objects it
- *     inherits from.
- * <li>false, which suppresses permission inherited via "*".
- * </ul>
- *
- * <p>TODO: We want to do for constructor: something weaker than '*',
- * but rather more like what we do for [[Prototype]] links, which is
- * that it is whitelisted only if it points at an object which is
- * otherwise reachable by a whitelisted path.
- *
- * <p>The members of the whitelist are either
- * <ul>
- * <li>(uncommented) defined by the ES5.1 normative standard text,
- * <li>(questionable) provides a source of non-determinism, in
- *     violation of pure object-capability rules, but allowed anyway
- *     since we've given up on restricting JavaScript to a
- *     deterministic subset.
- * <li>(ES5 Appendix B) common elements of de facto JavaScript
- *     described by the non-normative Appendix B.
- * <li>(Harmless whatwg) extensions documented at
- *     <a href="http://wiki.whatwg.org/wiki/Web_ECMAScript"
- *     >http://wiki.whatwg.org/wiki/Web_ECMAScript</a> that seem to be
- *     harmless. Note that the RegExp constructor extensions on that
- *     page are <b>not harmless</b> and so must not be whitelisted.
- * <li>(ES-Harmony proposal) accepted as "proposal" status for
- *     EcmaScript-Harmony.
- * </ul>
- *
- * <p>With the above encoding, there are some sensible whitelists we
- * cannot express, such as marking a property both with "*" and a JSON
- * record. This is an expedient decision based only on not having
- * encountered such a need. Should we need this extra expressiveness,
- * we'll need to refactor to enable a different encoding.
- *
- * <p>We factor out {@code true} into the variable {@code t} just to
- * get a bit better compression from simple minifiers.
  */
 export function buildWhitelist() {
   "use strict";
 
-  var t = true;
   var j = true;  // included in the Jessie runtimef
 
   const whitelist = {
@@ -133,9 +48,6 @@ export function buildWhitelist() {
       is: j,                         // ES-Harmony
       preventExtensions: j,
       seal: j,
-    },
-
-    Function: {  // 19.2
     },
 
     Boolean: {  // 19.3
