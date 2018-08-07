@@ -87,6 +87,7 @@ export function buildWhitelist() {
         lastIndexOf: j,
         slice: j,
         startsWith: j,               // ES-Harmony
+      }
     },
 
     // 22 Indexed Collections
