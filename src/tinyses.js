@@ -1,3 +1,10 @@
+
+
+
+// Work on TinySES has moved to https://github.com/Agoric/TinySES
+
+
+
 // Options: --free-variable-checker --require --validate
 /*global module require*/
 
@@ -89,7 +96,7 @@ module.exports = (function() {
 
     identName ::= IDENT / RESERVED_WORD;
     useVar ::= IDENT                                       ${id => ['use',id]};
-    defVar ::= IDENT                                       ${id => ['def',id]}
+    defVar ::= IDENT                                       ${id => ['def',id]};
 
     # For most identifiers that ES2017 treats as IDENT but recognizes
     # as pseudo-keywords in a context dependent manner, TinySES simply makes
