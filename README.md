@@ -119,9 +119,9 @@ can thereby flag which code is withiin the Jessie static restrictions
 and provide sound static analysis info for that code.
 
 The only difference between TinySES and Jessie is that correct TinySES
-programs may rely on the presence of the [entire SES 
+programs may rely on the presence of the [entire SES
 runtime](https://github.com/Agoric/SES/blob/master/src/bundle/whitelist.js).
-Correct Jessie programs may only rely on a [minimal subset of the SES 
+Correct Jessie programs may only rely on a [minimal subset of the SES
 runtime](https://github.com/Agoric/Jessie/blob/master/src/bundle/whitelist.js)
 that standalone Jessie implementations can implement for reasonable
 effort. However, correct Jessie programs also cannot rely on the
@@ -495,7 +495,7 @@ system, so that **Typed Distributed Jessie** can be simpler.
 [Defensive JavaScript (DJS)](http://www.defensivejs.com/)
 and
 [ProScript](https://github.com/Inria-Prosecco/proscript-messaging), as
-subsets similar in many way to Jessie, build to support mechanized
+subsets similar in many way to Jessie, built to support mechanized
 formal reasoning by translation to
 [ProVerif](http://prosecco.gforge.inria.fr/personal/bblanche/proverif/).
 However, the designs are somewhat different, as are the goals of the
