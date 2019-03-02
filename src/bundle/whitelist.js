@@ -80,10 +80,9 @@ export function buildWhitelist() {
 
     String: {  // 21.2
       fromCharCode: j,
-      fromCodePoint: j,
       raw: j,                        // ES-Harmony
       prototype: {
-        codePointAt: j,
+        charCodeAt: j,
         endsWith: j,                 // ES-Harmony
         indexOf: j,
         lastIndexOf: j,
@@ -170,11 +169,11 @@ export function buildWhitelist() {
 
     Promise: {  // 25.4
       all: j,
-      catch: j,
       race: j,
       reject: j,
       resolve: j,
       prototype: {
+        catch: j,
         then: j,
       }
     }
