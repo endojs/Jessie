@@ -80,12 +80,15 @@ export function buildWhitelist() {
 
     String: {  // 21.2
       fromCharCode: j,
+      fromCodePoint: j,
       raw: j,                        // ES-Harmony
       prototype: {
+        codePointAt: j,
         endsWith: j,                 // ES-Harmony
         indexOf: j,
         lastIndexOf: j,
         slice: j,
+        split: j,
         startsWith: j,               // ES-Harmony
       }
     },
@@ -94,11 +97,13 @@ export function buildWhitelist() {
 
     Array: {  // 22.1
       from: j,
+      isArray: j,
       of: j,                         // ES-Harmony?
       prototype: {
         filter: j,
         forEach: j,
         indexOf: j,
+        join: j,
         lastIndexOf: j,
         map: j,
         pop: j,
@@ -165,6 +170,7 @@ export function buildWhitelist() {
 
     Promise: {  // 25.4
       all: j,
+      catch: j,
       race: j,
       reject: j,
       resolve: j,
