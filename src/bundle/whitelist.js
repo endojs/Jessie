@@ -82,10 +82,12 @@ export function buildWhitelist() {
       fromCharCode: j,
       raw: j,                        // ES-Harmony
       prototype: {
+        charCodeAt: j,
         endsWith: j,                 // ES-Harmony
         indexOf: j,
         lastIndexOf: j,
         slice: j,
+        split: j,
         startsWith: j,               // ES-Harmony
       }
     },
@@ -94,11 +96,13 @@ export function buildWhitelist() {
 
     Array: {  // 22.1
       from: j,
+      isArray: j,
       of: j,                         // ES-Harmony?
       prototype: {
         filter: j,
         forEach: j,
         indexOf: j,
+        join: j,
         lastIndexOf: j,
         map: j,
         pop: j,
@@ -169,6 +173,7 @@ export function buildWhitelist() {
       reject: j,
       resolve: j,
       prototype: {
+        catch: j,
         then: j,
       }
     }
