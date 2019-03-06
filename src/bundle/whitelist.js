@@ -48,6 +48,7 @@ export function buildWhitelist() {
       is: j,                         // ES-Harmony
       preventExtensions: j,
       seal: j,
+      entries: j,
     },
 
     Boolean: {  // 19.3
