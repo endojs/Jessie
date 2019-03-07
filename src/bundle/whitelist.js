@@ -49,6 +49,8 @@ export function buildWhitelist() {
       preventExtensions: j,
       seal: j,
       entries: j,
+      keys: j,
+      values: j,
     },
 
     Boolean: {  // 19.3
