@@ -209,12 +209,12 @@ they are effectively keywords in strict code.  Jessie does include
 ellipses `...` both as rest and spread, which provides the useful
 functionality of `arguments` with less confusion.
 
-Jessie omits computed property names. Jessie has syntax for mutating
-only number-named properties, which include integers, floating point,
-`NaN`, `Infinity`, and `-Infinity`. Jessie omits syntactic support for
-mutating other property names. Jessie has syntax for computed lookup
-and mutation of number-named properties, but not other property
-names. However, the SES environment provides access to the `Reflect`
+Jessie omits mutation through computed property names. Jessie has syntax
+for mutating only number-named properties, which include integers,
+floating point, `NaN`, `Infinity`, and `-Infinity`. Jessie omits syntactic
+support for mutating other property names, except when preparing an object
+for delivery (before it is staticly required to be hardened).  However, the
+SES environment provides access to the `Reflect`
 API, enabling explicit reflective property access. TinySES programs
 may rely on `Reflect` to manipulate properties via EcmaScript property
 descriptors. Jessie programs may not rely on the presence or absence
@@ -241,7 +241,8 @@ lexical block scope.
 Jessie has no for/in statement, and so does not inherit the
 non-determinism regarding property modification during for/in
 enumeration. Everything useful about for/in is still available by
-reflection but without this non-determinism issue.
+`Object.keys`, `Object.values` and `Object.entries`,  (or in TinySES
+through reflection) but without this non-determinism issue.
 
 
 ## Additional Dynamic Restrictions of SES
