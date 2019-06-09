@@ -85,7 +85,7 @@ ES-strict. To achieve this subsetting, SES builds on [Frozen
 Realms](https://github.com/tc39/proposal-frozen-realms/) which builds
 on [Realms](https://github.com/tc39/proposal-realms/). (Shims at
 [Realms
-shim](https://github.com/tc39/proposal-realms/tree/master/shim) and
+shim](https://github.com/Agoric/realms-shim) and
 [Frozen Realms
 shim](https://github.com/tc39/proposal-frozen-realms/tree/master/shim).)
 SES statically accepts all programs accepted by ES-strict and can run
