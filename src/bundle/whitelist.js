@@ -22,15 +22,24 @@ export function buildWhitelist() {
   "use strict";
 
   var j = true;  // included in the Jessie runtime
-
-  const whitelist = {
-    cajaVM: {                        // Caja support
-      Nat: j,
-      def: j,
-
-      confine: j,
+  
+  // These are necessary for most Javascript environments.
+  const anonIntrinsics = {
+    ThrowTypeError: {},
+    IteratorPrototype: {
+      next: '*',
+      constructor: false,
     },
+    ArrayIteratorPrototype: {},
+    StringIteratorPrototype: {},
+    MapIteratorPrototype: {},
+    SetIteratorPrototype: {},
 
+    GeneratorFunction: {},
+    AsyncGeneratorFunction: {},
+  };
+
+  const namedIntrinsics = {
     // In order according to
     // http://www.ecma-international.org/ecma-262/ with chapter
     // numbers where applicable
@@ -40,6 +49,8 @@ export function buildWhitelist() {
     Infinity: j,
     NaN: j,
     undefined: j,
+
+    eval: j, // realms-shim depends on having indirect eval in the globals
 
     // 19 Fundamental Objects
 
@@ -51,6 +62,9 @@ export function buildWhitelist() {
       entries: j,
       keys: j,
       values: j,
+      prototype: {
+        toString: '*',
+      },
     },
 
     Boolean: {  // 19.3
@@ -92,6 +106,8 @@ export function buildWhitelist() {
         slice: j,
         split: j,
         startsWith: j,               // ES-Harmony
+
+        length: '*',
       }
     },
 
@@ -113,7 +129,10 @@ export function buildWhitelist() {
         reduce: j,
         reduceRight: j,
         slice: j,
-      }
+
+        // 22.1.4 instances
+        length: '*',
+      },
     },
 
     // 23 Keyed Collections          all ES-Harmony
@@ -179,8 +198,8 @@ export function buildWhitelist() {
         catch: j,
         then: j,
       }
-    }
+    },
   };
 
-  return whitelist;
+  return {namedIntrinsics, anonIntrinsics};
 }
