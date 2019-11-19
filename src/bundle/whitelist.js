@@ -34,6 +34,9 @@ export function buildWhitelist() {
     StringIteratorPrototype: {},
     MapIteratorPrototype: {},
     SetIteratorPrototype: {},
+
+    GeneratorFunction: {},
+    AsyncGeneratorFunction: {},
   };
 
   const namedIntrinsics = {
@@ -60,9 +63,7 @@ export function buildWhitelist() {
       keys: j,
       values: j,
       prototype: {
-        // We need to prefix __proto__ with ESCAPE so that it doesn't
-        // just change the prototype of this object.
-        ESCAPE__proto__: 'maybeAccessor',
+        toString: '*',
       },
     },
 
@@ -105,6 +106,8 @@ export function buildWhitelist() {
         slice: j,
         split: j,
         startsWith: j,               // ES-Harmony
+
+        length: '*',
       }
     },
 
@@ -126,6 +129,9 @@ export function buildWhitelist() {
         reduce: j,
         reduceRight: j,
         slice: j,
+
+        // 22.1.4 instances
+        length: '*',
       },
     },
 
