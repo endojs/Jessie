@@ -148,7 +148,7 @@ platforms. Its character resembles a simple Scheme with records.
 ## Jessie as a subset of SES
 
 
-The [Jessie grammar](src/tinyses.js#L34) is based on the [ECMAScript 2017
+The [Jessie grammar](https://github.com/agoric-labs/jessica#grammar) is based on the [ECMAScript 2017
 Grammar
 Summary](http://www.ecma-international.org/ecma-262/8.0/#sec-grammar-summary).
 Unlike the Ecma page, lexical productions in the Jessie grammar are
