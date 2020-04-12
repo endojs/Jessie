@@ -1,6 +1,6 @@
 {
   "name": "jessie-std",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Jessie standard library",
   "main": "lib/index.js",
   "directories": {
