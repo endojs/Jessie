@@ -1,0 +1,21 @@
+{
+  "name": "@lib-jessie/zones",
+  "version": "0.1.0",
+  "description": "Protection zone helpers (protect/suspect) for Jessie",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "tap --no-esm --no-coverage --reporter spec 'test/**/*.test.js'"
+  },
+  "repository": "https://github.com/Agoric/Jessie",
+  "author": "Agoric",
+  "license": "Apache-2.0",
+  "private": false,
+  "type": "module",
+  "dependencies": {
+    "@lib-jessie/harden": "^0.1.0",
+    "tape": "^5.0.0"
+  },
+  "devDependencies": {
+    "tap": "^14.10.5"
+  }
+}
