@@ -11,9 +11,9 @@ import buildTable from '@lib-jessie/harden/src/buildTable.js';
  * The design of the `protect(x)` and `suspect(x)` functions is based on
  * `wrap(x)`, which installs a proxy wrapper around `x` and
  * associates it with a Zone (if x was not already wrapped).  If used
- * in a `suspect` call, the Zone will not be isSuspected(zone), and the wrapped object
- * is not hardened.  For `protect` calls, the Zone will be !isSuspected(zone),
- * and the object will also be hardened.
+ * in a `protect` call, the Zone will be isProtected(zone), and the wrapped
+ * object will also be hardened.  For `suspect` calls, the Zone will *not* be
+ * isProtected(zone), and the object will *not* be hardened.
  * 
  * If an object is entering this Zone (unwrap(x)), proxies are unwrapped if
  * their Zone matches, otherwise any proxies are retained.  This helps preserve object
@@ -22,8 +22,10 @@ import buildTable from '@lib-jessie/harden/src/buildTable.js';
  * 
  * Zones are used both to control wrapping and unwrapping, and to detect when a
  * proxy from a protected Zone has been captured as a `this`-value for a method
- * belonging to a foreign (suspected or not) Zone.  The default behaviour is
- * to throw when this happens.
+ * belonging to a foreign (protected or not) Zone.  The behaviour in this case is
+ * to reset the `this`-value to an Error describing the thwarted attack.  Hopefully
+ * that helps naive users to find more documentation on what this means, such as
+ * in the comments in this source file.
  */
 
 /**
@@ -38,25 +40,31 @@ const NEUTRAL_ZONE = harden({ toString() { return 'NEUTRAL_ZONE'; }});
 let lastCreatedZone = 0;
 
 /**
- * Contagiously harden a value and mark it as being from a fresh Zone.
+ * @type {WeakSet<Zone>}
+ */
+let protectedZones;
+
+const isProtected = harden(zone => protectedZones && protectedZones.has(zone));
+
+/**
+ * Contagiously harden a value and mark it as being from a fresh protected Zone.
  *
  * @template T
  * @param {T} x any value
  * @returns {T} a hardened and protected value in a fresh Zone, who contagiously begets objects of the same kind
  */
 export const protect = harden(x => {
+  if (!protectedZones) {
+    // Create the set here, after XS's lockdown is past.
+    protectedZones = new WeakSet;
+  }
+
   lastCreatedZone += 1;
   const myZone = `PROTECTED_ZONE[${lastCreatedZone}]`;
   const protectedZone = harden({ toString() { return myZone; }});
+  protectedZones.add(protectedZone);
   return wrapWithZone(x, protectedZone);
 });
-
-/**
- * @type {WeakSet<Zone>}
- */
-let suspectedZones;
-
-const isSuspectedZone = harden(zone => suspectedZones.has(zone));
 
 /**
  * Contagiously mark a value as being from a suspected Zone.
@@ -66,14 +74,9 @@ const isSuspectedZone = harden(zone => suspectedZones.has(zone));
  * @returns {T} a value in the SUSPECTED_ZONE
  */
 export const suspect = harden(x => {
-  if (!suspectedZones) {
-    // Create the set here, after XS's lockdown is past.
-    suspectedZones = new WeakSet;
-  }
   lastCreatedZone += 1;
   const myZone = `SUSPECTED_ZONE[${lastCreatedZone}]`;
   const suspectedZone = harden({ toString() { return myZone; }});
-  suspectedZones.add(suspectedZone);
   return wrapWithZone(x, suspectedZone);
 });
 
@@ -162,12 +165,8 @@ const wrapWithZone = harden((x, zone) => {
    */
   let wrap;
 
-  if (isSuspectedZone(zone)) {
-    // A suspected zone doesn't contribute to the wrappers.
-    wrap = identity;
-    unwrap = identity;
-  } else {
-    // Not a suspected zone, so wrap and unwrap.
+  if (isProtected(zone)) {
+    // A protected zone, so wrap and unwrap.
     wrap = x2 => wrapWithZone(x2, zone);
     unwrap = x2 => {
       if (proxyToZone.get(x2) === zone) {
@@ -175,6 +174,10 @@ const wrapWithZone = harden((x, zone) => {
       }
       return x2;
     };
+  } else {
+    // A suspected (non-protected) zone doesn't contribute to the wrappers.
+    wrap = identity;
+    unwrap = identity;
   }
   
   const subCall = (fn, ...args) => {
@@ -228,9 +231,8 @@ const wrapWithZone = harden((x, zone) => {
       return subCall((subThisArg, ...subArgArray) => {
         const thisZone = proxyToZone.get(subThisArg);
         if (thisZone &&
-          thisZone !== zone && // If it's the same zone, we aren't exposed,
-          thisZone !== NEUTRAL_ZONE && // neutral zone also does not expose,
-          !isSuspectedZone(thisZone) // nor do suspected this'es.
+          thisZone !== zone && // If it's not the same zone, we are exposed,
+          isProtected(thisZone) // if it's a protected zone.
         ) {
           // If you got here, you were (probably accidentally) exposing a
           // private `this` value to potentially untrusted code.
@@ -335,7 +337,7 @@ const wrapWithZone = harden((x, zone) => {
 
   // console.log('wrapping for ' + zone + ' ' + callerZone, Error('here'));
 
-  if (!isSuspectedZone(zone)) {
+  if (isProtected(zone)) {
     // Needs hardening before the user accesses it.
     harden(wrapper);
   } else if (!Reflect.isExtensible(x)) {
