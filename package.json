@@ -10,7 +10,8 @@
     "node": ">=12.16.1"
   },
   "scripts": {
-    "lerna": "lerna"
+    "lerna": "lerna",
+    "test": "lerna run test"
   },
   "devDependencies": {
     "lerna": "^3.21.0"
