@@ -4,7 +4,7 @@
 // valid Jessie code.
 export { confine, confineExpr } from './confine.js';
 export { makePromise, makeMap, makeSet, makeWeakMap, makeWeakSet } from './makers.js';
-export { default as harden } from '@agoric/harden';
+export { default as harden } from '@lib-jessie/harden';
 
 // FIXME: Need to remove insulate entirely!
 export const insulate = o => o;

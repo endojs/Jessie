@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import makeHardener from '@agoric/make-hardener';
+import makeHardener from '@lib-jessie/make-hardener';
 import buildTable from './buildTable.js';
 
 // Try to use SES's own harden if available.
@@ -27,7 +27,7 @@ if (h === undefined) {
 if (h === undefined) {
   // Warn if they haven't explicitly set harden or SES.harden.
   console.warn(
-    `SecurityWarning: '@agoric/harden' doesn't prevent prototype poisoning without SES`,
+    `SecurityWarning: '@lib-jessie/harden' doesn't prevent prototype poisoning without SES`,
   );
 }
 
