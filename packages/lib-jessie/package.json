@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/Agoric/Jessie#readme",
   "dependencies": {
-    "@lib-jessie/harden": "^0.1.0"
+    "@lib-jessie/harden": "^0.1.0",
+    "@lib-jessie/zones": "^0.1.0"
   },
   "files": [
     "lib"
