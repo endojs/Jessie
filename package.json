@@ -1,6 +1,6 @@
 {
   "name": "lib-jessie",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Jessie standard library",
   "main": "lib/index.js",
   "directories": {
@@ -18,10 +18,10 @@
   "bugs": {
     "url": "https://github.com/Agoric/Jessie/issues"
   },
-  "homepage": "https://github.com/Agoric/Jessie#readme",
-  "dependencies": {
-    "@agoric/harden": "0.0.4"
+  "devDependencies": {
+    "ses": "^0.12.3"
   },
+  "homepage": "https://github.com/Agoric/Jessie#readme",
   "files": [
     "lib"
   ]
