@@ -1,28 +1,38 @@
 {
-  "name": "lib-jessie",
-  "version": "0.2.0",
-  "description": "Jessie standard library",
-  "main": "lib/index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Agoric/Jessie.git"
-  },
-  "author": "Agoric",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/Agoric/Jessie/issues"
+  "name": "jessie.js",
+  "private": true,
+  "useWorkspaces": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=12.17.0"
   },
   "devDependencies": {
-    "ses": "^0.12.3"
+    "ava": "^3.12.1",
+    "lerna": "^3.19.0",
+    "lerna-update-wizard": "^0.17.5",
+    "typescript": "^4.0.2"
   },
-  "homepage": "https://github.com/Agoric/Jessie#readme",
-  "files": [
-    "lib"
-  ]
+  "scripts": {
+    "clean": "lerna clean",
+    "depcheck": "node scripts/check-mismatched-dependencies.js",
+    "update": "lernaupdate --dedupe",
+    "prettier": "lerna run prettier",
+    "lint": "lerna run lint",
+    "lint-fix": "lerna run --no-bail lint-fix",
+    "test": "ava",
+    "postinstall": "patch-package",
+    "patch-package": "patch-package",
+    "build": "lerna run build"
+  },
+  "dependencies": {
+    "patch-package": "^6.2.2"
+  },
+  "ava": {
+    "files": [
+      "packages/*/test/**/test-*.js"
+    ],
+    "timeout": "2m"
+  }
 }
