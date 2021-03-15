@@ -101,7 +101,6 @@ NEWPKGJSONHASH=$(
       "lint-fix": "eslint --fix '"'**/*.js'"'",
     }) | to_entries | sort_by(.key) | from_entries,
     devDependencies: ((.devDependencies // {}) + {
-      "@agoric/eslint-config": "^0.2.1",
       "@rollup/plugin-node-resolve": "^6.1.0",
       "@rollup/plugin-commonjs": "^13.0.0",
       "rollup-plugin-terser": "^5.1.3",
@@ -127,8 +126,11 @@ NEWPKGJSONHASH=$(
     },
     "eslintConfig": {
       "extends": [
-        "@agoric"
+        "@jessie.js/agoric"
       ],
+      "plugins": [
+        "@jessie.js"
+      ]
     },
     "prettier": {
       "trailingComma": "all",

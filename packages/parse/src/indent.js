@@ -1,4 +1,5 @@
 // @ts-check
+import '@jessie.js/transform-this-module';
 
 /**
  * @param {TemplateStringsArray} template
@@ -8,7 +9,7 @@ const indent = (template, ...substs) => {
   const result = [];
   let newnewline = '\n';
   for (let i = 0, ilen = substs.length; i < ilen; i += 1) {
-    let segment = template[i];
+    let segment = template[+i];
     if (i === 0 && segment[0].startsWith('\n')) {
       segment = segment.slice(1);
     }
@@ -21,7 +22,7 @@ const indent = (template, ...substs) => {
     }
     result.push(segment);
     // We don't have regexps at our disposal in Jessie.
-    String(substs[i])
+    String(substs[+i])
       .split('\n')
       .forEach((subst, j) => {
         if (j !== 0) {
@@ -30,7 +31,7 @@ const indent = (template, ...substs) => {
         result.push(subst);
       });
   }
-  result.push(template[substs.length]);
+  result.push(template[+substs.length]);
   return result.join('');
 };
 

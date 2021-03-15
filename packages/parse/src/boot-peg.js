@@ -1,15 +1,67 @@
+/* eslint-disable no-underscore-dangle,func-names,no-use-before-define */
 // @ts-check
 // A lot of this code is lifted from:
 // https://github.com/erights/quasiParserGenerator/tree/master/src/bootbnf.js
 
-/// <reference path="../types/peg.d.ts"/>
 /// <reference types="ses"/>
-import { makeMap, makeWeakMap } from '@jessie.js/lib';
+/// <reference path="../types/peg.d.ts"/>
+
+import '@jessie.js/transform-this-module';
+
+import { makeMap, makeWeakMap } from 'lib-jessie';
 
 import indent from './indent.js';
 
+const { details: X } = assert;
+
+const FAIL = { toString: () => 'FAIL' };
+const SKIP = { toString: () => 'SKIP' };
+
 /** @type {PegConstant} */
 const LEFT_RECUR = { toString: () => 'LEFT_RECUR' };
+
+/**
+ *
+ * @param {TemplateStringsArray} template
+ * @param {number} pos
+ * @returns {[number, number] | number | undefined}
+ */
+const FIND = (template, pos) => {
+  const { raw } = template;
+  const numSubs = raw.length - 1;
+  let relpos = pos;
+  for (let segnum = 0; segnum <= numSubs; segnum += 1) {
+    const segment = raw[+segnum];
+    const seglen = segment.length;
+    if (relpos < seglen) {
+      return [segnum, relpos];
+    } else if (relpos === seglen && segnum < numSubs) {
+      return segnum; // as hole number
+    }
+    relpos -= seglen + 1; // "+1" for the skipped hole
+  }
+  return undefined;
+};
+
+/** @type {PegEat} */
+const EAT = (self, pos, str) => {
+  // if (self._debug) {
+  //    console.warn(`Have ${self.template}`;
+  // }
+  const found = FIND(self.template, pos);
+  if (Array.isArray(found)) {
+    const segment = self.template.raw[+found[0]];
+    if (typeof str === 'string') {
+      if (segment.startsWith(str, found[1])) {
+        return [pos + str.length, str];
+      }
+    } else {
+      // Just return the next character.
+      return [pos + 1, segment[+found[1]]];
+    }
+  }
+  return [pos, FAIL];
+};
 
 /**
  * @param {IPegParser} self
@@ -39,7 +91,7 @@ const RUN = (self, ruleOrPatt, pos, name) => {
     self._misses(1);
     if (typeof ruleOrPatt === 'function') {
       result = ruleOrPatt(self, pos);
-    } else if (ruleOrPatt !== void 0) {
+    } else if (ruleOrPatt !== undefined) {
       console.error(`Rule missing: ${name}`);
     } else {
       result = EAT(self, pos, ruleOrPatt);
@@ -99,7 +151,7 @@ const ERROR = (self, _pos) => {
 -------template--------
 ${self.template.raw.reduce((prior, r, i) => {
   if (sources) {
-    const s = sources[i];
+    const s = sources[+i];
     prior += `    ${s.uri}:${s.line}: `;
   }
   prior += `${JSON.stringify(r).slice(0, 50)}\n`;
@@ -116,8 +168,8 @@ ${failStr}`);
  */
 const makeTokStr = (self, found) => {
   if (Array.isArray(found)) {
-    const segment = self.template[found[0]];
-    return `${JSON.stringify(segment[found[1]])} #${found[0]}:${found[1]}`;
+    const segment = self.template[+found[0]];
+    return `${JSON.stringify(segment[+found[1]])} #${found[0]}:${found[1]}`;
   }
   if (typeof found === 'number') {
     return `hole #${found}`;
@@ -156,52 +208,10 @@ const DONE = self => {
   }
 };
 
-/**
- *
- * @param {TemplateStringsArray} template
- * @param {number} pos
- * @returns {[number, number] | number | undefined}
- */
-const FIND = (template, pos) => {
-  const { raw } = template;
-  const numSubs = raw.length - 1;
-  let relpos = pos;
-  for (let segnum = 0; segnum <= numSubs; segnum++) {
-    const segment = raw[segnum];
-    const seglen = segment.length;
-    if (relpos < seglen) {
-      return [segnum, relpos];
-    } else if (relpos === seglen && segnum < numSubs) {
-      return segnum; // as hole number
-    }
-    relpos -= seglen + 1; // "+1" for the skipped hole
-  }
-};
-
 /** @type {PegPredicate} */
 const ACCEPT = (_self, pos) => {
   // Not really needed: useful for incremental compilation.
   return [pos, []];
-};
-
-/** @type {PegEat} */
-const EAT = (self, pos, str) => {
-  // if (self._debug) {
-  //    console.warn(`Have ${self.template}`;
-  // }
-  const found = FIND(self.template, pos);
-  if (Array.isArray(found)) {
-    const segment = self.template.raw[found[0]];
-    if (typeof str === 'string') {
-      if (segment.startsWith(str, found[1])) {
-        return [pos + str.length, str];
-      }
-    } else {
-      // Just return the next character.
-      return [pos + 1, segment[found[1]]];
-    }
-  }
-  return [pos, FAIL];
 };
 
 /** @type {PegPredicate} */
@@ -212,9 +222,6 @@ const HOLE = (self, pos) => {
   }
   return [pos, FAIL];
 };
-
-const FAIL = { toString: () => 'FAIL' };
-const SKIP = { toString: () => 'SKIP' };
 
 const lHexDigits = '0123456789abcdef';
 const uHexDigits = 'ABCDEF';
@@ -273,8 +280,10 @@ const unescape = cs => {
       q = String.fromCharCode(ord);
       return [q, 4];
     }
+    default: {
+      break;
+    }
   }
-
   return [q, 2];
 };
 
@@ -306,7 +315,8 @@ const bootPeg = (makePeg, bootPegAst) => {
      * @param {string} prefix
      */
     function nextVar(prefix) {
-      const result = `${prefix}_${alphaCount++}`;
+      const result = `${prefix}_${alphaCount}`;
+      alphaCount += 1;
       vars.push(result);
       return result;
     }
@@ -319,7 +329,9 @@ const bootPeg = (makePeg, bootPegAst) => {
      * @param {string} prefix
      */
     function nextLabel(prefix) {
-      return `${prefix}_${alphaCount++}`;
+      const result = `${prefix}_${alphaCount}`;
+      alphaCount += 1;
+      return result;
     }
 
     /**
@@ -332,7 +344,7 @@ const bootPeg = (makePeg, bootPegAst) => {
         const rulesSrc = rules.map(peval).join('\n');
 
         const paramSrcs = [];
-        for (let i = 0; i < numSubs; i++) {
+        for (let i = 0; i < numSubs; i += 1) {
           paramSrcs.push(`act_${i}`);
         }
         // rules[0] is the ast of the first rule, which has the form
@@ -473,7 +485,6 @@ if (value !== FAIL) {
       /**
        * @param {PegExpr} patt
        * @param {PegExpr} sep
-       * @returns
        */
       '**': function(patt, sep) {
         // for backtracking
@@ -560,21 +571,21 @@ if (beginPos !== undefined) {
         // Character class.
         let classStr = '';
         let i = 0;
-        const invert = (cs[i] === '^');
+        const invert = (cs[+i] === '^');
         if (invert) {
-          ++i;
+          i += 1;
         }
         while (i < cs.length) {
           const [c, j] = unescape(cs.slice(i));
           i += j;
-          if (cs[i] === '-') {
+          if (cs[+i] === '-') {
             // It's a range.
-            ++i;
+            i += 1;
             const [c2, j2] = unescape(cs.slice(i));
             i += j2;
             const min = c.charCodeAt(0);
             const max = c2.charCodeAt(0);
-            for (let k = min; k <= max; k++) {
+            for (let k = min; k <= max; k += 1) {
               classStr += String.fromCharCode(k);
             }
           } else {
@@ -638,6 +649,8 @@ pos = ${posSrc};`;
       },
     };
 
+    const vtableMap = makeMap(Object.values(vtable));
+
     /**
      * @param {PegExpr} expr
      * @returns {string}
@@ -649,7 +662,7 @@ pos = ${posSrc};`;
         const nameStr = JSON.stringify(expr);
         return `[pos, value] = RUN(self, self.rule_${expr}, pos, ${nameStr});`;
       }
-      const op = vtable[expr[0]];
+      const op = vtableMap.get(expr[0]);
       if (!op) {
         console.error(`Cannot find ${expr[0]} in vtable`);
       }
@@ -667,7 +680,6 @@ pos = ${posSrc};`;
    *
    * @param {<T>(template: TemplateStringsArray, debug: boolean) => IPegTag<T>} quasiCurry
    * @param {IParserTag['parserCreator']} parserCreator
-   * @returns
    */
   function quasiMemo(quasiCurry, parserCreator) {
     const wm = makeWeakMap();
@@ -770,8 +782,6 @@ pos = ${posSrc};`;
        */
       const ext = baseQuasiParser => {
         /**
-         * @otypedef {((flag: string) => IPegTag<W>) &
-         *  ((template: TemplateStringsArray, ...substs: PegHole[]) => W) &
          * @typedef {(templateOrFlag: FlagTemplate, ...substs: PegHole[]) => W | IPegTag<W>}
          * TagFunction
          */
