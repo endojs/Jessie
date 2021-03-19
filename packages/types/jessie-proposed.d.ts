@@ -15,6 +15,13 @@ interface IMainDependencies {
     writeOutput: (file: string, data: string) => void;
 }
 
+interface ObjectConstructor {
+  assign<T, U>(target: T, source: U): T & U;
+  assign<T, U, V>(target: T, source1: U, source2: V): T & U & V;
+  assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
+  assign(target: object, ...sources: any[]): any;
+}
+
 interface PartialConsole {
   readonly debug(...args: any[]): void;
   readonly log(...args: any[]): void;

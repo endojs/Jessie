@@ -20,11 +20,6 @@ type PegEat = (
 type PegAction = (...terms: any[]) => any;
 type PegHole = PegConstant | PegAction;
 
-interface IFlaggedTag<Base extends IFlaggedTag<Base, T>, T = any, U = any> {
-  (template: TemplateStringsArray, ...args: U[]): T;
-  (flag: string): Base;
-}
-
 interface IBootPegTag<T = any> {
   (template: TemplateStringsArray, ...args: PegHole[]): T;
   ACCEPT: PegPredicate;
@@ -32,9 +27,18 @@ interface IBootPegTag<T = any> {
   SKIP: PegConstant;
 }
 
-interface IParserTag<T = any> extends IFlaggedTag<IParserTag<T>, T> {
+interface ParserOptions {
+  debug: boolean;
+}
+
+interface IParserTag<T = any, U = any> {
+  (template: TemplateStringsArray, ...args: T[]): U;
+  options(opts: Partial<ParserOptions>): IParserTag<T, U>;
   parserCreator: PegParserCreator;
-  _asExtending: <V, W>(baseQuasiParser: IParserTag<W>) => IPegTag<V>;
+  _asExtending: <V, W>(
+    baseQuasiParser: IParserTag<W>,
+    options: Partial<ParserOptions>,
+  ) => IPegTag<IParserTag<V>>;
 }
 
 interface IPegParser {
@@ -49,18 +53,16 @@ interface IPegParser {
 
 type PegParserCreator = (
   template: TemplateStringsArray,
-  debug: boolean,
+  options: Partial<ParserOptions>,
 ) => IPegParser | undefined;
 
-interface IPegTag<T = any> extends IFlaggedTag<IPegTag<T>, T, PegHole> {
+interface IPegTag<T = any> extends IParserTag<any, T> {
   ACCEPT: PegPredicate;
   FAIL: PegConstant;
   HOLE: PegPredicate;
   SKIP: PegConstant;
   EAT: PegEat;
-  extends: <W>(peg: IParserTag<W>) => IPegTag<T>;
-  _asExtending: <W>(baseQuasiParser: IParserTag<W>) => IPegTag<T>;
-  parserCreator: PegParserCreator;
+  extends: <W, V>(peg: IParserTag<W>) => IPegTag<IParserTag<V>>;
 }
 
 // TODO: Fill out all the tree from PegDef.
@@ -76,3 +78,10 @@ type MakePeg = <T = IPegTag<any>, U = IPegTag<IParserTag<any>>>(
   pegTag: IBootPegTag<T>,
   metaCompile: (defs: PegDef[]) => (..._: any[]) => U,
 ) => T;
+
+type BootPeg<T extends IPegTag<any>> = (
+  makePeg: MakePeg,
+  bootPegAst: PegDef[],
+) => IPegTag<IPegTag<T>>;
+
+type ParserTag<T> = (...baseActions: Array<any>) => IPegTag<T>;

@@ -28,14 +28,15 @@
 
 /// <reference path="peg.d.ts"/>
 
-import {qunpack} from './quasi-utils.js';
+import { qunpack } from './quasi-utils.js';
 
 const binary = (left: PegExpr, rights: any[]) => {
-    return rights.reduce<PegExpr>((prev, [op, right]) => [op, prev, right], left);
+  return rights.reduce<PegExpr>((prev, [op, right]) => [op, prev, right], left);
 };
 
 const transformSingleQuote = (s: string) => {
-  let i = 0, qs = '';
+  let i = 0;
+  let qs = '';
   while (i < s.length) {
     const c = s.slice(i, i + 1);
     if (c === '\\') {
@@ -45,21 +46,22 @@ const transformSingleQuote = (s: string) => {
     } else if (c === '"') {
       // Quote it.
       qs += '\\"';
-      i ++;
+      i++;
     } else {
       // Add it directly.
       qs += c;
-      i ++;
+      i++;
     }
   }
   return `"${qs}"`;
 };
 
 const makeJustin = (peg: IPegTag<IParserTag<any>>) => {
-    const {SKIP} = peg;
-    return peg`
+  const { SKIP } = peg;
+  return peg`
     # to be overridden or inherited
-    start <- _WS assignExpr _EOF                       ${v => (..._a: any[]) => v};
+    start <- _WS assignExpr _EOF                       ${v => (..._a: any[]) =>
+      v};
 
     # A.1 Lexical Grammar
 
@@ -152,11 +154,17 @@ const makeJustin = (peg: IPegTag<IParserTag<any>>) => {
     # Optional trailing commas.
     record <-
       super.record
-    / LEFT_BRACE propDef ** _COMMA _COMMA? RIGHT_BRACE      ${(_, ps, _2) => ['record', ps]};
+    / LEFT_BRACE propDef ** _COMMA _COMMA? RIGHT_BRACE      ${(_, ps, _2) => [
+      'record',
+      ps,
+    ]};
 
     array <-
       super.array
-    / LEFT_BRACKET element ** _COMMA _COMMA? RIGHT_BRACKET  ${(_, es, _2) => ['array', es]};
+    / LEFT_BRACKET element ** _COMMA _COMMA? RIGHT_BRACKET  ${(_, es, _2) => [
+      'array',
+      es,
+    ]};
 
     useVar <- IDENT                                       ${id => ['use', id]};
 
@@ -180,17 +188,34 @@ const makeJustin = (peg: IPegTag<IParserTag<any>>) => {
 
     element <-
       super.element
-    / ELLIPSIS assignExpr                                 ${(_, e) => ['spread', e]};
+    / ELLIPSIS assignExpr                                 ${(_, e) => [
+      'spread',
+      e,
+    ]};
 
     propDef <-
       super.propDef
-    / useVar                                              ${u => ['prop', u[1], u]}
-    / ELLIPSIS assignExpr                                 ${(_, e) => ['spreadObj', e]};
+    / useVar                                              ${u => [
+      'prop',
+      u[1],
+      u,
+    ]}
+    / ELLIPSIS assignExpr                                 ${(_, e) => [
+      'spreadObj',
+      e,
+    ]};
 
     purePropDef <-
       super.purePropDef
-    / useVar                                              ${u => ['prop', u[1], u]}
-    / ELLIPSIS assignExpr                                 ${(_, e) => ['spreadObj', e]};
+    / useVar                                              ${u => [
+      'prop',
+      u[1],
+      u,
+    ]}
+    / ELLIPSIS assignExpr                                 ${(_, e) => [
+      'spreadObj',
+      e,
+    ]};
 
     # No computed property name
     propName <-
@@ -199,19 +224,34 @@ const makeJustin = (peg: IPegTag<IParserTag<any>>) => {
     / NUMBER;
 
     quasiExpr <-
-      QUASI_ALL                                            ${q => ['quasi', [q]]}
-    / QUASI_HEAD expr ** QUASI_MID QUASI_TAIL              ${(h, ms, t) => ['quasi', qunpack(h, ms, t)]};
+      QUASI_ALL                                            ${q => [
+        'quasi',
+        [q],
+      ]}
+    / QUASI_HEAD expr ** QUASI_MID QUASI_TAIL              ${(h, ms, t) => [
+      'quasi',
+      qunpack(h, ms, t),
+    ]};
 
     # to be extended
     memberPostOp <-
-      LEFT_BRACKET indexExpr RIGHT_BRACKET                 ${(_, e, _3) => ['index', e]}
-    / DOT IDENT_NAME                                       ${(_, id) => ['get', id]}
+      LEFT_BRACKET indexExpr RIGHT_BRACKET                 ${(_, e, _3) => [
+        'index',
+        e,
+      ]}
+    / DOT IDENT_NAME                                       ${(_, id) => [
+      'get',
+      id,
+    ]}
     / quasiExpr                                            ${q => ['tag', q]};
 
     # to be extended
     callPostOp <-
       memberPostOp
-    / args                                                 ${args => ['call', args]};
+    / args                                                 ${args => [
+      'call',
+      args,
+    ]};
 
     # Because Justin and Jessie have no "new" or "super", they don't need
     # to distinguish callExpr from memberExpr. So justin omits memberExpr
@@ -226,14 +266,24 @@ const makeJustin = (peg: IPegTag<IParserTag<any>>) => {
     # Restrict index access to number-names, including
     # floating point, NaN, Infinity, and -Infinity.
     indexExpr <-
-      NUMBER                                               ${n => ['data', JSON.parse(n)]}
-    / PLUS unaryExpr                                       ${(_, e) => [`pre:+`, e]};
+      NUMBER                                               ${n => [
+        'data',
+        JSON.parse(n),
+      ]}
+    / PLUS unaryExpr                                       ${(_, e) => [
+      `pre:+`,
+      e,
+    ]};
 
-    args <- LEFT_PAREN arg ** _COMMA RIGHT_PAREN            ${(_, args, _2) => args};
+    args <- LEFT_PAREN arg ** _COMMA RIGHT_PAREN            ${(_, args, _2) =>
+      args};
 
     arg <-
       assignExpr
-    / ELLIPSIS assignExpr                                  ${(_, e) => ['spread', e]};
+    / ELLIPSIS assignExpr                                  ${(_, e) => [
+      'spread',
+      e,
+    ]};
 
     # to be overridden
     updateExpr <- callExpr;
@@ -251,7 +301,11 @@ const makeJustin = (peg: IPegTag<IParserTag<any>>) => {
     # Different communities will think -x**y parses in different ways,
     # so the EcmaScript grammar forces parens to disambiguate.
     powExpr <-
-      updateExpr STARSTAR powExpr                          ${(x, op, y) => [op, x, y]}
+      updateExpr STARSTAR powExpr                          ${(x, op, y) => [
+        op,
+        x,
+        y,
+      ]}
     / unaryExpr;
 
     multExpr <- powExpr (multOp powExpr)*                  ${binary};
@@ -281,7 +335,12 @@ const makeJustin = (peg: IPegTag<IParserTag<any>>) => {
     orElseOp <- "||" _WS;
 
     condExpr <-
-      orElseExpr QUESTION assignExpr COLON assignExpr   ${(c, _, t, _2, e) => ['cond', c, t, e]}
+      orElseExpr QUESTION assignExpr COLON assignExpr   ${(c, _, t, _2, e) => [
+        'cond',
+        c,
+        t,
+        e,
+      ]}
     / orElseExpr;
 
     # override, to be extended
