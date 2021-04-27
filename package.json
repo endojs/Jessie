@@ -37,7 +37,9 @@
     "build": "lerna run build"
   },
   "dependencies": {
-    "patch-package": "^6.2.2"
+    "@agoric/eslint-plugin": "^0.2.3",
+    "patch-package": "^6.2.2",
+    "prettier": "^1.19.1"
   },
   "ava": {
     "files": [

@@ -10,12 +10,21 @@ test('makePromise', async t => {
 });
 
 test('makeMap', async t => {
-  const init = [['abc', 123], ['def', 456]];
+  const init = [
+    ['abc', 123],
+    ['def', 456],
+  ];
   const map = makeMap(init);
 
   t.deepEqual([...map.entries()], init);
-  t.deepEqual([...map.keys()], init.map(([k]) => k));
-  t.deepEqual([...map.values()], init.map(([_k, v]) => v));
+  t.deepEqual(
+    [...map.keys()],
+    init.map(([k]) => k),
+  );
+  t.deepEqual(
+    [...map.values()],
+    init.map(([_k, v]) => v),
+  );
 
   const bar = {};
   t.is(map.get('abc'), 123);
