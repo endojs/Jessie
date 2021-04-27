@@ -129,11 +129,11 @@ effort. However, correct Jessie programs also cannot rely on the
 may be linked with programs written in SES, and so may rely on SES's ocap
 rules to constrain these other programs.
 
-Thus, every correct Jessie program is also a correct TinySES and SES
-program, and works unmodified within a SES environment run on a normal
-JavaScript implementation. Correct Jessie programs will also run on a
-standalone implementation of Jessie in which it is linked only with
-other Jessie code.
+Thus, every correct Jessie program is also a correct TinySES and SES program,
+and works unmodified within a SES environment run on a normal JavaScript
+implementation. Correct Jessie programs will also run on a standalone
+implementation of Jessie (which still needs to obey SES's ocap rules) in which
+it is linked only with other Jessie code.
 
 **JSON** is a static, absorbed subset of all the languages above. JSON
 achieved universal adoption because

@@ -1,0 +1,87 @@
+{
+  "name": "jessie.js",
+  "version": "0.2.0",
+  "description": "Jessie standard library",
+  "keywords": [],
+  "author": "Agoric",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/endojs/Jessie/tree/master/packages/lib#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/endojs/Jessie.git"
+  },
+  "bugs": {
+    "url": "https://github.com/endojs/Jessie/issues"
+  },
+  "parsers": {
+    "js": "mjs"
+  },
+  "main": "./dist/jessie.js.cjs",
+  "module": "./src/main.js",
+  "browser": "./dist/jessie.js.umd.js",
+  "unpkg": "./dist/jessie.js.umd.js",
+  "types": "./types/main.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./src/main.js",
+      "require": "./dist/jessie.js.cjs",
+      "browser": "./dist/jessie.js.umd.js"
+    }
+  },
+  "scripts": {
+    "build": "yarn build:types && yarn build:dist",
+    "build:dist": "rollup --config rollup.config.js",
+    "build:types": "tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "clean": "rm -rf dist",
+    "cover": "nyc ava",
+    "lint": "eslint '**/*.js'",
+    "lint-fix": "eslint --fix '**/*.js'",
+    "prepublish": "yarn clean && yarn build",
+    "test": "ava"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@agoric/eslint-config": "^0.2.1",
+    "@agoric/ses-ava": "^0.1.1",
+    "@agoric/swingset-vat": "^0.16.4",
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^6.1.0",
+    "ava": "^3.12.1",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "nyc": "^15.1.0",
+    "prettier": "^1.19.1",
+    "rollup": "1.31.0",
+    "rollup-plugin-terser": "^5.1.3",
+    "ses": "^0.12.3",
+    "typescript": "^4.0.5"
+  },
+  "files": [
+    "LICENSE*",
+    "dist",
+    "src",
+    "types"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@agoric"
+    ]
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "singleQuote": true
+  },
+  "ava": {
+    "files": [
+      "test/**/test-*.js"
+    ],
+    "require": [
+      "esm"
+    ],
+    "timeout": "2m"
+  }
+}

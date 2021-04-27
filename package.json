@@ -1,28 +1,51 @@
 {
-  "name": "lib-jessie",
-  "version": "0.2.0",
-  "description": "Jessie standard library",
-  "main": "lib/index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Agoric/Jessie.git"
-  },
-  "author": "Agoric",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/Agoric/Jessie/issues"
+  "name": "@jessie.js/monorepo",
+  "private": true,
+  "useWorkspaces": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=12.17.0"
   },
   "devDependencies": {
-    "ses": "^0.12.3"
+    "@agoric/eslint-config": "0.1.0",
+    "@typescript-eslint/parser": "^4.17.0",
+    "ava": "^3.12.1",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-eslint-comments": "^3.1.2",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-jsdoc": "^32.2.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "esm": "^3.2.25",
+    "lerna": "^3.19.0",
+    "lerna-update-wizard": "^0.17.5",
+    "typescript": "^4.0.2"
   },
-  "homepage": "https://github.com/Agoric/Jessie#readme",
-  "files": [
-    "lib"
-  ]
+  "scripts": {
+    "clean": "lerna clean",
+    "depcheck": "node scripts/check-mismatched-dependencies.js",
+    "update": "lernaupdate --dedupe",
+    "prettier": "lerna run prettier",
+    "lint": "lerna run lint",
+    "lint-fix": "lerna run --no-bail lint-fix",
+    "test": "ava",
+    "postinstall": "patch-package",
+    "patch-package": "patch-package",
+    "build": "lerna run build"
+  },
+  "dependencies": {
+    "patch-package": "^6.2.2"
+  },
+  "ava": {
+    "files": [
+      "packages/*/test/**/test-*.js"
+    ],
+    "require": [
+      "esm"
+    ],
+    "timeout": "2m"
+  }
 }
