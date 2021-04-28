@@ -1,50 +1,48 @@
 // @ts-check
 import { test } from '@agoric/swingset-vat/tools/prepare-test-env-ava';
-import { asyncAllTruthies, asyncWhile } from '../src/async';
+import { asyncDoWhile, asyncGenerate } from '../src/ring1/async';
 
-test('asyncAllTruthies - for-await-of', async t => {
+test('asyncDoWhile', async t => {
+  let nextValue = 0;
+  const unused = await asyncDoWhile(async () => {
+    const value = await Promise.resolve(nextValue);
+    nextValue += 1;
+    return value < 4;
+  });
+  t.is(unused, undefined);
+  t.is(nextValue, 5);
+});
+
+test('asyncGenerate - for-await-of', async t => {
   const results = [];
-  let state = 4;
-  const thunk = async () => {
-    const cur = await Promise.resolve(state);
-    state -= 1;
-    return cur;
-  };
-  for await (const el of asyncAllTruthies(thunk)) {
+  let nextValue = 0;
+  const gen = asyncGenerate(async () => {
+    const value = await Promise.resolve(nextValue);
+    nextValue += 1;
+    return { done: value >= 4, value };
+  });
+  for await (const el of gen) {
     results.push(el);
   }
-  t.deepEqual(results, [4, 3, 2, 1]);
+  t.deepEqual(results, [0, 1, 2, 3]);
 });
 
-test('asyncAllTruthies - manual iteration', async t => {
-  let state = 4;
-  const thunk = async () => {
-    const cur = await Promise.resolve(state);
-    state -= 1;
-    return cur;
-  };
+test('asyncGenerate - manual iteration', async t => {
+  let nextValue = 0;
+  const gen = asyncGenerate(async () => {
+    const value = await Promise.resolve(nextValue);
+    nextValue += 1;
+    return { done: value >= 4, value };
+  });
 
-  const ai = asyncAllTruthies(thunk)[Symbol.asyncIterator]();
-
-  for (let count = 4; count > 0; count -= 1) {
+  const ai = gen[Symbol.asyncIterator]();
+  for (let count = 0; count < 4; count += 1) {
     // eslint-disable-next-line no-await-in-loop
     const r = await ai.next();
-    t.is(r.value, count);
     t.is(r.done, false);
+    t.is(r.value, count);
   }
   const fin = await ai.next();
-  t.is(fin.value, 0);
   t.is(fin.done, true);
-});
-
-test('asyncWhile', async t => {
-  let state = 4;
-  const thunk = async () => {
-    const cur = await Promise.resolve(state);
-    state -= 1;
-    return cur;
-  };
-  const last = await asyncWhile(thunk);
-  t.is(last, 0);
-  t.is(state, -1);
+  t.is(fin.value, 4);
 });
