@@ -1,0 +1,82 @@
+{
+  "name": "@jessie.js/types",
+  "version": "0.1.0",
+  "description": "Typescript types for Jessie.",
+  "keywords": [],
+  "author": "Agoric",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/endojs/Jessie/tree/master/packages/types#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/endojs/Jessie.git"
+  },
+  "bugs": {
+    "url": "https://github.com/endojs/Jessie/issues"
+  },
+  "type": "module",
+  "parsers": {
+    "js": "mjs"
+  },
+  "main": "./dist/types.cjs",
+  "module": "./src/main.js",
+  "browser": "./dist/types.umd.js",
+  "unpkg": "./dist/types.umd.js",
+  "types": "./types/main.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./src/main.js",
+      "require": "./dist/types.cjs",
+      "browser": "./dist/types.umd.js"
+    }
+  },
+  "scripts": {
+    "build": "exit 0",
+    "build:dist": "rollup --config rollup.config.js",
+    "build:types": "tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "clean": "rm -rf dist",
+    "cover": "nyc ava",
+    "lint": "eslint '**/*.js'",
+    "lint-fix": "eslint --fix '**/*.js'",
+    "prepublish": "yarn clean && yarn build",
+    "test": "ava"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@agoric/eslint-config": "^0.2.1",
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^6.1.0",
+    "ava": "^3.12.1",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "nyc": "^15.1.0",
+    "prettier": "^1.19.1",
+    "rollup": "1.31.0",
+    "rollup-plugin-terser": "^5.1.3",
+    "typescript": "^4.0.5"
+  },
+  "files": [
+    "LICENSE*",
+    "dist",
+    "src",
+    "types"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@agoric"
+    ]
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "singleQuote": true
+  },
+  "ava": {
+    "files": [
+      "test/**/test-*.js"
+    ],
+    "timeout": "2m"
+  }
+}

@@ -1,0 +1,100 @@
+name: Test all Packages
+
+# run CI on pushes to main, and on all PRs (even the ones that target other
+# branches)
+
+on:
+ push:
+   branches: [main]
+ pull_request:
+
+# set ESM_DISABLE_CACHE=true (will be JSON parsed)
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['12.x', '14.x']
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: cache node modules
+      uses: actions/cache@v1
+      with:
+        path: ~/.cache/yarn
+        key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - run: yarn install
+    - run: yarn build
+
+    - name: cache build outputs
+      uses: actions/cache@v1
+      with:
+        path: .
+        key: ${{ runner.os }}-${{ matrix.node-version }}-built-${{ github.sha }}
+
+  lint:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['14.x']
+    steps:
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    # BEGIN-RESTORE-BOILERPLATE
+    - name: restore built files
+      id: built
+      uses: actions/cache@v1
+      with:
+        path: .
+        key: ${{ runner.os }}-${{ matrix.node-version }}-built-${{ github.sha }}
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+      if: steps.built.outputs.cache-hit != 'true'
+    - run: yarn install
+      if: steps.built.outputs.cache-hit != 'true'
+    - run: yarn build
+      if: steps.built.outputs.cache-hit != 'true'
+    # END-RESTORE-BOILERPLATE
+
+    - run: yarn lint
+
+  test:
+    # BEGIN-TEST-BOILERPLATE
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['12.x', '14.x']
+    steps:
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    # END-TEST-BOILERPLATE
+    # BEGIN-RESTORE-BOILERPLATE
+    - name: restore built files
+      id: built
+      uses: actions/cache@v1
+      with:
+        path: .
+        key: ${{ runner.os }}-${{ matrix.node-version }}-built-${{ github.sha }}
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+      if: steps.built.outputs.cache-hit != 'true'
+    - run: yarn install
+      if: steps.built.outputs.cache-hit != 'true'
+    - run: yarn build
+      if: steps.built.outputs.cache-hit != 'true'
+    # END-RESTORE-BOILERPLATE
+
+    - run: yarn test
