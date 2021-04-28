@@ -1,7 +1,7 @@
 {
   "name": "@jessie.js/types",
   "version": "0.1.0",
-  "description": "Description forthcoming.",
+  "description": "Typescript types for Jessie.",
   "keywords": [],
   "author": "Agoric",
   "license": "Apache-2.0",

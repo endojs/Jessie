@@ -1,7 +1,7 @@
 {
   "name": "@jessie.js/transform-this-module",
   "version": "0.1.0",
-  "description": "Description forthcoming.",
+  "description": "Indicate that the importer needs rewriting to be valid Jessie.",
   "keywords": [],
   "author": "Agoric",
   "license": "Apache-2.0",
