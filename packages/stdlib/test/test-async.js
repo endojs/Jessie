@@ -1,6 +1,6 @@
 // @ts-check
 import { test } from '@agoric/swingset-vat/tools/prepare-test-env-ava';
-import { asyncDoWhile, asyncGenerate } from '../src/ring1/async';
+import { asyncDoWhile, asyncGenerate } from '../src/ring1/async-tools';
 
 test('asyncDoWhile', async t => {
   let nextValue = 0;
