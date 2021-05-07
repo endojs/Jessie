@@ -1,4 +1,5 @@
-The modules in this folder rely on engine-level mechanisms.  This code
-cannot be written in pure Jessie.
+The modules in this folder rely on SES-level mechanisms.  This code cannot be
+written in pure Jessie.
 
-So, a given implementation of Jessie must reimplement these modules.
+A non-SES implementation of Jessie needs to reimplement these modules outside of
+Jessie.

@@ -4,6 +4,8 @@ import { makePromise } from '../ring0/main';
 /**
  * Resolve promise with value when body returns falsy.
  *
+ * This works around Jessie's forbiddance of `await` not at the function-level.
+ *
  * @template T
  * @param {() => T | Promise<T>} body perform side-effects, and return truthy if
  * we should run again
@@ -27,23 +29,3 @@ const asyncDoWhile = body => {
 };
 harden(asyncDoWhile);
 export { asyncDoWhile };
-
-/**
- * Return an async iterable that produces iterator results via next.
- *
- * @template T,TReturn
- * @param {() => IteratorResult<T, TReturn> | Promise<IteratorResult<T,
- * TReturn>>} next produce an iterator result
- * @returns {AsyncIterable<T>}
- */
-const asyncGenerate = next => {
-  return harden({
-    [Symbol.asyncIterator]: () => {
-      return harden({
-        next: async () => harden(next()),
-      });
-    },
-  });
-};
-harden(asyncGenerate);
-export { asyncGenerate };

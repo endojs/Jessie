@@ -1,4 +1,5 @@
 // @ts-check
+// These work around Jessie's forbiddance of `new`.
 /// <reference types="ses" />
 
 // TODO: Typing these would be laudable, but harder than it looks.
