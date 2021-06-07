@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@agoric/eslint-config": "0.1.0",
+    "@endo/eslint-config": "^0.3.8",
     "@typescript-eslint/parser": "^4.17.0",
     "ava": "^3.12.1",
     "eslint": "^6.8.0",

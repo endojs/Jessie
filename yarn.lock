@@ -568,6 +568,20 @@
   resolved "https://registry.yarnpkg.com/@endo/base64/-/base64-0.1.0.tgz#d321d5b36f16648f0b0b05d96f93501d6a461501"
   integrity sha512-wVBsKkVV3t3mGT1XVoQAYkBpnum/OEJ0kBka3s7PSQnAne0aFmi1P9IIWyHzsoIgdai7ONTpGSgBZIk6X9dOrw==
 
+"@endo/eslint-config@^0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@endo/eslint-config/-/eslint-config-0.3.8.tgz#8f7426557505001b4fecda6a33582581911c99fe"
+  integrity sha512-Q/eIeUq1BnuQstG6SoryndpUrYi2zbZLZho0B2L5L7Vu6pbpc8n3UW898+qqUYSrmHq/eJz34+TQJwmC/bNYfQ==
+  dependencies:
+    "@endo/eslint-plugin" "^0.3.4"
+
+"@endo/eslint-plugin@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@endo/eslint-plugin/-/eslint-plugin-0.3.4.tgz#6cafbc8623792a4ba261708f2e68a063daa131ab"
+  integrity sha512-VEngqWiAD6ip8+XNuT/6X3ThLJgvkpv2zzBy3NeMLXWCVeX86rpPVWW9GqEmY5M5Q+i8e+lCaLNiW59ZR14sKw==
+  dependencies:
+    requireindex "~1.1.0"
+
 "@evocateur/libnpmaccess@^3.1.2":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@evocateur/libnpmaccess/-/libnpmaccess-3.1.2.tgz#ecf7f6ce6b004e9f942b098d92200be4a4b1c845"
