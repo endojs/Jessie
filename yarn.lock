@@ -62,23 +62,6 @@
   dependencies:
     ses "^0.12.6"
 
-"@agoric/eslint-config@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@agoric/eslint-config/-/eslint-config-0.1.0.tgz#f5d3dc16f6db6248f8b756d514dd2b54d92fd9d6"
-  integrity sha512-oOHWOuoS4pK6PF2HPz0wwhHpkbMcTLAfYGA6pz9fYB8O7efal9EJxcLPTbD3uJd6Z2Qd7CJp/Z8Ze06nT9/nQw==
-
-"@agoric/eslint-config@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@agoric/eslint-config/-/eslint-config-0.2.1.tgz#e18d548fbf2d41ed6dce0303402ffed82b4973ba"
-  integrity sha512-0VJdY28OA1q57QnZHPUlmKO3aMe0MAIoYimwvpr2W5PViq5eZQb9CclpMD6Bliosn54Js0S5CCA1V8VBJfIrPA==
-
-"@agoric/eslint-plugin@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@agoric/eslint-plugin/-/eslint-plugin-0.2.3.tgz#29734731b2bcfcb4bb259f531fcf0125772c3bfd"
-  integrity sha512-m0GcNDf4L8WCQMbDrdq7dv4RVYly7YvDm6Xs2C3/Zq2FQGli9TjuR38SA41HXpf1O9Vaz20YpchuLjx/CP8uKQ==
-  dependencies:
-    requireindex "~1.1.0"
-
 "@agoric/eventual-send@^0.13.11":
   version "0.13.11"
   resolved "https://registry.yarnpkg.com/@agoric/eventual-send/-/eventual-send-0.13.11.tgz#9158a0b36dad625527c9ae28e5210b5ad520a53f"
@@ -567,6 +550,20 @@
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@endo/base64/-/base64-0.1.0.tgz#d321d5b36f16648f0b0b05d96f93501d6a461501"
   integrity sha512-wVBsKkVV3t3mGT1XVoQAYkBpnum/OEJ0kBka3s7PSQnAne0aFmi1P9IIWyHzsoIgdai7ONTpGSgBZIk6X9dOrw==
+
+"@endo/eslint-config@^0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@endo/eslint-config/-/eslint-config-0.3.8.tgz#8f7426557505001b4fecda6a33582581911c99fe"
+  integrity sha512-Q/eIeUq1BnuQstG6SoryndpUrYi2zbZLZho0B2L5L7Vu6pbpc8n3UW898+qqUYSrmHq/eJz34+TQJwmC/bNYfQ==
+  dependencies:
+    "@endo/eslint-plugin" "^0.3.4"
+
+"@endo/eslint-plugin@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@endo/eslint-plugin/-/eslint-plugin-0.3.4.tgz#6cafbc8623792a4ba261708f2e68a063daa131ab"
+  integrity sha512-VEngqWiAD6ip8+XNuT/6X3ThLJgvkpv2zzBy3NeMLXWCVeX86rpPVWW9GqEmY5M5Q+i8e+lCaLNiW59ZR14sKw==
+  dependencies:
+    requireindex "~1.1.0"
 
 "@evocateur/libnpmaccess@^3.1.2":
   version "3.1.2"

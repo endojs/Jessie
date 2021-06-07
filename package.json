@@ -9,7 +9,7 @@
     "node": ">=12.17.0"
   },
   "devDependencies": {
-    "@agoric/eslint-config": "0.1.0",
+    "@endo/eslint-config": "^0.3.8",
     "@typescript-eslint/parser": "^4.17.0",
     "ava": "^3.12.1",
     "eslint": "^6.8.0",
@@ -22,6 +22,7 @@
     "esm": "^3.2.25",
     "lerna": "^3.19.0",
     "lerna-update-wizard": "^0.17.5",
+    "prettier": "^1.19.1",
     "typescript": "^4.0.2"
   },
   "scripts": {
@@ -37,9 +38,7 @@
     "build": "lerna run build"
   },
   "dependencies": {
-    "@agoric/eslint-plugin": "^0.2.3",
-    "patch-package": "^6.2.2",
-    "prettier": "^1.19.1"
+    "patch-package": "^6.2.2"
   },
   "ava": {
     "files": [

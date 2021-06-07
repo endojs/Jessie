@@ -42,7 +42,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@agoric/eslint-config": "^0.2.1",
     "@agoric/ses-ava": "^0.1.1",
     "@agoric/swingset-vat": "^0.16.4",
     "@rollup/plugin-commonjs": "^13.0.0",
@@ -67,8 +66,11 @@
     "access": "public"
   },
   "eslintConfig": {
+    "plugins": [
+      "@jessie.js"
+    ],
     "extends": [
-      "@agoric"
+      "@endo"
     ]
   },
   "prettier": {
