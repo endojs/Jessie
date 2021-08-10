@@ -66,9 +66,6 @@
     "access": "public"
   },
   "eslintConfig": {
-    "plugins": [
-      "@jessie.js"
-    ],
     "extends": [
       "@endo"
     ]
