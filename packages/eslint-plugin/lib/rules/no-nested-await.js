@@ -47,6 +47,11 @@ module.exports = {
   create(context) {
     return {
       AwaitExpression: node => {
+        // As a hint to future readers, I used the following ASTExplorer
+        // workspace to look up the relevant AST shapes (note that node.parent
+        // is not displayed in the ASTExplorer, but is available in the ESLint
+        // visitor):
+        // https://astexplorer.net/#/gist/4508eec25a8d5be1e0248c4cc06b9634/f6b22f2e8e3abd82a911ca6286a304ef0a3018c4
         let parent = node.parent;
         if (parent.type === 'VariableDeclarator' && parent.init === node) {
           // It's a declarator, so look up to the declaration statement's parent.

@@ -12,6 +12,10 @@ exports.jessieRules = {
   'no-fallthrough': ['error', { commentPattern: `fallthrough is ${nono}` }],
   // The denylist is probably too permissive.  We should have an allowlist.
   'no-restricted-globals': ['error', 'RegExp', 'Date', 'Symbol'],
+  // Hint to future readers: https://eslint.org/docs/developer-guide/selectors
+  // is a guide to the `no-restricted-syntax` rule configuration.  You can use
+  // https://astexplorer.net/#/gist/4508eec25a8d5be1e0248c4cc06b9634/f6b22f2e8e3abd82a911ca6286a304ef0a3018c4
+  // to see what AST nodes are produced by different programs.
   'no-restricted-syntax': [
     'error',
     {
