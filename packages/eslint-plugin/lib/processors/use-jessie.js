@@ -113,6 +113,8 @@ const prependedText = text => {
   if (text.startsWith('#!')) {
     prepend += '//';
   }
+  // Adding exactly one space to our prepension prevents eslint from insisting
+  // on users adding an extra one themselves.
   if (!prepend.endsWith(' ')) {
     prepend += ' ';
   }
