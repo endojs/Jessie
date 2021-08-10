@@ -37,7 +37,7 @@ module.exports = {
       category: 'Possible Errors',
       recommended: true,
       url:
-        'https://github.com/endojs/Jessie/blob/master/packages/eslint-plugin/lib/rules/no-tricky-await.js',
+        'https://github.com/endojs/Jessie/blob/master/packages/eslint-plugin/lib/rules/no-nested-await.js',
     },
     type: 'problem',
     fixable: null,

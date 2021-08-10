@@ -5,7 +5,7 @@
 const nono = `not allowed in Jessie`;
 
 exports.jessieRules = {
-  '@jessie.js/no-tricky-await': ['error'],
+  '@jessie.js/no-nested-await': ['error'],
   curly: ['error', 'all'],
   eqeqeq: ['error', 'always'],
   'no-bitwise': ['error'],
