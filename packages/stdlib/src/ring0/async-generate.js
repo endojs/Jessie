@@ -11,7 +11,7 @@
  * } next produce a single-step iterator result
  * @returns {AsyncIterable<T>}
  */
-const asyncGenerate = next => {
+export const asyncGenerate = next => {
   return harden({
     [Symbol.asyncIterator]: () => {
       return harden({
@@ -21,4 +21,3 @@ const asyncGenerate = next => {
   });
 };
 harden(asyncGenerate);
-export { asyncGenerate };

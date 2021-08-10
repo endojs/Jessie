@@ -1,8 +1,9 @@
 // @ts-check
+// @jessie-check
 import { makePromise } from '../ring0/main';
 
 /**
- * Resolve promise with value when body returns falsy.
+ * Resolve returned promise with undefined when `body` returns falsy.
  *
  * This works around Jessie's forbiddance of `await` not at the function-level.
  *
@@ -11,7 +12,7 @@ import { makePromise } from '../ring0/main';
  * we should run again
  * @returns {Promise<void>}
  */
-const asyncDoWhile = body => {
+export const asyncDoWhile = body => {
   const loop = async (resolve, reject) => {
     const doContinue = await body();
     if (!doContinue) {
@@ -28,4 +29,3 @@ const asyncDoWhile = body => {
   return makePromise((resolve, reject) => loop(resolve, reject).catch(reject));
 };
 harden(asyncDoWhile);
-export { asyncDoWhile };
