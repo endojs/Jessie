@@ -1,6 +1,6 @@
 # @jessie.js/eslint-plugin
 
-Agoric-specific plugin
+Jessie-specific plugin
 
 ## Installation
 
@@ -31,16 +31,10 @@ Add `@jessie.js` to the plugins section of your `.eslintrc` configuration file. 
 ```
 
 
-Then configure the rules you want to use under the rules section.
+Then configure the Jessie parser under the processor section.
 
 ```json
 {
-    "rules": {
-        "@jessie.js/rule-name": 2
-    }
+    "processor": "@jessie.js/use-jessie"
 }
 ```
-
-## Supported Rules
-
-* Fill in provided rules here

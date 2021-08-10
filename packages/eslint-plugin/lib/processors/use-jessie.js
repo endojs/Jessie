@@ -111,7 +111,10 @@ const prependedText = text => {
   }
   let prepend = jessieRulesOneLine;
   if (text.startsWith('#!')) {
-    prepend += '// ';
+    prepend += '//';
+  }
+  if (!prepend.endsWith(' ')) {
+    prepend += ' ';
   }
   return prepend;
 };

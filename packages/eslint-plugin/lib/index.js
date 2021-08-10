@@ -18,3 +18,4 @@ const requireIndex = require('requireindex');
 
 module.exports.configs = requireIndex(`${__dirname}/configs`);
 module.exports.processors = requireIndex(`${__dirname}/processors`);
+module.exports.rules = requireIndex(`${__dirname}/rules`);
