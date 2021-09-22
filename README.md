@@ -293,10 +293,10 @@ face of the pervasive possibility of reflective property mutation.
 
 To enable sound static reasoning, in Jessie all objects made by
 literal expressions (object literals, array literals, the many forms
-of function literals) must be tamper-proofed with `def` before they
+of function literals) must be tamper-proofed with `harden` before they
 can be aliased or escape from their static context of origin. Thus,
 direct property mutation can only be used to prepare an object for
-release. Use of `def` then marks the object as being ready for use by
+release. Use of `harden` then marks the object as being ready for use by
 its clients, who are thereby unable to mutate its properties. During
 an object's initialization phase, due to the lack of aliasing, each
 mutation can be reasoned about as-if it replaces the object in place
@@ -402,7 +402,7 @@ immediately when obtaining a fresh array from builtins like
 `Array.prototype.map`. In the following legal TinySES code
 
 ```js
-def(def([x, y, x]).map(f))
+harden(harden([x, y, x]).map(f))
 ```
 
 if TinySES knows that the array produced by `.map` is pristine and
@@ -411,7 +411,7 @@ extraneous or overriding properties. However, keeping track of such
 freshness requires more type mechanism than we wish to require for
 TinySES.
 
-Without the outer `def` the code above is still valid TinySES
+Without the outer `harden` the code above is still valid TinySES
 code. But TinySES would consider the resulting value to be as untyped
 as values received from SES code.
 
@@ -427,9 +427,9 @@ native support for Realms, safety can only be shimmed at the price of
 a full parse. This is the current situation on some browsers.
 
 Beyond subsetting EcmaScript, the Jessie grammar also includes the
-infix bang `!` (eventually) operator from Dr.SES. We hope infix bang
-`!` will become part of the standard EcmaScript grammar. But until
-then, infix bang `!` trivially transpiles into calls to the Dr.SES
+infix tildot `~.` (eventually) operator (like `!` from Dr.SES). We hope infix tildot
+`~.` will become part of the standard EcmaScript grammar. But until
+then, infix tildot `~.` trivially transpiles into calls to the Dr.SES
 extended promise API. See [Distributed Electronic Rights in
 JavaScript](http://research.google.com/pubs/pub40673.html).
 
