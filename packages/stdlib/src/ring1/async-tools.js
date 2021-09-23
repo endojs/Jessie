@@ -1,6 +1,6 @@
 // @ts-check
 // @jessie-check
-import { makePromise } from '../ring0/main';
+import { makePromise } from '../ring0/main.js';
 
 /**
  * Resolve returned promise with undefined when `body` returns falsy.
