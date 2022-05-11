@@ -14,27 +14,15 @@
     "url": "https://github.com/endojs/Jessie/issues"
   },
   "type": "module",
-  "parsers": {
-    "js": "mjs"
-  },
-  "main": "./dist/transform-this-module.cjs",
-  "module": "./src/main.js",
-  "browser": "./dist/transform-this-module.umd.js",
-  "unpkg": "./dist/transform-this-module.umd.js",
+  "main": "./src/main.js",
   "types": "./types/main.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    ".": {
-      "import": "./src/main.js",
-      "require": "./dist/transform-this-module.cjs",
-      "browser": "./dist/transform-this-module.umd.js"
-    }
+    ".": "./src/main.js"
   },
   "scripts": {
-    "build": "yarn build:types && yarn build:dist",
-    "build:dist": "rollup --config rollup.config.js",
+    "build": "yarn build:types",
     "build:types": "tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
-    "clean": "rm -rf dist",
     "cover": "nyc ava",
     "lint": "eslint '**/*.js'",
     "lint-fix": "eslint --fix '**/*.js'",
@@ -43,19 +31,14 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^13.0.0",
-    "@rollup/plugin-node-resolve": "^6.1.0",
     "ava": "^3.12.1",
     "eslint": "^7.23.0",
     "nyc": "^15.1.0",
     "prettier": "^1.19.1",
-    "rollup": "1.31.0",
-    "rollup-plugin-terser": "^5.1.3",
-    "typescript": "^4.2.3"
+    "typescript": "^4.6.4"
   },
   "files": [
     "LICENSE*",
-    "dist",
     "src",
     "types"
   ],

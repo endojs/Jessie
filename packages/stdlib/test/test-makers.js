@@ -1,5 +1,5 @@
 // @ts-check
-import { test } from '@agoric/swingset-vat/tools/prepare-test-env-ava';
+import { test } from '@agoric/swingset-vat/tools/prepare-test-env-ava.js';
 import { makePromise, makeMap } from '../src/ring0/makers.js';
 
 test('makePromise', async t => {
@@ -10,6 +10,7 @@ test('makePromise', async t => {
 });
 
 test('makeMap', async t => {
+  /** @type {[string, number][]} */
   const init = [
     ['abc', 123],
     ['def', 456],
@@ -31,6 +32,7 @@ test('makeMap', async t => {
   t.is(map.get('foo'), undefined);
   t.is(map.has('def'), true);
   t.is(map.has('foo'), false);
+  // @ts-expect-error not assignable to type number
   map.set('foo', bar);
   t.is(map.has('foo'), true);
   t.is(map.get('foo'), bar);

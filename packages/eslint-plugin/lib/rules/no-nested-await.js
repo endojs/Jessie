@@ -62,10 +62,10 @@ module.exports = {
         ) {
           // It's an assignment, so look up to the assigment's parent.
           parent = parent.parent;
-          if (parent.type === 'ExpressionStatement') {
-            // Try to find the parent block.
-            parent = parent.parent;
-          }
+        }
+        if (parent.type === 'ExpressionStatement') {
+          // Try to find the parent block.
+          parent = parent.parent;
         }
         if (parent.type === 'BlockStatement') {
           // Find the parent block's node.
