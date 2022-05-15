@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "moduleResolution": "node",
+        "target": "esnext",
+        "module": "es6",
+        "typeRoots": ["../types", "./node_modules/@types"],
+        "noImplicitAny": true,
+        "noEmit": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "alwaysStrict": true,
+        "types": ["../types/lib.jessie"]
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules/**"
+    ]
+}
