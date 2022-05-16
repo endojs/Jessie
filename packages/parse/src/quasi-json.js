@@ -7,13 +7,16 @@
 
 // See also json.org
 
-/// <reference path="peg.d.ts"/>
+/// <reference path="./peg.d.ts"/>
 
-const makeJSON = (peg: IPegTag<IParserTag<any>>) => {
-    const {FAIL, HOLE, SKIP} = peg;
-    return peg`
+/**
+ * @param {IPegTag<IParserTag<any>>} peg
+ */
+const makeJSON = peg => {
+  const { FAIL, HOLE, SKIP } = peg;
+  return peg`
 # to be overridden or inherited
-start <- _WS assignExpr _EOF                ${v => (..._a: any[]) => v};
+start <- _WS assignExpr _EOF                ${v => () => v};
 
 # to be extended
 primaryExpr <- dataStructure;
@@ -35,10 +38,16 @@ pureExpr <-
 dataLiteral <- (("null" / "false" / "true") _WSN / NUMBER / STRING) _WS;
 
 pureArray <-
-  LEFT_BRACKET pureExpr ** _COMMA _COMMA? RIGHT_BRACKET ${(_, es, _2) => ['array', es]};
+  LEFT_BRACKET pureExpr ** _COMMA _COMMA? RIGHT_BRACKET ${(_, es, _2) => [
+    'array',
+    es,
+  ]};
 
 array <-
-  LEFT_BRACKET element ** _COMMA _COMMA? RIGHT_BRACKET ${(_, es, _2) => ['array', es]};
+  LEFT_BRACKET element ** _COMMA _COMMA? RIGHT_BRACKET ${(_, es, _2) => [
+    'array',
+    es,
+  ]};
 
 # to be extended
 element <- assignExpr;
@@ -46,10 +55,16 @@ element <- assignExpr;
 # The JavaScript and JSON grammars calls records "objects"
 
 pureRecord <-
-  LEFT_BRACE purePropDef ** _COMMA _COMMA? RIGHT_BRACE  ${(_, ps, _2) => ['record', ps]};
+  LEFT_BRACE purePropDef ** _COMMA _COMMA? RIGHT_BRACE  ${(_, ps, _2) => [
+    'record',
+    ps,
+  ]};
 
 record <-
-  LEFT_BRACE propDef ** _COMMA _COMMA? RIGHT_BRACE  ${(_, ps, _2) => ['record', ps]};
+  LEFT_BRACE propDef ** _COMMA _COMMA? RIGHT_BRACE  ${(_, ps, _2) => [
+    'record',
+    ps,
+  ]};
 
 # to be extended
 purePropDef <- propName COLON pureExpr     ${(k, _, e) => ['prop', k, e]};
@@ -58,14 +73,14 @@ purePropDef <- propName COLON pureExpr     ${(k, _, e) => ['prop', k, e]};
 propDef <- propName COLON assignExpr       ${(k, _, e) => ['prop', k, e]};
 
 # to be extended
-propName <- STRING                     ${(str) => {
-                                            const js = JSON.parse(str);
-                                            if (js === '__proto__') {
-                                              // Don't allow __proto__ behaviour attacks.
-                                              return FAIL;
-                                            }
-                                            return ['data', js];
-                                          }};
+propName <- STRING                     ${str => {
+    const js = JSON.parse(str);
+    if (js === '__proto__') {
+      // Don't allow __proto__ behaviour attacks.
+      return FAIL;
+    }
+    return ['data', js];
+  }};
 
 # to be overridden
 assignExpr <- primaryExpr;
@@ -115,7 +130,6 @@ exp <- [Ee] [+\-]? digit+;
 _WSN <- ~[$A-Za-z_] _WS    ${_ => SKIP};
 _WS <- [\t\n\r ]*          ${_ => SKIP};
 `;
-
 };
 
 export default makeJSON;

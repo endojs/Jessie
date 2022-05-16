@@ -14,45 +14,64 @@
 // which are adapted from:
 // https://github.com/erights/quasiParserGenerator
 
-/// <reference path="peg.d.ts"/>
+/// <reference path="./peg.d.ts"/>
 
-const makePeg = <T = IPegTag<any>, U = IPegTag<IParserTag<any>>>(
-      pegTag: IBootPegTag<T>,
-      metaCompile: (defs: PegDef[]) => (..._: any[]) => U) => {
-      const {ACCEPT, HOLE, SKIP} = pegTag;
+/**
+ * @template [T=IPegTag<any>],[U=IPegTag<IParserTag<any>>]
+ * @param {IBootPegTag<T>} pegTag
+ * @param {(defs: PegDef[]) => (..._: unknown[]) => U} metaCompile
+ */
+const makePeg = (pegTag, metaCompile) => {
+  const { ACCEPT, HOLE, SKIP } = pegTag;
 
-      function simple(prefix: string, list: PegExpr[]) {
-            if (list.length === 0) { return ['empty']; }
-            if (list.length === 1) { return list[0]; }
-            return [prefix, ...list];
+  /**
+   * @param {string} prefix
+   * @param {PegExpr[]} list
+   */
+  function simple(prefix, list) {
+    if (list.length === 0) {
+      return ['empty'];
+    }
+    if (list.length === 1) {
+      return list[0];
+    }
+    return [prefix, ...list];
+  }
+
+  /**
+   * @param {PegExpr[]} args
+   */
+  function flatArgs(args) {
+    return args.reduce((prior, a) => {
+      // eslint-disable-next-line no-use-before-define
+      prior.push(...flatSeq(a));
+      return prior;
+    }, []);
+  }
+
+  /**
+   * @param {PegExpr} term
+   * @returns {PegExpr[]}
+   */
+  function flatSeq(term) {
+    if (Array.isArray(term)) {
+      if (term.length === 0) {
+        return [];
       }
-
-      function flatArgs(args: PegExpr[]) {
-            return args.reduce<PegExpr[]>((prior, a) => {
-                  prior.push(...flatSeq(a));
-                  return prior;
-            }, []);
+      const [kind, ...terms] = term;
+      if (kind === 'seq') {
+        return flatArgs(terms);
+      } else if (terms.length === 0 && Array.isArray(kind)) {
+        return flatSeq(kind);
+      } else {
+        return [[kind, ...flatArgs(terms)]];
       }
+    }
 
-      function flatSeq(term: PegExpr): PegExpr[] {
-            if (Array.isArray(term)) {
-                  if (term.length === 0) {
-                        return [];
-                  }
-                  const [kind, ...terms] = term;
-                  if (kind === 'seq') {
-                        return flatArgs(terms);
-                  } else if (terms.length === 0 && Array.isArray(kind)) {
-                        return flatSeq(kind);
-                  } else {
-                        return [[kind, ...flatArgs(terms)]];
-                  }
-            }
+    return [term];
+  }
 
-            return [term];
-      }
-
-      return pegTag`
+  return pegTag`
 # Hierarchical syntax
 
 Grammar      <- _Spacing Definition+ _EndOfFile
@@ -65,9 +84,10 @@ Expression   <- Sequence ** _SLASH
 Sequence     <- (Prefix*
                     ${list => simple('seq', list)})
                  HOLE?
-                    ${(seq, optHole) => optHole.length === 0 ?
-                        ['val0', ...flatSeq(seq)] :
-                        ['act', optHole[0], ...flatSeq(seq)]};
+                    ${(seq, optHole) =>
+                      optHole.length === 0
+                        ? ['val0', ...flatSeq(seq)]
+                        : ['act', optHole[0], ...flatSeq(seq)]};
 Prefix       <- AND HOLE
                     ${(_, a) => ['pred', a]}
               / AND Suffix
@@ -88,9 +108,9 @@ Primary      <- Super
               / OPEN Expression CLOSE
                     ${(_, e, _2) => e}
               / Literal
-                    ${(s) => ['lit', s]}
+                    ${s => ['lit', s]}
               / Class
-                    ${(c) => ['cls', c]}
+                    ${c => ['cls', c]}
               / DOT
                     ${() => ['dot']}
               / BEGIN

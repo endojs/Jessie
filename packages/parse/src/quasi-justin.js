@@ -2,7 +2,7 @@
 // http://www.ecma-international.org/ecma-262/9.0/#sec-grammar-summary
 
 // Justin is the safe JavaScript expression language, a potentially
-// pure decidable superset of JSON and subset of Jessie, that relieves
+// pure terminating superset of JSON and subset of Jessie, that relieves
 // many of the pain points of using JSON as a data format:
 //   * unquoted indentifier property names.
 //   * comments.
@@ -14,7 +14,7 @@
 // Justin also includes most pure JavaScript expressions. Justin does not
 // include function expressions or variable or function
 // definitions. However, it does include free variable uses and
-// function calls; so the purity and decidability of Justin depends on
+// function calls; so the purity and termination of Justin depends on
 // the endowments provided for these free variable bindings.
 
 // Justin is defined to be extended into the Jessie grammar, which is
@@ -24,17 +24,24 @@
 
 // Justin is defined to be extended into the Chainmail grammar, to
 // provide its expression language in a JS-like style. Chainmail
-// expressions need to be pure and should be decidable.
+// expressions need to be pure and should be terminating.
 
-/// <reference path="peg.d.ts"/>
+/// <reference path="./peg.d.ts"/>
 
-import { qunpack } from './quasi-utils.js';
+import { qunpack } from './qutils.js';
 
-const binary = (left: PegExpr, rights: any[]) => {
-  return rights.reduce<PegExpr>((prev, [op, right]) => [op, prev, right], left);
+/**
+ * @param {PegExpr} left
+ * @param {PegExpr[]} rights
+ */
+const binary = (left, rights) => {
+  return rights.reduce((prev, [op, right]) => [op, prev, right], left);
 };
 
-const transformSingleQuote = (s: string) => {
+/**
+ * @param {string} s
+ */
+const transformSingleQuote = s => {
   let i = 0;
   let qs = '';
   while (i < s.length) {
@@ -46,22 +53,24 @@ const transformSingleQuote = (s: string) => {
     } else if (c === '"') {
       // Quote it.
       qs += '\\"';
-      i++;
+      i += 1;
     } else {
       // Add it directly.
       qs += c;
-      i++;
+      i += 1;
     }
   }
   return `"${qs}"`;
 };
 
-const makeJustin = (peg: IPegTag<IParserTag<any>>) => {
+/**
+ * @param {IPegTag<IParserTag<any>>} peg
+ */
+const makeJustin = peg => {
   const { SKIP } = peg;
   return peg`
     # to be overridden or inherited
-    start <- _WS assignExpr _EOF                       ${v => (..._a: any[]) =>
-      v};
+    start <- _WS assignExpr _EOF                       ${v => () => v};
 
     # A.1 Lexical Grammar
 
@@ -86,7 +95,7 @@ const makeJustin = (peg: IPegTag<IParserTag<any>>) => {
     # Only match if whitespace doesn't contain newline
     _NO_NEWLINE <- ~IDENT [ \t]*     ${_ => SKIP};
 
-    IDENT_NAME <- ~(HIDDEN_PFX / "__proto__") (IDENT / RESERVED_WORD);
+    IDENT_NAME <- ~(HIDDEN_PFX / "__proto__" _WSN) (IDENT / RESERVED_WORD);
 
     IDENT <-
       ~(HIDDEN_PFX / IMPORT_PFX / RESERVED_WORD)

@@ -4,15 +4,13 @@
 // https://github.com/erights/quasiParserGenerator/tree/master/src/bootbnf.js
 
 /// <reference types="ses"/>
-/// <reference path="../types/peg.d.ts"/>
+/// <reference path="./peg.d.ts"/>
 
 import '@jessie.js/transform-this-module';
 
-import { makeMap, makeWeakMap } from 'lib-jessie';
+import { makeMap, makeWeakMap } from 'jessie.js';
 
 import indent from './indent.js';
-
-const { details: X } = assert;
 
 const FAIL = { toString: () => 'FAIL' };
 const SKIP = { toString: () => 'SKIP' };
@@ -45,7 +43,7 @@ const FIND = (template, pos) => {
 
 /** @type {PegEat} */
 const EAT = (self, pos, str) => {
-  // if (self._debug) {
+  // if (self._options.debug) {
   //    console.warn(`Have ${self.template}`;
   // }
   const found = FIND(self.template, pos);
@@ -71,7 +69,7 @@ const EAT = (self, pos, str) => {
  * @returns {any}
  */
 const RUN = (self, ruleOrPatt, pos, name) => {
-  if (self._debug) {
+  if (self._options.debug) {
     console.info(`run(f, ${pos}, ${name})`);
   }
   /** @type {Map<PegRuleOrPatt, any>} */
@@ -181,7 +179,7 @@ const makeTokStr = (self, found) => {
  * @param {IPegParser} self
  */
 const DONE = self => {
-  if (self._debug) {
+  if (self._options.debug) {
     for (const [pos, posm] of self._memo) {
       const fails = [];
       for (const [ruleOrPatt, result] of posm) {
@@ -288,10 +286,10 @@ const unescape = cs => {
 };
 
 /**
- * @template T
+ * @template {IPegTag<any>} T
  * @param {MakePeg} makePeg
  * @param {Array<PegDef>} bootPegAst
- * @returns {IPegTag<IPegTag<T>>}
+ * @returns {IPegTag<T>}
  */
 const bootPeg = (makePeg, bootPegAst) => {
   /**
@@ -359,14 +357,14 @@ const bootPeg = (makePeg, bootPegAst) => {
         return indent`
 (function(${paramSrcs.join(', ')}) {
   let myHits = 0, myMisses = 0;
-  return baseMemo => (template, debug) => {
+  return baseMemo => (template, options) => {
     const BaseParser = baseMemo({});
     return {...BaseParser,
       template,
       _memo: makeMap(),
       _hits: (i) => myHits += i,
       _misses: (i) => myMisses += i,
-      _debug: debug,
+      _options: options,
       start: (self) => {
         const pair = RUN(self, self.rule_${name}, 0, ${JSON.stringify(name)});
         if (pair[1] === FAIL) {
@@ -674,7 +672,7 @@ pos = ${posSrc};`;
   }
 
   /**
-   * @param {<T>(template: TemplateStringsArray, debug: boolean) => IPegTag<IParserTag<T>>} quasiCurry
+   * @param {(template: TemplateStringsArray, debug: boolean) => IPegTag<T>} quasiCurry
    * @param {IParserTag['parserCreator']} parserCreator
    * @param {Partial<ParserOptions>} options
    */
@@ -727,56 +725,58 @@ pos = ${posSrc};`;
   const defaultBaseGrammar = quasifyParser(_template => undefined, {});
 
   /**
-   * @template T
    * @param {Array<PegDef>} baseRules
-   * @returns {(...baseActions: Array<any>) => IPegTag<IPegTag<T>>}
+   * @returns {(...baseActions: Array<any>) => IPegTag<T>}
    */
   function metaCompile(baseRules) {
     const baseAST = ['peg', ...baseRules];
     const parserTraitMakerSrc = compile(baseAST);
     // console.trace(`SOURCES: ${parserTraitMakerSrc}\n`;
+    // eslint-disable-next-line no-restricted-syntax
+    const compartment = new Compartment(
+      {
+        DONE,
+        EAT,
+        ERROR,
+        FAIL,
+        FIND,
+        RUN,
+        SKIP,
+        makeMap,
+        makeTokStr,
+      },
+      {},
+    );
     /**
      * @typedef {(base: PegParserCreator) => PegParserCreator} ParserTrait
      */
-    const compartment = Compartment({}, {});
     /** @type {(...actions: any[]) => ParserTrait} */
-    const makeParserTrait = compartment.evaluate(parserTraitMakerSrc, {
-      DONE,
-      EAT,
-      ERROR,
-      FAIL,
-      FIND,
-      RUN,
-      SKIP,
-      makeMap,
-      makeTokStr,
-    });
+    const makeParserTrait = compartment.evaluate(parserTraitMakerSrc);
 
     /**
      * @param {Array<any>} baseActions
-     * @returns {IPegTag<IParserTag<any>>}
+     * @returns {IPegTag<T>}
      */
     function parserTag(...baseActions) {
       const parserTrait = makeParserTrait(...baseActions);
-      /** @type {<V, W = any>(baseQuasiParser: IParserTag<W>, opts: Partial<ParserOptions>) => IPegTag<IParserTag<V>>} */
+      /** @type {<W, V = any>(baseQuasiParser: IParserTag<V>, opts: Partial<ParserOptions>) => IPegTag<W>} */
       let _asExtending;
-      /** @type {IPegTag<IParserTag<any>>} */
+      /** @type {IPegTag<T>} */
       let quasiParser;
       /**
-       * @template W,V
+       * @template [V=any]
        * @param {IParserTag<V>} baseQuasiParser
-       * @returns {IPegTag<IParserTag<W>>}
        */
       const ext = baseQuasiParser => {
         /**
-         * @param {Partial<ParserOptions>} options
-         * @returns {IPegTag<IParserTag<W>>}
+         * @template X
+         * @param {ParserOptions} options
+         * @returns {IPegTag<IParserTag<X>>}
          */
         const makeExtensionTag = (options = {}) => {
           /**
            * @param {TemplateStringsArray} template
            * @param {PegHole[]} substs
-           * @returns {IParserTag<W>}
            */
           const tag = (template, ...substs) => {
             const boundParser = quasiParser(template, ...substs);
@@ -787,7 +787,7 @@ pos = ${posSrc};`;
             return parserBase;
           };
 
-          const extensionTag = Object.assign(tag, {
+          const extendedTag = Object.assign(tag, {
             ACCEPT,
             EAT,
             FAIL,
@@ -805,11 +805,17 @@ pos = ${posSrc};`;
             parserCreator: quasiParser.parserCreator,
           });
 
-          return extensionTag;
+          return extendedTag;
         };
         return makeExtensionTag();
       };
-      _asExtending = (baseQuasiParser, options) => {
+      /**
+       * @template W,[V=any]
+       * @param {IParserTag<V>} baseQuasiParser
+       * @param {Partial<ParserOptions>} options
+       * @returns {IPegTag<W>}
+       */
+      const boundAsExtending = (baseQuasiParser, options) => {
         const parserCreator = parserTrait(baseQuasiParser.parserCreator);
         const parser = quasifyParser(parserCreator, options);
         return Object.assign(parser, {
@@ -826,11 +832,13 @@ pos = ${posSrc};`;
           },
         });
       };
+      _asExtending = boundAsExtending;
+      /** @type {typeof defaultBaseGrammar & Pick<IParserTag, '_asExtending' | 'options'>} */
       const boundBaseGrammar = Object.assign(defaultBaseGrammar, {
         _asExtending,
         /**
          * @param {Partial<ParserOptions>} opts
-         * @returns {IPegTag<IParserTag<PegHole, any>>}
+         * @returns {IPegTag<any>}
          */
         options(opts) {
           return _asExtending(boundBaseGrammar, opts);

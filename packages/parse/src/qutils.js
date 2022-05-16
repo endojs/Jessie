@@ -1,8 +1,16 @@
-export const qunpack = (h: string, ms: any[][], t: string) => {
+/**
+ * @param {string} h
+ * @param {unknown[][]} ms
+ * @param {string} t
+ */
+export const qunpack = (h, ms, t) => {
   return [h, ...ms, t];
 };
 
-export const qrepack = (parts: any[]) => {
+/**
+ * @param {any[]} parts
+ */
+export const qrepack = parts => {
   // TODO bug: We only provide the raw form at this time. I
   // apologize once again for allowing a cooked form into the
   // standard.
@@ -13,7 +21,6 @@ export const qrepack = (parts: any[]) => {
     argExprs.push(parts[i]);
     raw.push(parts[i + 1]);
   }
-  const template: string[] & { raw?: string[] } = [...raw];
-  template.raw = raw;
+  const template = Object.assign([...raw], { raw });
   return [['data', template], ...argExprs];
 };
