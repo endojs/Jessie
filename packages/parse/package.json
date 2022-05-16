@@ -1,11 +1,12 @@
 {
   "name": "@jessie.js/parse",
   "version": "0.1.0",
-  "description": "Description forthcoming.",
+  "description": "Jessie parser generator",
+  "type": "module",
   "keywords": [],
   "author": "Agoric",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/endojs/Jessie/tree/master/packages/parse#readme",
+  "homepage": "https://github.com/endojs/Jessie/tree/main/packages/parse#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/endojs/Jessie.git"
@@ -13,54 +14,39 @@
   "bugs": {
     "url": "https://github.com/endojs/Jessie/issues"
   },
-  "type": "module",
-  "parsers": {
-    "js": "mjs"
-  },
-  "main": "./dist/parse.cjs",
-  "module": "./src/main.js",
-  "browser": "./dist/parse.umd.js",
-  "unpkg": "./dist/parse.umd.js",
+  "main": "./src/main.js",
   "types": "./types/main.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    ".": {
-      "import": "./src/main.js",
-      "require": "./dist/parse.cjs",
-      "browser": "./dist/parse.umd.js"
-    }
+    ".": "./src/main.js"
   },
   "scripts": {
-    "build": "yarn build:types && yarn build:dist",
-    "build:dist": "rollup --config rollup.config.js",
-    "build:types": "tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
-    "clean": "rm -rf dist",
+    "build": "yarn build:types",
+    "build:types": "tsc -p jsconfig.build.json --outDir types",
     "cover": "nyc ava",
     "lint": "eslint '**/*.js'",
+    "lint:types": "tsc -p jsconfig.json",
     "lint-fix": "eslint --fix '**/*.js'",
-    "prepublish-OFF": "yarn clean && yarn build",
+    "prepublish": "yarn clean && yarn build",
     "test": "ava"
   },
   "dependencies": {
+    "@endo/far": "^0.2.3",
+    "@endo/init": "^0.5.41",
     "@jessie.js/transform-this-module": "^0.1.0",
-    "lib-jessie": "^0.2.0"
+    "jessie.js": "^0.2.0"
   },
   "devDependencies": {
-    "@jessie.js/eslint-plugin": "^0.1.1",
-    "@rollup/plugin-commonjs": "^13.0.0",
-    "@rollup/plugin-node-resolve": "^6.1.0",
+    "@agoric/swingset-vat": "^0.26.0",
+    "@endo/ses-ava": "^0.2.25",
     "ava": "^3.12.1",
-    "babel-eslint": "^10.0.3",
+    "eslint": "^7.23.0",
     "nyc": "^15.1.0",
     "prettier": "^1.19.1",
-    "rollup": "1.31.0",
-    "rollup-plugin-terser": "^5.1.3",
-    "ses": "^0.12.3",
-    "typescript": "^4.0.5"
+    "ses": "^0.15.15"
   },
   "files": [
     "LICENSE*",
-    "dist",
     "src",
     "types"
   ],
@@ -69,10 +55,8 @@
   },
   "eslintConfig": {
     "extends": [
-      "plugin:@jessie.js/agoric"
-    ],
-    "plugins": [
-      "@jessie.js"
+      "@endo",
+      "plugin:@jessie.js/recommended"
     ]
   },
   "prettier": {

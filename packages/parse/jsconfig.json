@@ -10,10 +10,11 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "alwaysStrict": true,
-        "types": ["../types/lib.jessie"]
+        "downlevelIteration": true,
+        "types": ["@jessie.js/types/lib.jessie"]
     },
     "include": [
-        "src/**/*"
+        "src/**/*.js"
     ],
     "exclude": [
         "node_modules/**"
