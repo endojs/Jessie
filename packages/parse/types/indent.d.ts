@@ -4,3 +4,4 @@ export default indent;
  * @param {Array<any>} substs
  */
 declare function indent(template: TemplateStringsArray, ...substs: Array<any>): string;
+//# sourceMappingURL=indent.d.ts.map

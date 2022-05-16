@@ -5,7 +5,7 @@
   "keywords": [],
   "author": "Agoric",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/endojs/Jessie/tree/master/packages/types#readme",
+  "homepage": "https://github.com/endojs/Jessie/tree/main/packages/types#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/endojs/Jessie.git"
@@ -17,23 +17,13 @@
   "parsers": {
     "js": "mjs"
   },
-  "main": "./dist/types.cjs",
-  "module": "./src/main.js",
-  "browser": "./dist/types.umd.js",
-  "unpkg": "./dist/types.umd.js",
-  "types": "./types/main.d.ts",
+  "main": "./src/main.js",
   "exports": {
     "./package.json": "./package.json",
-    ".": {
-      "import": "./src/main.js",
-      "require": "./dist/types.cjs",
-      "browser": "./dist/types.umd.js"
-    }
+    ".": "./src/main.js"
   },
   "scripts": {
     "build": "exit 0",
-    "build:dist": "rollup --config rollup.config.js",
-    "build:types": "tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
     "clean": "rm -rf dist",
     "cover": "nyc ava",
     "lint": "eslint '**/*.js'",
@@ -43,15 +33,11 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^13.0.0",
-    "@rollup/plugin-node-resolve": "^6.1.0",
     "ava": "^3.12.1",
     "eslint": "^7.23.0",
     "nyc": "^15.1.0",
     "prettier": "^1.19.1",
-    "rollup": "1.31.0",
-    "rollup-plugin-terser": "^5.1.3",
-    "typescript": "^4.2.3"
+    "typescript": "^4.6.4"
   },
   "files": [
     "LICENSE*",
