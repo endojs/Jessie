@@ -5,7 +5,7 @@
   "keywords": [],
   "author": "Agoric",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/endojs/Jessie/tree/master/packages/transform-this-module#readme",
+  "homepage": "https://github.com/endojs/Jessie/tree/main/packages/transform-this-module#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/endojs/Jessie.git"
