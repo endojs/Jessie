@@ -23,6 +23,7 @@
   "scripts": {
     "build": "yarn build:types",
     "build:types": "tsc -p jsconfig.build.json --outDir types",
+    "clean": "rm -rf types",
     "cover": "nyc ava",
     "lint": "eslint '**/*.js'",
     "lint:types": "tsc -p jsconfig.json",
