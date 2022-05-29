@@ -20,11 +20,11 @@
     "eslint-plugin-jsdoc": "^30.7.0",
     "eslint-plugin-jsx-a11y": "^6.4.0",
     "eslint-plugin-prettier": "^3.2.0",
-    "lerna": "^3.20.2",
+    "lerna": "^5.0.0",
     "lerna-update-wizard": "^0.17.5",
     "prettier": "^1.18.2",
     "typescript": "^4.6.4"
- },
+  },
   "scripts": {
     "clean": "lerna clean",
     "depcheck": "node scripts/check-mismatched-dependencies.js",
