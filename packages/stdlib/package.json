@@ -1,6 +1,6 @@
 {
   "name": "jessie.js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Jessie standard library",
   "type": "module",
   "keywords": [],
@@ -23,6 +23,7 @@
   "scripts": {
     "build": "yarn build:types",
     "build:types": "tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "clean": "rm -rf types",
     "cover": "nyc ava",
     "lint": "eslint '**/*.js'",
     "lint-fix": "eslint --fix '**/*.js'",
@@ -33,8 +34,8 @@
     "@endo/far": "^0.2.3"
   },
   "devDependencies": {
-    "@endo/ses-ava": "^0.2.25",
     "@agoric/swingset-vat": "^0.26.0",
+    "@endo/ses-ava": "^0.2.25",
     "ava": "^3.12.1",
     "eslint": "^7.23.0",
     "nyc": "^15.1.0",

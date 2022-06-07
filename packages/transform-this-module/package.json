@@ -1,6 +1,6 @@
 {
   "name": "@jessie.js/transform-this-module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Indicate that the importer needs rewriting to be valid Jessie.",
   "keywords": [],
   "author": "Agoric",
@@ -23,13 +23,13 @@
   "scripts": {
     "build": "yarn build:types",
     "build:types": "tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "clean": "rm -rf types",
     "cover": "nyc ava",
     "lint": "eslint '**/*.js'",
     "lint-fix": "eslint --fix '**/*.js'",
     "prepublish": "yarn clean && yarn build",
     "test": "ava"
   },
-  "dependencies": {},
   "devDependencies": {
     "ava": "^3.12.1",
     "eslint": "^7.23.0",
