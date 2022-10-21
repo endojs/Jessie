@@ -58,7 +58,8 @@ module.exports = {
           parent = parent.parent.parent;
         } else if (
           parent.type === 'AssignmentExpression' &&
-          parent.right === node
+          parent.right === node &&
+          parent.operator === '='
         ) {
           // It's an assignment, so look up to the assigment's parent.
           parent = parent.parent;
