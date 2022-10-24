@@ -1,6 +1,6 @@
 {
   "name": "@jessie.js/parse",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Jessie parser generator",
   "type": "module",
   "keywords": [],
@@ -34,8 +34,8 @@
   "dependencies": {
     "@endo/far": "^0.2.3",
     "@endo/init": "^0.5.41",
-    "@jessie.js/transform-this-module": "^0.2.0",
-    "jessie.js": "^0.3.0"
+    "@jessie.js/transform-this-module": "^0.2.1",
+    "jessie.js": "^0.3.1"
   },
   "devDependencies": {
     "@agoric/swingset-vat": "^0.26.0",

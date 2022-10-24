@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/endojs/Jessie/compare/@jessie.js/eslint-plugin@0.2.0...@jessie.js/eslint-plugin@0.2.1) (2022-10-24)
+
+
+### Bug Fixes
+
+* **eslint-plugin:** Disallow `await` in non-plain assignments ([#90](https://github.com/endojs/Jessie/issues/90)) ([4a75042](https://github.com/endojs/Jessie/commit/4a750424260aa5ccedf662d02835c5c0cc279149))
+
+
+
+
+
 # 0.2.0 (2022-05-29)
 
 
