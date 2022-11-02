@@ -45,6 +45,24 @@ module.exports = {
     supported: true || CodePathAnalyzer !== null,
   },
   create(context) {
+    const isValidParent = parent => {
+      if (parent.type === 'BlockStatement') {
+        // Find the parent block's node.
+        parent = parent.parent;
+      }
+
+      // Is the parent is an async function or for-await-of body.
+      return (
+        ([
+          'ArrowFunctionExpression',
+          'FunctionExpression',
+          'FunctionDeclaration',
+        ].includes(parent.type) &&
+          parent.async === true) ||
+        (parent.type === 'ForOfStatement' && parent.await === true)
+      );
+    };
+
     return {
       AwaitExpression: node => {
         // As a hint to future readers, I used the following ASTExplorer
@@ -68,28 +86,22 @@ module.exports = {
           // Try to find the parent block.
           parent = parent.parent;
         }
-        if (parent.type === 'BlockStatement') {
-          // Find the parent block's node.
-          parent = parent.parent;
-        }
 
-        if (
-          ([
-            'ArrowFunctionExpression',
-            'FunctionExpression',
-            'FunctionDeclaration',
-          ].includes(parent.type) &&
-            parent.async === true) ||
-          (parent.type === 'ForOfStatement' && parent.await === true)
-        ) {
-          // Its parent is an async function or for-await-of body.
-          return;
+        if (!isValidParent(parent)) {
+          context.report({
+            node,
+            message: 'Unexpected `await` expression (not top of function body)',
+          });
         }
-
-        context.report({
-          node,
-          message: 'Unexpected `await` expression (not top of function body)',
-        });
+      },
+      ForOfStatement: node => {
+        if (node.await === true && !isValidParent(node.parent)) {
+          context.report({
+            node,
+            message:
+              'Unexpected `for-await-of` statement (not top of function body)',
+          });
+        }
       },
     };
   },
