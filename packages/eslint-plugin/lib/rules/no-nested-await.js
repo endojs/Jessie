@@ -74,13 +74,15 @@ module.exports = {
         }
 
         if (
-          [
+          ([
             'ArrowFunctionExpression',
             'FunctionExpression',
             'FunctionDeclaration',
-          ].includes(parent.type)
+          ].includes(parent.type) &&
+            parent.async === true) ||
+          (parent.type === 'ForOfStatement' && parent.await === true)
         ) {
-          // Its parent is a function body.
+          // Its parent is an async function or for-await-of body.
           return;
         }
 
