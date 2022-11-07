@@ -45,13 +45,13 @@ module.exports = {
     supported: true || CodePathAnalyzer !== null,
   },
   create(context) {
-    const isValidParent = parent => {
+    const isAwaitAllowedInNode = parent => {
       if (parent.type === 'BlockStatement') {
         // Find the parent block's node.
         parent = parent.parent;
       }
 
-      // Is the parent is an async function or for-await-of body.
+      // If the parent is an async function or for-await-of body.
       return (
         ([
           'ArrowFunctionExpression',
@@ -87,19 +87,20 @@ module.exports = {
           parent = parent.parent;
         }
 
-        if (!isValidParent(parent)) {
+        if (!isAwaitAllowedInNode(parent)) {
           context.report({
             node,
-            message: 'Unexpected `await` expression (not top of function body)',
+            message:
+              'Unexpected `await` expression (not top of async function or `for-await-of` body)',
           });
         }
       },
       ForOfStatement: node => {
-        if (node.await === true && !isValidParent(node.parent)) {
+        if (node.await === true && !isAwaitAllowedInNode(node.parent)) {
           context.report({
             node,
             message:
-              'Unexpected `for-await-of` statement (not top of function body)',
+              'Unexpected `for-await-of` statement (not top of async function or another `for-await-of` body)',
           });
         }
       },
