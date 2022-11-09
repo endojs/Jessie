@@ -45,6 +45,24 @@ module.exports = {
     supported: true || CodePathAnalyzer !== null,
   },
   create(context) {
+    const isAwaitAllowedInNode = parent => {
+      if (parent.type === 'BlockStatement') {
+        // Find the parent block's node.
+        parent = parent.parent;
+      }
+
+      // If the parent is an async function or for-await-of body.
+      return (
+        ([
+          'ArrowFunctionExpression',
+          'FunctionExpression',
+          'FunctionDeclaration',
+        ].includes(parent.type) &&
+          parent.async === true) ||
+        (parent.type === 'ForOfStatement' && parent.await === true)
+      );
+    };
+
     return {
       AwaitExpression: node => {
         // As a hint to future readers, I used the following ASTExplorer
@@ -68,26 +86,23 @@ module.exports = {
           // Try to find the parent block.
           parent = parent.parent;
         }
-        if (parent.type === 'BlockStatement') {
-          // Find the parent block's node.
-          parent = parent.parent;
-        }
 
-        if (
-          [
-            'ArrowFunctionExpression',
-            'FunctionExpression',
-            'FunctionDeclaration',
-          ].includes(parent.type)
-        ) {
-          // Its parent is a function body.
-          return;
+        if (!isAwaitAllowedInNode(parent)) {
+          context.report({
+            node,
+            message:
+              'Unexpected `await` expression (not top of async function or `for-await-of` body)',
+          });
         }
-
-        context.report({
-          node,
-          message: 'Unexpected `await` expression (not top of function body)',
-        });
+      },
+      ForOfStatement: node => {
+        if (node.await === true && !isAwaitAllowedInNode(node.parent)) {
+          context.report({
+            node,
+            message:
+              'Unexpected `for-await-of` statement (not top of async function or another `for-await-of` body)',
+          });
+        }
       },
     };
   },
