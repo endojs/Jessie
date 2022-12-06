@@ -1,7 +1,7 @@
 // Subsets of JavaScript, starting from the grammar as defined at
 // http://www.ecma-international.org/ecma-262/9.0/#sec-grammar-summary
 
-// See https://github.com/Agoric/Jessie/blob/master/README.md
+// See https://github.com/endojs/Jessie/blob/HEAD/README.md
 // for documentation of the Jessie grammar defined here.
 
 /// <reference path="peg.d.ts"/>

@@ -2,7 +2,7 @@
 // http://www.ecma-international.org/ecma-262/9.0/#sec-grammar-summary
 
 // Defined to be extended into the Jessie grammar.
-// See https://github.com/Agoric/Jessie/blob/master/README.md
+// See https://github.com/endojs/Jessie/blob/HEAD/README.md
 // for documentation of the Jessie grammar.
 
 // See also json.org

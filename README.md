@@ -122,7 +122,7 @@ The only difference between TinySES and Jessie is that correct TinySES
 programs may rely on the presence of the [entire SES
 runtime](https://github.com/Agoric/SES/blob/master/src/bundle/whitelist.js).
 Correct Jessie programs may only rely on a [minimal subset of the SES
-runtime](https://github.com/Agoric/Jessie/blob/master/src/bundle/whitelist.js)
+runtime](https://github.com/endojs/Jessie/blob/HEAD/src/bundle/whitelist.js)
 that standalone Jessie implementations can implement for reasonable
 effort. However, correct Jessie programs also cannot rely on the
 *absence* of the rest of the SES runtime. Jessie and TinySES programs
