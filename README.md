@@ -82,12 +82,12 @@ safety, but are not sufficient by themselves.
 
 **SES**, or *Secure EcmaScript*, is a dynamic, absorbed subset of
 ES-strict. To achieve this subsetting, SES builds on [Frozen
-Realms](https://github.com/tc39/proposal-frozen-realms/) which builds
-on [Realms](https://github.com/tc39/proposal-realms/). (Shims at
+Realms](https://github.com/tc39/proposal-ses) which builds
+on [[Shadow]Realms](https://github.com/tc39/proposal-shadowrealm). (Shims at
 [Realms
 shim](https://github.com/Agoric/realms-shim) and
 [Frozen Realms
-shim](https://github.com/tc39/proposal-frozen-realms/tree/HEAD/shim).)
+shim](https://github.com/endojs/endo/tree/master/packages/ses).)
 SES statically accepts all programs accepted by ES-strict and can run
 on ES-strict without internal modification.
 
@@ -420,7 +420,7 @@ as values received from SES code.
 
 The [`import` expression]() and [`import.meta` expression]()
 proposals, by themselves, introduce a security hole in JavaScript. The
-[Realm proposal](https://github.com/tc39/proposal-realms)'s traps
+[ShadowRealm proposal](https://github.com/tc39/proposal-shadowrealm)'s traps
 provide the mechanism needed to plug these holes. On those platforms
 that provide either of the security breaking features but do not provide
 native support for Realms, safety can only be shimmed at the price of
