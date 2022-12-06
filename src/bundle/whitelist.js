@@ -14,7 +14,7 @@
 // limitations under the License.
 
 /**
- * Based on https://github.com/Agoric/SES/blob/HEAD/src/bundle/whitelist.js
+ * Based on https://github.com/endojs/endo/blob/HEAD/packages/ses/src/whitelist.js
  *
  * @author Mark S. Miller,
  */
