@@ -87,7 +87,7 @@ on [Realms](https://github.com/tc39/proposal-realms/). (Shims at
 [Realms
 shim](https://github.com/Agoric/realms-shim) and
 [Frozen Realms
-shim](https://github.com/tc39/proposal-frozen-realms/tree/master/shim).)
+shim](https://github.com/tc39/proposal-frozen-realms/tree/HEAD/shim).)
 SES statically accepts all programs accepted by ES-strict and can run
 on ES-strict without internal modification.
 
@@ -120,7 +120,7 @@ and provide sound static analysis info for that code.
 
 The only difference between TinySES and Jessie is that correct TinySES
 programs may rely on the presence of the [entire SES
-runtime](https://github.com/Agoric/SES/blob/master/src/bundle/whitelist.js).
+runtime](https://github.com/Agoric/SES/blob/HEAD/src/bundle/whitelist.js).
 Correct Jessie programs may only rely on a [minimal subset of the SES
 runtime](https://github.com/endojs/Jessie/blob/HEAD/src/bundle/whitelist.js)
 that standalone Jessie implementations can implement for reasonable

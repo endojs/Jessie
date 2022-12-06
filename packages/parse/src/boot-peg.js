@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle,func-names,no-use-before-define */
 // @ts-check
 // A lot of this code is lifted from:
-// https://github.com/erights/quasiParserGenerator/tree/master/src/bootbnf.js
+// https://github.com/erights/quasiParserGenerator/tree/HEAD/src/bootbnf.js
 
 /// <reference types="ses"/>
 /// <reference path="./peg.d.ts"/>
