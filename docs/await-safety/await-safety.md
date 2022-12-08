@@ -2,7 +2,9 @@ _context: [[Coding Style]]_
 
 # Avoid Nested/Conditional Await
 
-Our general rule (which will be enforced as part of the Jessie linter) is that `await` must only appear in the top level of any given function. It should not appear inside of a conditional or a loop.
+Our general rule (which will be enforced as part of the Jessie linter) is that an `await` may only appear in the top level of a function body. It must not appear otherwise inside of control syntax, such as a conditional, loop, or switch.
+
+(More precisely, the rule is that an `await` or a for-await-of loops must only appear in the top level of a function body, module, or for-await-of loop body.)
 
 For example, the following function runs `thunk()` (which might or might not be `async`), and wants to ensure that the `meteringDisabled` counter is decremented afterwards. The non-recommended approach is:
 
