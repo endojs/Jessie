@@ -1,11 +1,11 @@
-/* global module require */
+/* eslint-env node */
 
 'use strict';
 
 const USE_JESSIE_BEFORE_FIRST_STATEMENT_REGEXP = /^\s*\/\/\s*@jessie-check\s*$/m;
 const USE_JESSIE_FIRST_STATEMENT_REGEXP = /^('use\s+jessie'|"use\s+jessie"|import\s+('@jessie.js\/transform-this-module'|"jessie.js\/transform-this-module"))/;
 
-const { jessieRules } = require('../use-jessie-rules');
+const { jessieRules } = require('../use-jessie-rules.js');
 
 function serializeRuleObject(obj) {
   if (Object(obj) !== obj) {
@@ -40,7 +40,7 @@ function serializeRuleObject(obj) {
 }
 
 function serializeEslintRules(rules) {
-  let out = '/* eslint';
+  let out = '/* eslint-disable max-len */ /* eslint';
   let sep = ' ';
   Object.entries(rules).forEach(([k, v]) => {
     // We assume the key is a legitimate eslint keyword.
