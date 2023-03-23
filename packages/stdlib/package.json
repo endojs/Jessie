@@ -65,9 +65,6 @@
     "files": [
       "test/**/test-*.js"
     ],
-    "require": [
-      "esm"
-    ],
     "timeout": "2m"
   }
 }

@@ -31,18 +31,12 @@
     "prettier": "lerna run prettier",
     "lint": "lerna run lint",
     "lint-fix": "lerna run --no-bail lint-fix",
-    "test": "ava",
+    "test": "lerna run --no-bail test",
     "postinstall": "patch-package",
     "patch-package": "patch-package",
     "build": "lerna run build"
   },
   "dependencies": {
     "patch-package": "^6.2.2"
-  },
-  "ava": {
-    "files": [
-      "packages/*/test/**/test-*.js"
-    ],
-    "timeout": "2m"
   }
 }
