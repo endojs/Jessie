@@ -1,5 +1,6 @@
 // @ts-check
-import { test } from '@agoric/swingset-vat/tools/prepare-test-env-ava.js';
+import '@endo/init/debug.js';
+import test from 'ava';
 import { makePromise, makeMap } from '../src/ring0/makers.js';
 
 test('makePromise', async t => {
