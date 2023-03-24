@@ -47,8 +47,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "@endo",
-      "plugin:@jessie.js/recommended"
+      "plugin:@jessie.js/internal"
     ]
   },
   "prettier": {
