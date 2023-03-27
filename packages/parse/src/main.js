@@ -1,1 +1,1 @@
-export { default as bootPeg } from './boot-peg';
+export { default as bootPeg } from './boot-peg.js';

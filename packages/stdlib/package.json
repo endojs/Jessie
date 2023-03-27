@@ -53,8 +53,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "@endo",
-      "plugin:@jessie.js/recommended"
+      "plugin:@jessie.js/internal"
     ]
   },
   "prettier": {
@@ -64,9 +63,6 @@
   "ava": {
     "files": [
       "test/**/test-*.js"
-    ],
-    "require": [
-      "esm"
     ],
     "timeout": "2m"
   }

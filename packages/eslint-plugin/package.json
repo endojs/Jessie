@@ -10,16 +10,17 @@
   "author": "Agoric",
   "main": "lib/index.js",
   "scripts": {
-    "test": "exit 0",
+    "test": "mocha test/test-*.js",
     "build": "exit 0",
     "lint-fix": "eslint '**/*.js' --fix",
-    "lint-check": "eslint '**/*.js'"
+    "lint": "eslint '**/*.js'"
   },
   "dependencies": {
     "requireindex": "~1.1.0"
   },
   "devDependencies": {
-    "eslint": "^7.23.0"
+    "eslint": "^7.23.0",
+    "mocha": "^10.2.0"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -29,8 +30,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "@endo",
-      "plugin:@jessie.js/recommended"
+      "plugin:@jessie.js/internal"
     ]
   },
   "prettier": {

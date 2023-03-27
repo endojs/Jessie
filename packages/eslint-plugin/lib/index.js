@@ -1,10 +1,11 @@
-/* global __dirname module require */
+/* eslint-env node */
+
+'use strict';
+
 /**
  * @file Agoric-specific plugin
  * @author Agoric
  */
-
-'use strict';
 
 //------------------------------------------------------------------------------
 // Requirements

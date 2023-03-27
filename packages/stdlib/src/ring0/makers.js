@@ -2,8 +2,12 @@
 // These work around Jessie's forbiddance of `new`.
 /// <reference types="ses" />
 
-/** @type {<T>(executor: (resolve: (value: T) => void, reject: (reason?: any) =>
- * void) => void) => Promise<T>} */
+/**
+ * @type {<T>(executor: (
+ *   resolve: (value: T) => void,
+ *   reject: (reason?: any) => void
+ * ) => void) => Promise<T>}
+ */
 export const makePromise = executor => harden(new Promise(executor));
 harden(makePromise);
 
@@ -20,7 +24,11 @@ harden(makeMap);
 export const makeSet = values => harden(new Set(values));
 harden(makeSet);
 
-/** @typedef {<K extends {}, V = any>(entries?: readonly [K, V][] | null) => WeakMap<K, V>} WeakMapFromEntries */
+/**
+ * @typedef {<K extends {}, V = any>(
+ *    entries?: readonly [K, V][] | null
+ * ) => WeakMap<K, V>} WeakMapFromEntries
+ */
 /** @typedef {<K extends {}, V>(iterable: Iterable<[K, V]>) => WeakMap<K, V>} WeakMapFromIterable */
 /** @type {WeakMapFromEntries & WeakMapFromIterable} */
 export const makeWeakMap = entries => harden(new WeakMap(entries));
