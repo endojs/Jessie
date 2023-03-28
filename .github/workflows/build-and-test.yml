@@ -16,14 +16,14 @@ jobs:
       matrix:
         node-version: ['14.19.3', '16.x']
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: 'true'
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
     - name: cache node modules
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: ~/.cache/yarn
         key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
@@ -34,7 +34,7 @@ jobs:
     - run: yarn build
 
     - name: cache build outputs
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: .
         key: ${{ runner.os }}-${{ matrix.node-version }}-built-${{ github.sha }}
@@ -46,17 +46,17 @@ jobs:
       matrix:
         node-version: ['14.19.3']
     steps:
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
     # BEGIN-RESTORE-BOILERPLATE
     - name: restore built files
       id: built
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: .
         key: ${{ runner.os }}-${{ matrix.node-version }}-built-${{ github.sha }}
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: 'true'
       if: steps.built.outputs.cache-hit != 'true'
@@ -76,18 +76,18 @@ jobs:
       matrix:
         node-version: ['14.19.3', '16.x']
     steps:
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
     # END-TEST-BOILERPLATE
     # BEGIN-RESTORE-BOILERPLATE
     - name: restore built files
       id: built
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: .
         key: ${{ runner.os }}-${{ matrix.node-version }}-built-${{ github.sha }}
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: 'true'
       if: steps.built.outputs.cache-hit != 'true'
