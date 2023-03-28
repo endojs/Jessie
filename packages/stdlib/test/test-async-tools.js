@@ -1,5 +1,6 @@
 // @ts-check
-import { test } from '@agoric/swingset-vat/tools/prepare-test-env-ava.js';
+import '@endo/init/debug.js';
+import test from 'ava';
 import { asyncDoWhile } from '../src/ring1/async-tools.js';
 import { asyncGenerate } from '../src/ring0/async-generate.js';
 

@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "yarn build:types",
-    "build:types": "tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "build:types": "tsc -p jsconfig.build.json --outDir types",
     "clean": "rm -rf types",
     "cover": "nyc ava",
     "lint": "eslint '**/*.js'",
@@ -34,8 +34,8 @@
     "@endo/far": "^0.2.3"
   },
   "devDependencies": {
-    "@agoric/swingset-vat": "^0.26.0",
     "@endo/ses-ava": "^0.2.25",
+    "@endo/init": "^0.5.41",
     "ava": "^3.12.1",
     "eslint": "^7.23.0",
     "nyc": "^15.1.0",

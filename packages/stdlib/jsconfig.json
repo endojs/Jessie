@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "moduleResolution": "node",
+        "target": "esnext",
+        "module": "es6",
+        "noImplicitAny": true,
+        "noEmit": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "alwaysStrict": true,
+        "downlevelIteration": true,
+    },
+    "include": [
+        "src/**/*.js"
+    ],
+    "exclude": [
+        "node_modules/**"
+    ]
+}
