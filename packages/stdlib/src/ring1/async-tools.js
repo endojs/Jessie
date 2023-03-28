@@ -13,19 +13,21 @@ import { makePromise } from '../ring0/main.js';
  * @returns {Promise<void>}
  */
 export const asyncDoWhile = body => {
-  const loop = async (resolve, reject) => {
-    const doContinue = await body();
-    if (!doContinue) {
-      // Resolve the outermost promise.
-      resolve(undefined);
-      return;
-    }
+  return makePromise((resolve, reject) => {
+    const loop = async () => {
+      const doContinue = await body();
+      if (!doContinue) {
+        // Resolve the outermost promise.
+        resolve(undefined);
+        return;
+      }
 
-    // Do the loop again.  We are careful not to await so that we don't create a
-    // promise chain.
-    loop(resolve, reject).catch(reject);
-  };
+      // Do the loop again.  We are careful not to await so that we don't create a
+      // promise chain.
+      loop().catch(reject);
+    };
 
-  return makePromise((resolve, reject) => loop(resolve, reject).catch(reject));
+    loop().catch(reject);
+  });
 };
 harden(asyncDoWhile);
