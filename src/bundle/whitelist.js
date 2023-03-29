@@ -14,7 +14,7 @@
 // limitations under the License.
 
 /**
- * Based on https://github.com/endojs/endo/blob/HEAD/packages/ses/src/whitelist.js
+ * Based on https://github.com/endojs/endo/blob/master/packages/ses/src/whitelist.js
  *
  * @author Mark S. Miller,
  */

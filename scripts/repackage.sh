@@ -52,7 +52,7 @@ NEWPKGJSONHASH=$(
   } + . + {
     name: (.name // "@jessie.js/\($name)"),
     version: (.version // "0.1.0"),
-    homepage: (.homepage // "https://github.com/endojs/Jessie/tree/HEAD/packages/\($name)#readme"),
+    homepage: (.homepage // "https://github.com/endojs/Jessie/tree/main/packages/\($name)#readme"),
     repository: {
       type: "git",
       url: "git+https://github.com/endojs/Jessie.git",

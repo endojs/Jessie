@@ -120,9 +120,9 @@ and provide sound static analysis info for that code.
 
 The only difference between TinySES and Jessie is that correct TinySES
 programs may rely on the presence of the [entire SES
-runtime](https://github.com/endojs/endo/blob/HEAD/packages/ses/src/whitelist.js).
+runtime](https://github.com/endojs/endo/blob/master/packages/ses/src/whitelist.js).
 Correct Jessie programs may only rely on a [minimal subset of the SES
-runtime](https://github.com/endojs/Jessie/blob/HEAD/src/bundle/whitelist.js)
+runtime](https://github.com/endojs/Jessie/blob/main/src/bundle/whitelist.js)
 that standalone Jessie implementations can implement for reasonable
 effort. However, correct Jessie programs also cannot rely on the
 *absence* of the rest of the SES runtime. Jessie and TinySES programs
