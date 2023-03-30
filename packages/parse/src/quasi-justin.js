@@ -19,7 +19,7 @@
 
 // Justin is defined to be extended into the Jessie grammar, which is
 // defined to be extended into the JavaScript grammar.
-// See https://github.com/Agoric/Jessie/blob/master/README.md
+// See https://github.com/endojs/Jessie/blob/main/README.md
 // for documentation of the Jessie grammar.
 
 // Justin is defined to be extended into the Chainmail grammar, to

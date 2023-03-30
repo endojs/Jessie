@@ -3,7 +3,7 @@
 // to provide a smoother programming experience.
 //
 // When they have become a part of:
-// https://github.com/Agoric/Jessie/blob/master/src/bundle/whitelist.js
+// https://github.com/endojs/Jessie/blob/main/src/bundle/whitelist.js
 // then they will be moved to lib.jessie.d.ts.
 //
 // Michael FIG <michael+jessica@fig.org>, 2019-02-23
