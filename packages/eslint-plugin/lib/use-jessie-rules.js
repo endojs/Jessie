@@ -6,6 +6,7 @@ const nono = `not allowed in Jessie`;
 
 exports.jessieRules = {
   '@jessie.js/no-nested-await': ['error'],
+  '@jessie.js/no-top-level-effects': ['error'],
   curly: ['error', 'all'],
   eqeqeq: ['error', 'always'],
   'no-bitwise': ['error'],
@@ -18,6 +19,14 @@ exports.jessieRules = {
   // to see what AST nodes are produced by different programs.
   'no-restricted-syntax': [
     'error',
+    {
+      selector: `Program > [type!='ExpressionStatement'][type!='ImportDeclaration'][type!='ExportDefaultDeclaration'][type!='ExportNamedDeclaration'][type!='VariableDeclaration']`,
+      message: `top-level statement of this type is ${nono}`,
+    },
+    {
+      selector: `Program > VariableDeclaration[kind!='const']`,
+      message: `non-'const' top-level variable declarations are ${nono}`,
+    },
     {
       selector: `BinaryExpression[operator='in']`,
       message: `'in' is ${nono}`,
