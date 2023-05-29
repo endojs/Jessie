@@ -38,12 +38,18 @@ test('asyncGenerate - manual iteration', async t => {
   });
 
   const ai = gen[Symbol.asyncIterator]();
-  for (let count = 0; count < 4; count += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    const r = await ai.next();
-    t.is(r.done, false);
-    t.is(r.value, count);
-  }
+  const r0 = await ai.next();
+  t.is(r0.done, false);
+  t.is(r0.value, 0);
+  const r1 = await ai.next();
+  t.is(r1.done, false);
+  t.is(r1.value, 1);
+  const r2 = await ai.next();
+  t.is(r2.done, false);
+  t.is(r2.value, 2);
+  const r3 = await ai.next();
+  t.is(r3.done, false);
+  t.is(r3.value, 3);
   const fin = await ai.next();
   t.is(fin.done, true);
   t.is(fin.value, 4);
