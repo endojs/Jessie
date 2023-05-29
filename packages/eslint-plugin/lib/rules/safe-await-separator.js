@@ -6,7 +6,7 @@
 
 'use strict';
 
-const { makeAwaitAllowedVisitor } = require('../tools.js');
+const { isFunctionLike, makeAwaitAllowedVisitor } = require('../tools.js');
 
 module.exports = {
   meta: {
@@ -19,9 +19,11 @@ module.exports = {
     },
     type: 'problem',
     fixable: null,
+    hasSuggestions: true,
     messages: {
       unsafeAwaitSeparator:
         'The first `await` appearing in an async function must not be nested',
+      insertAwaitNull: 'Insert `await null;` before the first `await`',
     },
     schema: [],
     supported: true,
@@ -31,6 +33,20 @@ module.exports = {
       context.report({
         node,
         messageId: 'unsafeAwaitSeparator',
+        suggest: [
+          {
+            messageId: 'insertAwaitNull',
+            fix: fixer => {
+              let cur = node;
+              let parent = cur.parent;
+              while (!isFunctionLike(parent.parent)) {
+                cur = parent;
+                parent = cur.parent;
+              }
+              return fixer.insertTextBefore(cur, 'await null;');
+            },
+          },
+        ],
       });
     };
     return makeAwaitAllowedVisitor(context, makeReport, true);
