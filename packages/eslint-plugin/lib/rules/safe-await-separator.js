@@ -11,16 +11,17 @@ const { makeAwaitAllowedVisitor } = require('../tools.js');
 module.exports = {
   meta: {
     docs: {
-      description: `ensure all \`await\`s in an \`async\` function are not nested`,
+      description: `ensure the first \`await\` in an \`async\` function is non-nested so that it is clear when the synchronous portion of the function is finished`,
       category: 'Possible Errors',
       recommended: true,
       url:
-        'https://github.com/endojs/Jessie/blob/main/packages/eslint-plugin/lib/rules/no-nested-await.js',
+        'https://github.com/endojs/Jessie/blob/main/packages/eslint-plugin/lib/rules/safe-await-separator',
     },
     type: 'problem',
     fixable: null,
     messages: {
-      unexpectedNestedAwait: 'Nested `await`s are not permitted in Jessie',
+      unsafeAwaitSeparator:
+        'The first `await` appearing in an async function must not be nested',
     },
     schema: [],
     supported: true,
@@ -29,9 +30,9 @@ module.exports = {
     const makeReport = node => {
       context.report({
         node,
-        messageId: 'unexpectedNestedAwait',
+        messageId: 'unsafeAwaitSeparator',
       });
     };
-    return makeAwaitAllowedVisitor(context, makeReport);
+    return makeAwaitAllowedVisitor(context, makeReport, true);
   },
 };

@@ -2,8 +2,7 @@
 
 'use strict';
 
-// These cases are clearly valid.
-const clearlyValid = [
+const validNoNestedAwait = [
   {
     code: `const expr = async () => boo();`,
   },
@@ -31,6 +30,33 @@ const clearlyValid = [
       }
     }`,
   },
+  {
+    code: `const outer = async () => {
+      const inner = async () => {
+        await foo();
+      };
+      return inner;
+    }`,
+  },
+  {
+    code: `async function awaitBlock3() {
+      {
+        {
+          {
+            await foo();
+          }
+          await bar();
+        }
+        await baz();
+      }
+      await qux();
+    }`,
+  },
+];
+
+// These cases are clearly valid with the safe-await-separator.
+const validSafeAwaitSeparator = [
+  ...validNoNestedAwait,
   {
     code: `async function awaitConst() {
       await null;
@@ -89,28 +115,6 @@ const clearlyValid = [
       }
     }`,
   },
-  {
-    code: `const outer = async () => {
-      const inner = async () => {
-        await foo();
-      };
-      return inner;
-    }`,
-  },
-  {
-    code: `async function awaitBlock3() {
-      {
-        {
-          {
-            await foo();
-          }
-          await bar();
-        }
-        await baz();
-      }
-      await qux();
-    }`,
-  },
 ];
 
 // These cases are clearly unbalanced, which causes a statement to be
@@ -124,6 +128,12 @@ const clearlyInvalid = [
       fn();
     }`,
     errors: [{ line: 3 }],
+  },
+  {
+    code: `async function awaitFunctionArgument() {
+      fn(await bar());
+    }`,
+    errors: [{ line: 2 }],
   },
   {
     code: `async function awaitUnbalancedElse() {
@@ -154,7 +164,7 @@ const clearlyInvalid = [
       }
       fn();
     }`,
-    errors: [{ line: 3 }],
+    errors: [{ line: 3 }, { line: 4, messageId: 'unexpectedNestedAwait' }],
   },
   {
     code: `async function awaitNestedTryCatch() {
@@ -192,8 +202,8 @@ const clearlyInvalid = [
 
 // These cases are not obviously balanced, but they do not have statements that
 // are ambiguously within the synchronous prelude.  They will cause the
-// simplistic `no-nested-await` rule to report an error, but some more precise
-// future rule may accept them without error.
+// simplistic `safe-await-separator` rule to report an error, but some more
+// precise future rule may accept them without error.
 const subtlyValid = [
   {
     code: `async function awaitBalancedIf() {
@@ -204,7 +214,7 @@ const subtlyValid = [
       }
       zot();
     }`,
-    errors: [{ line: 3 }],
+    errors: [{ line: 3 }, { line: 5, messageId: 'unexpectedNestedAwait' }],
   },
   {
     code: `async function awaitUnbalancedThen() {
@@ -240,12 +250,13 @@ const subtlyValid = [
         }
       }
     }`,
-    errors: [{ line: 3 }],
+    errors: [{ line: 3 }, { line: 4, messageId: 'unexpectedNestedAwait' }],
   },
 ];
 
 module.exports = {
-  clearlyValid,
+  validNoNestedAwait,
+  validSafeAwaitSeparator,
   clearlyInvalid,
   subtlyValid,
 };
