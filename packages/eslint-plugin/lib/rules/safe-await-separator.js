@@ -1,4 +1,6 @@
+// @ts-check
 /* eslint-env node */
+
 /**
  * @author Michael FIG
  * See LICENSE file in root directory for full license.
@@ -8,6 +10,7 @@
 
 const { isFunctionLike, makeAwaitAllowedVisitor } = require('../tools.js');
 
+/** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     docs: {
@@ -29,6 +32,9 @@ module.exports = {
     supported: true,
   },
   create(context) {
+    /**
+     * @param {import('eslint').Rule.Node} node
+     */
     const makeReport = node => {
       context.report({
         node,

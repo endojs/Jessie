@@ -15,8 +15,6 @@ const {
   clearlyInvalid,
 } = require('./corpus.js');
 
-const unsafeAwaitSeparator = 'unsafeAwaitSeparator';
-
 ruleTester.run('safe-await-separator', rule, {
   valid: validSafeAwaitSeparator,
   // `safe-await-separator` is not smart enough to ignore subtle code that is
@@ -30,7 +28,7 @@ ruleTester.run('safe-await-separator', rule, {
       )
       .map(error => ({
         ...error,
-        messageId: unsafeAwaitSeparator,
+        messageId: 'unsafeAwaitSeparator',
       })),
   })),
 });

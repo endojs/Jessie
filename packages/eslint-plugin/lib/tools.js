@@ -1,19 +1,36 @@
+// @ts-check
 /* eslint-env node */
 
 'use strict';
 
-const isFunctionLike = node =>
-  [
-    'ArrowFunctionExpression',
-    'FunctionExpression',
+/** @typedef {import('eslint').Rule.Node} Node */
 
-    'FunctionDeclaration',
-    'MethodDefinition',
+const harden = Object.freeze;
 
-    'Program',
-    'StaticBlock',
-  ].includes(node.type);
+/** @type {Node['type'][]} */
+const functionLikeNodeTypes = [
+  'ArrowFunctionExpression',
+  'FunctionExpression',
 
+  'FunctionDeclaration',
+  'MethodDefinition',
+
+  'Program',
+  'StaticBlock',
+];
+harden(functionLikeNodeTypes);
+
+/**
+ * @param {Node} node
+ */
+const isFunctionLike = node => functionLikeNodeTypes.includes(node.type);
+harden(isFunctionLike);
+
+/**
+ * @param {Node} node
+ * @param {WeakSet<Node>} already
+ * @returns {boolean}
+ */
 const isAwaitAllowedInNode = (node, already = new WeakSet()) => {
   // Climb the AST until finding the nearest enclosing function or
   // function-like node.
@@ -43,14 +60,20 @@ const isAwaitAllowedInNode = (node, already = new WeakSet()) => {
 
   return result;
 };
+harden(isAwaitAllowedInNode);
 
+/**
+ * @param {import('eslint').Rule.RuleContext} _context
+ * @param {(node: Node) => void} makeReport
+ * @param {boolean} [addToCache]
+ */
 const makeAwaitAllowedVisitor = (
   _context,
   makeReport,
   addToCache = undefined,
 ) => {
   const already = addToCache ? new WeakSet() : undefined;
-  return {
+  return harden({
     /**
      * An `await` expression is treated as non-nested if it is:
      * - a non-nested expression statement,
@@ -67,7 +90,7 @@ const makeAwaitAllowedVisitor = (
      * added to the language.
      * @see https://github.com/tc39/proposal-do-expressions
      *
-     * @param {*} node
+     * @param {Node} node
      */
     AwaitExpression: node => {
       let parent = node.parent;
@@ -94,18 +117,19 @@ const makeAwaitAllowedVisitor = (
     /**
      * A `for-await-of` loop is treated as a simple `await` statement.
      *
-     * @param {*} node
+     * @param {Node} node
      */
     'ForOfStatement[await=true]': node => {
       if (!isAwaitAllowedInNode(node.parent, already)) {
         makeReport(node);
       }
     },
-  };
+  });
 };
+harden(makeAwaitAllowedVisitor);
 
-module.exports = {
+module.exports = harden({
   isFunctionLike,
   isAwaitAllowedInNode,
   makeAwaitAllowedVisitor,
-};
+});
