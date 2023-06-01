@@ -3,11 +3,10 @@
     "version": {
       "message": "chore(release): publish",
       "conventionalCommits": true,
-      "preid": "dev"
+      "preid": "dev",
+      "includeMergedTags": true
     }
   },
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
   "version": "independent"
 }
