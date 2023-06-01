@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/endojs/Jessie/compare/@jessie.js/eslint-plugin@0.3.0...@jessie.js/eslint-plugin@0.4.0) (2023-06-01)
+
+
+### Bug Fixes
+
+* **eslint-plugin:** loosen `no-nested-await` ([18261b2](https://github.com/endojs/Jessie/commit/18261b2c3480a6886d305f6805dadcb02e88e984))
+
+
+### Features
+
+* **eslint-plugin:** implement `await null;` suggestion ([8780b11](https://github.com/endojs/Jessie/commit/8780b11249a0019926c7c7d81e8129e6494ab212))
+* **eslint-plugin:** new `plugin:[@jessie](https://github.com/jessie).js/internal` configuration ([a18499d](https://github.com/endojs/Jessie/commit/a18499d72536a6593461034559b57262f82f341d))
+* **eslint-plugin:** separate the await rules ([1459908](https://github.com/endojs/Jessie/commit/1459908d113b92b694ce76417fd3b112dda402ec))
+
+
+
+
+
 # [0.3.0](https://github.com/endojs/Jessie/compare/@jessie.js/eslint-plugin@0.2.1...@jessie.js/eslint-plugin@0.3.0) (2022-11-14)
 
 

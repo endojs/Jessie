@@ -1,6 +1,6 @@
 {
   "name": "@jessie.js/types",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Typescript types for Jessie.",
   "keywords": [],
   "author": "Agoric",
@@ -49,7 +49,8 @@
   },
   "eslintConfig": {
     "extends": [
-      "plugin:@jessie.js/internal"    ]
+      "plugin:@jessie.js/internal"
+    ]
   },
   "prettier": {
     "trailingComma": "all",
