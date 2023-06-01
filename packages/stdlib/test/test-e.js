@@ -41,9 +41,10 @@ test('E method calls', async t => {
       return 2 * n;
     },
   };
-  const d = E(x).double(6);
-  t.is(typeof d.then, 'function', 'return is a thenable');
-  t.is(await d, 12, 'method call works');
+  const dP = E(x).double(6);
+  t.is(typeof dP.then, 'function', 'return is a thenable');
+  const d = await dP;
+  t.is(d, 12, 'method call works');
 });
 
 test('E sendOnly method calls', async t => {
@@ -129,6 +130,7 @@ test('E shortcuts', async t => {
       return `${greeting}, ${this.name}!`;
     },
   };
+  await null;
   t.is(await E(x).hello('Hello'), 'Hello, buddy!', 'method call works');
   t.is(
     await E(await E.get(await E.get(x).y).fn)(4),
@@ -151,6 +153,7 @@ test('E.get', async t => {
       return `${greeting}, ${this.name}!`;
     },
   };
+  await null;
   t.is(
     await E(await E.get(await E.get(x).y).fn)(4),
     8,
