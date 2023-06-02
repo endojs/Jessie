@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.3](https://github.com/endojs/Jessie/compare/jessie.js@0.3.2...jessie.js@0.3.3) (2023-06-01)
+
+
+### Bug Fixes
+
+* **stdlib:** conform to `noImplicitAny` ([eabd078](https://github.com/endojs/Jessie/commit/eabd0784ecc1f52d8ee5be1ea7d91da0db32f792))
+
+
+
+
+
 ## [0.3.2](https://github.com/endojs/Jessie/compare/jessie.js@0.3.1...jessie.js@0.3.2) (2022-11-14)
 
 **Note:** Version bump only for package jessie.js
