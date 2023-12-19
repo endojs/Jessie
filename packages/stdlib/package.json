@@ -31,16 +31,16 @@
     "test": "ava"
   },
   "dependencies": {
-    "@endo/far": "^0.2.3"
+    "@endo/far": "^1.0.0"
   },
   "devDependencies": {
-    "@endo/init": "^0.5.41",
-    "@endo/ses-ava": "^0.2.25",
+    "@endo/init": "^1.0.0",
+    "@endo/ses-ava": "^1.0.0",
     "ava": "^3.12.1",
     "eslint": "^7.23.0",
     "nyc": "^15.1.0",
     "prettier": "^1.19.1",
-    "ses": "^0.15.15",
+    "ses": "^1.0.0",
     "typescript": "^4.6.4"
   },
   "files": [

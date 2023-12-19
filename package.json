@@ -10,7 +10,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "@endo/eslint-plugin": "^0.4.4-dev.0",
+    "@endo/eslint-plugin": "^1.0.0",
     "@typescript-eslint/parser": "^5.56.0",
     "ava": "^3.12.1",
     "eslint": "^8.36.0",
