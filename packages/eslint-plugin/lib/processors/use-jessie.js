@@ -40,7 +40,7 @@ function serializeRuleObject(obj) {
 }
 
 function serializeEslintRules(rules) {
-  let out = '/* eslint-disable max-len */ /* eslint';
+  let out = '/* eslint';
   let sep = ' ';
   Object.entries(rules).forEach(([k, v]) => {
     // We assume the key is a legitimate eslint keyword.
