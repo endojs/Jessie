@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.4](https://github.com/endojs/Jessie/compare/@jessie.js/parse@0.2.3...@jessie.js/parse@0.2.4) (2024-03-15)
+
+**Note:** Version bump only for package @jessie.js/parse
+
+
+
+
+
 ## [0.2.3](https://github.com/endojs/Jessie/compare/@jessie.js/parse@0.2.2...@jessie.js/parse@0.2.3) (2023-06-01)
 
 **Note:** Version bump only for package @jessie.js/parse

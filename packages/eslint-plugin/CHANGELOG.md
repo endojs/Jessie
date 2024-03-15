@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1](https://github.com/endojs/Jessie/compare/@jessie.js/eslint-plugin@0.4.0...@jessie.js/eslint-plugin@0.4.1) (2024-03-15)
+
+
+### Bug Fixes
+
+* drop sometimes superfluous max-len ([8d5bd0c](https://github.com/endojs/Jessie/commit/8d5bd0c90ad7facff8826af8896f5c00eaf83520))
+
+
+
+
+
 # [0.4.0](https://github.com/endojs/Jessie/compare/@jessie.js/eslint-plugin@0.3.0...@jessie.js/eslint-plugin@0.4.0) (2023-06-01)
 
 
