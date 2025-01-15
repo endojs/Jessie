@@ -73,6 +73,7 @@ const makeAwaitAllowedVisitor = (
   addToCache = undefined,
 ) => {
   const already = addToCache ? new WeakSet() : undefined;
+  // Do not harden() because ESLint 9 relies on mutating the visitor.
   return {
     /**
      * An `await` expression is treated as non-nested if it is:
