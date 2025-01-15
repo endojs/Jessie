@@ -73,7 +73,7 @@ const makeAwaitAllowedVisitor = (
   addToCache = undefined,
 ) => {
   const already = addToCache ? new WeakSet() : undefined;
-  return harden({
+  return {
     /**
      * An `await` expression is treated as non-nested if it is:
      * - a non-nested expression statement,
@@ -124,7 +124,7 @@ const makeAwaitAllowedVisitor = (
         makeReport(node);
       }
     },
-  });
+  };
 };
 harden(makeAwaitAllowedVisitor);
 
