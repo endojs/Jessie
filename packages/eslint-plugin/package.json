@@ -1,6 +1,6 @@
 {
   "name": "@jessie.js/eslint-plugin",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Jessie-specific ESLint plugin",
   "keywords": [
     "eslint",

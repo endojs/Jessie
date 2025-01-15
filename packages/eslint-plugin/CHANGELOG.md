@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.2](https://github.com/endojs/Jessie/compare/@jessie.js/eslint-plugin@0.4.1...@jessie.js/eslint-plugin@0.4.2) (2025-01-15)
+
+
+### Bug Fixes
+
+* remove harden to unfreeze object for eslint v9 compat ([b732653](https://github.com/endojs/Jessie/commit/b732653fd41260fe6fb3f923c4ee45a55f954306))
+
+
+
+
+
 ## [0.4.1](https://github.com/endojs/Jessie/compare/@jessie.js/eslint-plugin@0.4.0...@jessie.js/eslint-plugin@0.4.1) (2024-03-28)
 
 
