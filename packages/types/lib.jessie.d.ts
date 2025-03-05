@@ -467,10 +467,8 @@ interface String {
 
   readonly [index: number]: string;
 }
-
-interface RawTemplateString extends String {}
 interface TemplateStringsArray extends ReadonlyArray<string> {
-  readonly raw: ReadonlyArray<RawTemplateString>;
+  readonly raw: ReadonlyArray<string>;
 }
 
 interface StringConstructor {
