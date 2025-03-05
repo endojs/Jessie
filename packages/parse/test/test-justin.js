@@ -1,19 +1,12 @@
 // @ts-check
 /// <reference path="../src/peg.d.ts"/>
 import { test } from './prepare-test-env-ava.js';
-import bootPeg from '../src/boot-peg.js';
-import bootPegAst from '../src/boot-pegast.js';
-import makePeg from '../src/quasi-peg.js';
 
-import makeJSON from '../src/quasi-json.js';
-import makeJustin from '../src/quasi-justin.js';
+import { justin } from '../src/main.js';
 import { ast, makeParser } from './parser-utils.js';
 
 function defaultJustinParser() {
-  const pegTag = bootPeg(makePeg, bootPegAst);
-  const jsonTag = makeJSON(pegTag);
-  const justinTag = makeJustin(pegTag.extends(jsonTag));
-  return makeParser(justinTag);
+  return makeParser(justin);
 }
 
 test('data', t => {

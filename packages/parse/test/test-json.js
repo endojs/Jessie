@@ -1,16 +1,11 @@
 /// <reference path="../src/peg.d.ts"/>
 import { test } from './prepare-test-env-ava.js';
-import bootPeg from '../src/boot-peg.js';
-import bootPegAst from '../src/boot-pegast.js';
-import makePeg from '../src/quasi-peg.js';
 
-import makeJSON from '../src/quasi-json.js';
+import { json } from '../src/main.js';
 import { ast, makeParser } from './parser-utils.js';
 
 function defaultJsonParser() {
-  const pegTag = bootPeg(makePeg, bootPegAst);
-  const jsonTag = makeJSON(pegTag);
-  return makeParser(jsonTag);
+  return makeParser(json);
 }
 
 test('data', t => {

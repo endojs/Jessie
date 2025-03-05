@@ -1,6 +1,6 @@
 /// <reference path="../src/peg.d.ts"/>
 import * as util from 'util';
-import tagString from '../src/tag-string.js';
+import tagToStringOnlyTag from '../src/tag-string.js';
 
 let curSrc = '';
 
@@ -9,7 +9,7 @@ let curSrc = '';
  */
 export function makeParser(tag) {
   /** @type {IParserTag<any>} */
-  const stringTag = tagString(tag);
+  const stringTag = tagToStringOnlyTag(tag);
   /**
    * @param {string} src
    * @param {boolean} [doDump]
