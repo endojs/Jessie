@@ -157,7 +157,9 @@ ${self.template.raw.reduce((prior, r, i) => {
 }, '')}
 -------
 ${failStr}`);
-  console.error(`Syntax error ${tokStr}`);
+  const err = Error(`Syntax: cannot parse ${tokStr}`);
+  err.stack = undefined;
+  throw err;
 };
 
 /**
@@ -690,7 +692,7 @@ pos = ${posSrc};`;
         wm.set(template, quasiRest);
       }
       if (typeof quasiRest !== 'function') {
-        console.error(`${typeof quasiRest}: ${quasiRest}`);
+        return quasiRest;
       }
       return quasiRest(...subs);
     };
