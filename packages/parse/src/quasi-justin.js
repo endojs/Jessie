@@ -9,7 +9,7 @@
 //   * multi-line strings (via template literals).
 //   * undefined.
 //   * includes all floating point values: NaN, Infinity, -Infinity
-//   * will include BigInt once available.
+//   * includes BigInt literals: 123n
 
 // Justin also includes most pure JavaScript expressions. Justin does not
 // include function expressions or variable or function
@@ -81,6 +81,9 @@ const makeJustin = peg => {
     QUESTION <- "?" _WS;
     RIGHT_PAREN <- ")" _WS;
     STARSTAR <- "**" _WS;
+
+    # BigInts are not supported in JSON, but they are in Justin.
+    bigintLiteral <- < int > "n" _WSN ${int => ['data', BigInt(int)]};
 
     # Define Javascript-style comments.
     _WS <- super._WS (EOL_COMMENT / MULTILINE_COMMENT)?   ${_ => SKIP};
@@ -158,6 +161,7 @@ const makeJustin = peg => {
     
     dataStructure <-
       undefined
+    / bigintLiteral
     / super.dataStructure;
 
     # Optional trailing commas.
