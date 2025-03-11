@@ -20,6 +20,7 @@ test('data', t => {
       ast(1, 'prop', ast(1, 'data', 'abc'), ast(8, 'data', 123)),
     ]),
   );
+  t.deepEqual(parse('9898n'), ast(0, 'data', BigInt(9898)));
   t.deepEqual(
     parse('["abc", 123]'),
     ast(0, 'array', [ast(1, 'data', 'abc'), ast(8, 'data', 123)]),
