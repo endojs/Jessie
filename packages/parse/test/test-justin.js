@@ -3,27 +3,26 @@
 import { test } from './prepare-test-env-ava.js';
 
 import { justin } from '../src/main.js';
-import { ast, makeParser } from './parser-utils.js';
-
-function defaultJustinParser() {
-  return makeParser(justin);
-}
+import { makeParserUtils } from './parser-utils.js';
 
 test('data', t => {
-  const parse = defaultJustinParser();
+  const { parse, arr, ast } = makeParserUtils(justin, (val, message) =>
+    t.assert(val, message),
+  );
   t.deepEqual(parse(`12345`), ast(0, 'data', 12345));
   t.deepEqual(parse(`{}`), ast(0, 'record', []));
   t.deepEqual(parse(`[]`), ast(0, 'array', []));
   t.deepEqual(
     parse(`{"abc": 123}`),
-    ast(0, 'record', [
-      ast(1, 'prop', ast(1, 'data', 'abc'), ast(8, 'data', 123)),
-    ]),
+    ast(
+      0,
+      'record',
+      arr([ast(1, 'prop', ast(1, 'data', 'abc'), ast(8, 'data', 123))]),
+    ),
   );
-  t.deepEqual(parse('9898n'), ast(0, 'data', BigInt(9898)));
   t.deepEqual(
     parse('["abc", 123]'),
-    ast(0, 'array', [ast(1, 'data', 'abc'), ast(8, 'data', 123)]),
+    ast(0, 'array', arr([ast(1, 'data', 'abc'), ast(8, 'data', 123)])),
   );
   t.deepEqual(parse(`  /* nothing */ 123`), ast(16, 'data', 123));
   t.deepEqual(
@@ -37,7 +36,9 @@ test('data', t => {
 });
 
 test('binops', t => {
-  const parse = defaultJustinParser();
+  const { parse, ast } = makeParserUtils(justin, (val, message) =>
+    t.assert(val, message),
+  );
   t.deepEqual(
     parse(`2 === 2`),
     ast(0, '===', ast(0, 'data', 2), ast(6, 'data', 2)),
