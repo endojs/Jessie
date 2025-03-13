@@ -9,19 +9,44 @@
 // Michael FIG <michael+jessica@fig.org>, 2019-02-23
 /// <reference path="./ses.d.ts"/>
 interface IMainDependencies {
-    applyMethod: (boundThis: any, method: (...args: any[]) => any, args: any[]) => any,
-    setComputedIndex: <T>(obj: Record<string | number, any>, index: string | number, value: T) => T,
-    readInput: (file: string) => string;
-    writeOutput: (file: string, data: string) => void;
+  applyMethod: (
+    boundThis: any,
+    method: (...args: any[]) => any,
+    args: any[],
+  ) => any;
+  setComputedIndex: <T>(
+    obj: Record<string | number, any>,
+    index: string | number,
+    value: T,
+  ) => T;
+  readInput: (file: string) => string;
+  writeOutput: (file: string, data: string) => void;
 }
 
 interface ObjectConstructor {
   assign<T, U>(target: T, source: U): T & U;
   assign<T, U, V>(target: T, source1: U, source2: V): T & U & V;
-  assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
+  assign<T, U, V, W>(
+    target: T,
+    source1: U,
+    source2: V,
+    source3: W,
+  ): T & U & V & W;
   assign(target: object, ...sources: any[]): any;
 }
 
+interface Error {
+  name: string;
+  message: string;
+  stack?: string;
+}
+
+interface ErrorConstructor {
+  (message?: string): Error;
+  readonly prototype: Error;
+}
+
+declare var Error: ErrorConstructor;
 interface PartialConsole {
   readonly debug(...args: any[]): void;
   readonly log(...args: any[]): void;
