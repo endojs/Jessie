@@ -10,6 +10,9 @@ test('data', t => {
     t.assert(val, message),
   );
   t.deepEqual(parse(`12345`), ast(0, 'data', 12345));
+  t.deepEqual(parse(`12_345`), ast(0, 'data', 12345));
+  t.deepEqual(parse('9898n'), ast(0, 'data', BigInt(9898)));
+  t.deepEqual(parse('98_9_8n'), ast(0, 'data', BigInt(9898)));
   t.deepEqual(parse(`{}`), ast(0, 'record', []));
   t.deepEqual(parse(`[]`), ast(0, 'array', []));
   t.deepEqual(

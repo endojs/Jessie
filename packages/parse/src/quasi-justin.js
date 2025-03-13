@@ -10,6 +10,7 @@
 //   * undefined.
 //   * includes all floating point values: NaN, Infinity, -Infinity
 //   * includes BigInt literals: 123n
+//   * numbers and bigints can have optional underscores: 1_000_000n
 
 // Justin also includes most pure JavaScript expressions. Justin does not
 // include function expressions or variable or function
@@ -82,8 +83,15 @@ const makeJustin = peg => {
     RIGHT_PAREN <- ")" _WS;
     STARSTAR <- "**" _WS;
 
+    # Allow optional underscore digit separators.
+    digits <- super.digit ** ("_"?);
+    NUMBER <- super.NUMBER ${ns => ns.replaceAll('_', '')};
+
     # BigInts are not supported in JSON, but they are in Justin.
-    bigintLiteral <- < int > "n" _WSN ${int => ['data', BigInt(int)]};
+    bigintLiteral <- < int > "n" _WSN ${ns => [
+      'data',
+      BigInt(ns.replaceAll('_', '')),
+    ]};
 
     # Define Javascript-style comments.
     _WS <- super._WS (EOL_COMMENT / MULTILINE_COMMENT)?   ${_ => SKIP};
