@@ -773,7 +773,7 @@ pos = ${posSrc};`;
         /**
          * @template X
          * @param {ParserOptions} options
-         * @returns {IPegTag<IParserTag<X>>}
+         * @returns {IPegTag<IParserTag<X, any>>}
          */
         const makeExtensionTag = (options = {}) => {
           /**

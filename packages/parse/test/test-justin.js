@@ -35,6 +35,53 @@ test('data', t => {
   t.deepEqual(parse('"\\f\\r\\n\\t\\b"'), ast(0, 'data', '\f\r\n\t\b'));
 });
 
+test('holes', t => {
+  const parseBLD = units => {
+    const { testTag: testJustin } = makeParserUtils(justin, (val, message) =>
+      t.assert(val, message),
+    );
+    const {
+      result,
+      tools: { ast, nest, hole },
+    } = testJustin`make(BLD, ${units}, 'additional arg')`;
+    assert(result.status === 'fulfilled', 'parse failed');
+    const parsed = result.value;
+
+    t.deepEqual(
+      parsed.ast,
+      ast(
+        nest(
+          0,
+          'call',
+          nest(0, 'use', 'make'),
+          nest(
+            4,
+            nest(5, 'use', 'BLD'),
+            hole(0, 'exprHole', 0),
+            nest(2, 'data', 'additional arg'),
+          ),
+        ),
+      ),
+    );
+
+    t.assert(Array.isArray(parsed.holes));
+    const expected = [units];
+    t.is(parsed.holes.length, expected.length);
+    expected.map((v, i) => t.is(parsed.holes[i], v, `hole ${i} is ${v}`));
+
+    return parsed;
+  };
+
+  const p1 = parseBLD(BigInt(123));
+  const p2 = parseBLD(BigInt(123));
+  t.deepEqual(p1, p2);
+  t.is(p1.ast, p2.ast);
+
+  const p3 = parseBLD(456);
+  t.notDeepEqual(p2, p3);
+  t.is(p1.ast, p3.ast);
+});
+
 test('binops', t => {
   const { parse, ast } = makeParserUtils(justin, (val, message) =>
     t.assert(val, message),

@@ -31,7 +31,7 @@ interface ParserOptions {
   debug?: boolean;
 }
 
-interface IParserTag<T = any, U = any> {
+interface IParserTag<T = any, U = { holes: any[]; ast: any }> {
   (template: TemplateStringsArray, ...args: T[]): U;
   options(opts: Partial<ParserOptions>): IParserTag<T, U>;
   parserCreator: PegParserCreator;

@@ -153,7 +153,7 @@ const makeSerialParseWithTools = (testTag, assert) => {
     const dtag = doDebug ? testTag.options({ debug: true }) : testTag;
     const { result, tools } = dtag(tmpl);
     assert(result.status === 'fulfilled', 'parse failed');
-    const parsed = result.value;
+    const parsed = result.value.ast;
     currentTestTools = tools;
     if (doDump) {
       // tslint:disable-next-line:no-console
