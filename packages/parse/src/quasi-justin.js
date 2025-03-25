@@ -9,7 +9,8 @@
 //   * multi-line strings (via template literals).
 //   * undefined.
 //   * includes all floating point values: NaN, Infinity, -Infinity
-//   * will include BigInt once available.
+//   * includes BigInt literals: 123n
+//   * numbers and bigints can have optional underscores: 1_000_000n
 
 // Justin also includes most pure JavaScript expressions. Justin does not
 // include function expressions or variable or function
@@ -22,9 +23,9 @@
 // See https://github.com/endojs/Jessie/blob/main/README.md
 // for documentation of the Jessie grammar.
 
-// Justin is defined to be extended into the Chainmail grammar, to
-// provide its expression language in a JS-like style. Chainmail
-// expressions need to be pure and should be terminating.
+// Justin is also intended to be extended into the Chainmail grammar, to provide
+// its expression language in a JS-like style. Chainmail expressions need to be
+// pure and should be terminating.
 
 /// <reference path="./peg.d.ts"/>
 
@@ -70,7 +71,7 @@ const makeJustin = peg => {
   const { SKIP } = peg;
   return peg`
     # to be overridden or inherited
-    start <- _WS assignExpr _EOF                       ${v => () => v};
+    start <- _WS assignExpr _EOF ${ast => (...holes) => ({ ast, holes })};
 
     # A.1 Lexical Grammar
 
@@ -81,6 +82,16 @@ const makeJustin = peg => {
     QUESTION <- "?" _WS;
     RIGHT_PAREN <- ")" _WS;
     STARSTAR <- "**" _WS;
+
+    # Allow optional underscore digit separators.
+    digits <- super.digit ** ("_"?);
+    NUMBER <- super.NUMBER ${ns => ns.replaceAll('_', '')};
+
+    # BigInts are not supported in JSON, but they are in Justin.
+    bigintLiteral <- < int > "n" _WSN ${ns => [
+      'data',
+      BigInt(ns.replaceAll('_', '')),
+    ]};
 
     # Define Javascript-style comments.
     _WS <- super._WS (EOL_COMMENT / MULTILINE_COMMENT)?   ${_ => SKIP};
@@ -144,11 +155,14 @@ const makeJustin = peg => {
     / "interface" / "private" / "public") _WSN;
 
     # Quasiliterals aka template literals
-    QUASI_CHAR <- "\\" . / ~"\`" .;
-    QUASI_ALL <- "\`" < (~"\${" QUASI_CHAR)* > "\`" _WS;
-    QUASI_HEAD <- "\`" < (~"\${" QUASI_CHAR)* > "\${" _WS;
-    QUASI_MID <- "}" < (~"\${" QUASI_CHAR)* > "\${" _WS;
-    QUASI_TAIL <- "}" < (~"\${" QUASI_CHAR)* > "\`" _WS;
+    QCHAR <- "\\" . / ~QQUOTE .;
+    QQUOTE <- "\`";
+    QHOLE <- "\${";
+    QHOLE_END <- "}";
+    QUASI_ALL <- QQUOTE < (~QHOLE QCHAR)* > QQUOTE _WS;
+    QUASI_HEAD <- QQUOTE < (~QHOLE QCHAR)* > QHOLE _WS;
+    QUASI_MID <- QHOLE_END < (~QHOLE QCHAR)* > QHOLE _WS;
+    QUASI_TAIL <- QHOLE_END < (~QHOLE QCHAR)* > QQUOTE _WS;
 
 
     # A.2 Expressions
@@ -158,6 +172,7 @@ const makeJustin = peg => {
     
     dataStructure <-
       undefined
+    / bigintLiteral
     / super.dataStructure;
 
     # Optional trailing commas.

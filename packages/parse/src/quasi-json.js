@@ -16,7 +16,7 @@ const makeJSON = peg => {
   const { FAIL, HOLE, SKIP } = peg;
   return peg`
 # to be overridden or inherited
-start <- _WS assignExpr _EOF                ${v => () => v};
+start <- _WS assignExpr _EOF          ${ast => (...holes) => ({ ast, holes })};
 
 # to be extended
 primaryExpr <- dataStructure;
@@ -116,15 +116,16 @@ hex <- digit / [a-fA-F];
 
 NUMBER <- < int frac? exp? > _WSN;
 
-int <- [1-9] digit+
+int <- [1-9] digits
 / digit
-/ MINUS digit
-/ MINUS [1-9] digit+;
+/ MINUS [1-9] digits
+/ MINUS digit;
 
 digit <- [0-9];
+digits <- digit*;
 
-frac <- '.' digit+;
-exp <- [Ee] [+\-]? digit+;
+frac <- '.' digits;
+exp <- [Ee] [+\-]? digits;
 
 # _WSN is whitespace or a non-ident character.
 _WSN <- ~[$A-Za-z_] _WS    ${_ => SKIP};
