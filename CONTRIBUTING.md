@@ -6,16 +6,15 @@ Rough notes that should evolve into a better guide sometime.
 # Name a release branch
 now=`date -u +%Y%m%dT%H%M%S`
 git checkout -b prepare-release-$now
-git branch -u origin
+git push -u origin prepare-release-$now
 
 # Install build dependencies
 yarn install --force
 
-# Bump versions for changed packages
+# Bump versions for changed packages and push.
 yarn lerna version --conventional-graduate
 
-# Push and create a release PR
-git push
+# Create a release PR
 open https://github.com/endojs/Jessie/pulls
 ```
 
