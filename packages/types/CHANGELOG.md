@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/endojs/Jessie/compare/@jessie.js/types@0.2.3...@jessie.js/types@0.3.0) (2025-04-15)
+
+
+### Features
+
+* **types:** add `Error` ([2c6823d](https://github.com/endojs/Jessie/commit/2c6823d20dcf117afed8c832a6c23b25ebc021bd))
+
+
+
+
+
 ## [0.2.3](https://github.com/endojs/Jessie/compare/@jessie.js/types@0.2.2...@jessie.js/types@0.2.3) (2023-06-01)
 
 **Note:** Version bump only for package @jessie.js/types

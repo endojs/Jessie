@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/endojs/Jessie/compare/@jessie.js/parse@0.2.4...@jessie.js/parse@0.3.0) (2025-04-15)
+
+
+### Bug Fixes
+
+* **parse:** propagate tagged template literal parse errors ([7744805](https://github.com/endojs/Jessie/commit/774480533963c23bae51897ad1b8d34a95de0d93))
+
+
+### Features
+
+* **parse:** add bigint literals to justin ([3fe1ab2](https://github.com/endojs/Jessie/commit/3fe1ab2eac9a95882fba667174852e85f87eef22))
+* **parse:** permit number and bigint underscore separators ([77855d5](https://github.com/endojs/Jessie/commit/77855d53a5cffabace1aa1c4bd895b8d5de0efd6))
+* **parse:** spruce up this package to make it useful ([7b62f09](https://github.com/endojs/Jessie/commit/7b62f095dd1826c89c123af168aab0fe525848f1))
+
+
+
+
+
 ## [0.2.4](https://github.com/endojs/Jessie/compare/@jessie.js/parse@0.2.3...@jessie.js/parse@0.2.4) (2024-03-28)
 
 **Note:** Version bump only for package @jessie.js/parse
