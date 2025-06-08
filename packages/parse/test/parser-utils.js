@@ -152,7 +152,9 @@ const makeSerialParseWithTools = (testTag, assert) => {
     const tmpl = Object.assign([src], { raw: [src] });
     const dtag = doDebug ? testTag.options({ debug: true }) : testTag;
     const { result, tools } = dtag(tmpl);
-    assert(result.status === 'fulfilled', 'parse failed');
+    if (result.status === 'rejected') {
+      assert(false, `parse failed: ${result.reason}`);
+    }
     const parsed = result.value.ast;
     currentTestTools = tools;
     if (doDump) {

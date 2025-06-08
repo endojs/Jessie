@@ -131,7 +131,7 @@ Literal      <- ['] < (~['] Char )* > ['] _Spacing
               / ["] < (~["] Char )* > ["] _Spacing;
 Class        <- '[' < (~']' Range)* > ']' _Spacing;
 Range        <- Char '-' Char / Char;
-Char         <- '\\' [abefnrtv'"\[\]\\\`\$]
+Char         <- '\\' [abefnrtv'"\[\]\\\`$]
               / '\\x' [0-9a-fA-F][0-9a-fA-F]
               / '\\' '-'
               / ~'\\' .;

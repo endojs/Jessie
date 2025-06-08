@@ -1,14 +1,11 @@
 // Subsets of JavaScript, starting from the grammar as defined at
 // http://www.ecma-international.org/ecma-262/9.0/#sec-grammar-summary
 
-// Justin is the safe JavaScript expression language, a potentially
-// pure terminating superset of JSON and subset of Jessie, that relieves
-// many of the pain points of using JSON as a data format:
-//   * unquoted indentifier property names.
-//   * comments.
-//   * multi-line strings (via template literals).
+// Justin is a safe JavaScript expression language, a potentially
+// pure terminating superset of JSON5 and subset of Jessie, that relieves
+// many of the constraints that exist with JSON5 (and thereby also JSON):
+//   * template literals.
 //   * undefined.
-//   * includes all floating point values: NaN, Infinity, -Infinity
 //   * includes BigInt literals: 123n
 //   * numbers and bigints can have optional underscores: 1_000_000n
 
@@ -40,31 +37,6 @@ const binary = (left, rights) => {
 };
 
 /**
- * @param {string} s
- */
-const transformSingleQuote = s => {
-  let i = 0;
-  let qs = '';
-  while (i < s.length) {
-    const c = s.slice(i, i + 1);
-    if (c === '\\') {
-      // Skip one char.
-      qs += s.slice(i, i + 2);
-      i += 2;
-    } else if (c === '"') {
-      // Quote it.
-      qs += '\\"';
-      i += 1;
-    } else {
-      // Add it directly.
-      qs += c;
-      i += 1;
-    }
-  }
-  return `"${qs}"`;
-};
-
-/**
  * @param {IPegTag<IParserTag<any>>} peg
  */
 const makeJustin = peg => {
@@ -84,75 +56,21 @@ const makeJustin = peg => {
     STARSTAR <- "**" _WS;
 
     # Allow optional underscore digit separators.
-    digits <- super.digit ** ("_"?);
-    NUMBER <- super.NUMBER ${ns => ns.replaceAll('_', '')};
+    digits <- super.digits ++ '_' ${ds => ds.filter(d => d !== '_').join('')};
+    hexDigits <- super.hexDigits ++ '_' ${ds =>
+      ds.filter(d => d !== '_').join('')};
 
-    # BigInts are not supported in JSON, but they are in Justin.
-    bigintLiteral <- < int > "n" _WSN ${ns => [
-      'data',
-      BigInt(ns.replaceAll('_', '')),
-    ]};
+    # BigInts are not supported in JSON5, but they are in Justin.
+    heximal <-
+      hexNat 'n' _WSN ${ds => BigInt(ds)}
+    / super.heximal;
 
-    # Define Javascript-style comments.
-    _WS <- super._WS (EOL_COMMENT / MULTILINE_COMMENT)?   ${_ => SKIP};
-    EOL_COMMENT <- "//" (~[\n\r] .)* _WS;
-    MULTILINE_COMMENT <- "/*" (~"*/" .)* "*/" _WS;
-
-    # Add single-quoted strings.
-    STRING <-
-      super.STRING
-    / "'" < (~"'" character)* > "'" _WS  ${s => transformSingleQuote(s)};
+    decimal <-
+      decNat 'n' _WSN ${ds => BigInt(ds)}
+    / super.decimal;
 
     # Only match if whitespace doesn't contain newline
-    _NO_NEWLINE <- ~IDENT [ \t]*     ${_ => SKIP};
-
-    IDENT_NAME <- ~(HIDDEN_PFX / "__proto__" _WSN) (IDENT / RESERVED_WORD);
-
-    IDENT <-
-      ~(HIDDEN_PFX / IMPORT_PFX / RESERVED_WORD)
-      < [$A-Za-z_] [$A-Za-z0-9_]* > _WSN;
-    HIDDEN_PFX <- "$h_";
-    IMPORT_PFX <- "$i_";
-
-    # Omit "async", "arguments", "eval", "get", and "set" from IDENT
-    # in Justin even though ES2017 considers them in IDENT.
-    RESERVED_WORD <-
-      (KEYWORD / RESERVED_KEYWORD / FUTURE_RESERVED_WORD
-    / "null" / "false" / "true"
-    / "async" / "arguments" / "eval" / "get" / "set") _WSN;
-
-    KEYWORD <-
-      ("break"
-    / "case" / "catch" / "const" / "continue"
-    / "debugger" / "default"
-    / "else" / "export"
-    / "finally" / "for" / "function"
-    / "if" / "import"
-    / "return"
-    / "switch"
-    / "throw" / "try" / "typeof"
-    / "void"
-    / "while") _WSN;
-
-    # Unused by Justin but enumerated here, in order to omit them
-    # from the IDENT token.
-    RESERVED_KEYWORD <-
-      ("class"
-    / "delete" / "do"
-    / "extends"
-    / "instanceof"
-    / "in"
-    / "new"
-    / "super"
-    / "this"
-    / "var"
-    / "with"
-    / "yield") _WSN;
-
-    FUTURE_RESERVED_WORD <-
-      ("await" / "enum"
-    / "implements" / "package" / "protected"
-    / "interface" / "private" / "public") _WSN;
+    _NO_NEWLINE <- [ \t]*     ${_ => SKIP};
 
     # Quasiliterals aka template literals
     QCHAR <- "\\" . / ~QQUOTE .;
@@ -172,23 +90,7 @@ const makeJustin = peg => {
     
     dataStructure <-
       undefined
-    / bigintLiteral
     / super.dataStructure;
-
-    # Optional trailing commas.
-    record <-
-      super.record
-    / LEFT_BRACE propDef ** _COMMA _COMMA? RIGHT_BRACE      ${(_, ps, _2) => [
-      'record',
-      ps,
-    ]};
-
-    array <-
-      super.array
-    / LEFT_BRACKET element ** _COMMA _COMMA? RIGHT_BRACKET  ${(_, es, _2) => [
-      'array',
-      es,
-    ]};
 
     useVar <- IDENT                                       ${id => ['use', id]};
 
@@ -207,6 +109,7 @@ const makeJustin = peg => {
 
     pureExpr <-
       super.pureExpr
+    / pureQuasiExpr
     / LEFT_PAREN pureExpr RIGHT_PAREN                     ${(_, e, _2) => e}
     / useVar;
 
@@ -241,17 +144,24 @@ const makeJustin = peg => {
       e,
     ]};
 
-    # No computed property name
-    propName <-
-      super.propName
-    / IDENT_NAME
-    / NUMBER;
-
-    quasiExpr <-
+    # A quasiliteral without any expressions is as pure as its tag.
+    pureQuasiAll <-
       QUASI_ALL                                            ${q => [
         'quasi',
         [q],
-      ]}
+      ]};
+
+    pureQuasiExpr <-
+      pureQuasiAll
+    / QUASI_HEAD pureExpr ** QUASI_MID QUASI_TAIL          ${(h, ms, t) => [
+      'quasi',
+      qunpack(h, ms, t),
+    ]};
+
+    quasiAll <- pureQuasiAll;
+
+    quasiExpr <-
+      quasiAll
     / QUASI_HEAD expr ** QUASI_MID QUASI_TAIL              ${(h, ms, t) => [
       'quasi',
       qunpack(h, ms, t),
@@ -290,17 +200,13 @@ const makeJustin = peg => {
     # Restrict index access to number-names, including
     # floating point, NaN, Infinity, and -Infinity.
     indexExpr <-
-      NUMBER                                               ${n => [
-        'data',
-        JSON.parse(n),
-      ]}
+      NUMBER
     / PLUS unaryExpr                                       ${(_, e) => [
       `pre:+`,
       e,
     ]};
 
-    args <- LEFT_PAREN arg ** _COMMA RIGHT_PAREN            ${(_, args, _2) =>
-      args};
+    args <- LEFT_PAREN arg ** _COMMA _COMMA? RIGHT_PAREN   ${(_, args) => args};
 
     arg <-
       assignExpr

@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 // Subsets of JavaScript, starting from the grammar as defined at
 // http://www.ecma-international.org/ecma-262/9.0/#sec-grammar-summary
 
@@ -8,6 +9,8 @@
 // See also json.org
 
 /// <reference path="./peg.d.ts"/>
+
+import { fromUtf8 } from './unicode.js';
 
 /**
  * @param {IPegTag<IParserTag<any>>} peg
@@ -22,7 +25,7 @@ start <- _WS assignExpr _EOF          ${ast => (...holes) => ({ ast, holes })};
 primaryExpr <- dataStructure;
 
 dataStructure <-
-  dataLiteral                             ${n => ['data', JSON.parse(n)]}
+  dataLiteral                             ${d => ['data', d]}
 / array
 / record
 / HOLE                                    ${h => ['exprHole', h]};
@@ -30,24 +33,23 @@ dataStructure <-
 # An expression without side-effects.
 # to be extended
 pureExpr <-
-  dataLiteral                             ${n => ['data', JSON.parse(n)]}
+  dataLiteral                             ${d => ['data', d]}
 / pureArray
 / pureRecord
 / HOLE                                    ${h => ['exprHole', h]};
 
-dataLiteral <- (("null" / "false" / "true") _WSN / NUMBER / STRING) _WS;
+dataLiteral <-
+  "null" _WSN ${() => null}
+/ "false" _WSN ${() => false}
+/ "true" _WSN ${() => true}
+/ NUMBER _WSN
+/ STRING _WSN;
 
 pureArray <-
-  LEFT_BRACKET pureExpr ** _COMMA _COMMA? RIGHT_BRACKET ${(_, es, _2) => [
-    'array',
-    es,
-  ]};
+  LEFT_BRACKET pureExpr ** _COMMA RIGHT_BRACKET ${(_, es) => ['array', es]};
 
 array <-
-  LEFT_BRACKET element ** _COMMA _COMMA? RIGHT_BRACKET ${(_, es, _2) => [
-    'array',
-    es,
-  ]};
+  LEFT_BRACKET element ** _COMMA RIGHT_BRACKET ${(_, es) => ['array', es]};
 
 # to be extended
 element <- assignExpr;
@@ -55,16 +57,10 @@ element <- assignExpr;
 # The JavaScript and JSON grammars calls records "objects"
 
 pureRecord <-
-  LEFT_BRACE purePropDef ** _COMMA _COMMA? RIGHT_BRACE  ${(_, ps, _2) => [
-    'record',
-    ps,
-  ]};
+  LEFT_BRACE purePropDef ** _COMMA RIGHT_BRACE  ${(_, ps) => ['record', ps]};
 
 record <-
-  LEFT_BRACE propDef ** _COMMA _COMMA? RIGHT_BRACE  ${(_, ps, _2) => [
-    'record',
-    ps,
-  ]};
+  LEFT_BRACE propDef ** _COMMA RIGHT_BRACE  ${(_, ps) => ['record', ps]};
 
 # to be extended
 purePropDef <- propName COLON pureExpr     ${(k, _, e) => ['prop', k, e]};
@@ -73,13 +69,12 @@ purePropDef <- propName COLON pureExpr     ${(k, _, e) => ['prop', k, e]};
 propDef <- propName COLON assignExpr       ${(k, _, e) => ['prop', k, e]};
 
 # to be extended
-propName <- STRING                     ${str => {
-    const js = JSON.parse(str);
-    if (js === '__proto__') {
+propName <- STRING                    ${str => {
+    if (str === '__proto__') {
       // Don't allow __proto__ behaviour attacks.
       return FAIL;
     }
-    return ['data', js];
+    return ['data', str];
   }};
 
 # to be overridden
@@ -87,6 +82,8 @@ assignExpr <- primaryExpr;
 
 # Lexical syntax
 
+CR <- "\r";
+LF <- "\n";
 _EOF <- ~.;
 LEFT_BRACKET <- "[" _WS;
 RIGHT_BRACKET <- "]" _WS;
@@ -97,39 +94,66 @@ COLON <- ":" _WS;
 MINUS <- "-" _WS;
 HOLE <- &${HOLE} _WS;
 
-STRING <- < '"' (~'"' character)* '"' > _WS;
+STRING <- '"' (~'"' character)* '"' _WS ${(_, cs) => cs.join('')};
 
-utf8 <-
-  [\xc2-\xdf] utf8cont
-/ [\xe0-\xef] utf8cont utf8cont
-/ [\xf0-\xf4] utf8cont utf8cont utf8cont;
-
+# Decode UTF-8 characters.
 utf8cont <- [\x80-\xbf];
+utf8 <-
+  [\x00-\x7f]
+/ [\xc0-\xdf] utf8cont ${(b0, b1) => String.fromCodePoint(fromUtf8(b0, b1))}
+/ [\xe0-\xef] utf8cont utf8cont ${(b0, b1, b2) =>
+    String.fromCodePoint(fromUtf8(b0, b1, b2))}
+/ [\xf0-\xf7] utf8cont utf8cont utf8cont ${(b0, b1, b2, b3) =>
+    String.fromCodePoint(fromUtf8(b0, b1, b2, b3))};
+
+unicodeEscape <-
+  '\\u' hex hex hex hex ${(_, h1, h2, h3, h4) => {
+    const cp = parseInt(h1 + h2 + h3 + h4, 16);
+    return String.fromCodePoint(cp);
+  }};
 
 character <-
-  escape
-/ '\\u' hex hex hex hex
-/ ~'\\' ([\x20-\x7f] / utf8);
+  ~[\\\x00-\x1f] utf8
+/ escape
+/ unicodeEscape;
 
-escape <- '\\' ['"\\bfnrt];
+escape <- '\\' (
+  ["\\/] ${verbatim => verbatim}
+/ 'b' ${_ => '\x08'}
+/ 'f' ${_ => '\x0c'}
+/ 'n' ${_ => '\n'}
+/ 'r' ${_ => '\r'}
+/ 't' ${_ => '\t'}
+) ${(_, c) => c};
+
 hex <- digit / [a-fA-F];
 
-NUMBER <- < int frac? exp? > _WSN;
+NUMBER <- MINUS? numeric _WSN ${(neg, num) => {
+    return neg.length ? -num : num;
+  }};
 
-int <- [1-9] digits
-/ digit
-/ MINUS [1-9] digits
-/ MINUS digit;
+# to be extended
+numeric <- decimal _WSN;
+
+decNat <- '0' / ~'0' digits;
 
 digit <- [0-9];
-digits <- digit*;
+digits <- digit+ ${ds => ds.join('')};
 
-frac <- '.' digits;
-exp <- [Ee] [+\-]? digits;
+frac <- '.' digits ${(dot, ds) => `${dot}${ds}`};
+exp <- [Ee] [+\-]? digits ${(e, sign, ds) => `${e}${sign[0] || ''}${ds}`};
+decimal <- decNat frac? exp? _WSN ${(nat, frac, exp) =>
+    parseFloat(nat + (frac[0] || '') + (exp[0] || ''))};
+
+whitespace <- [\t ];
+lineTerminatorSequence <- LF / CR ~LF / CR LF;
 
 # _WSN is whitespace or a non-ident character.
-_WSN <- ~[$A-Za-z_] _WS    ${_ => SKIP};
-_WS <- [\t\n\r ]*          ${_ => SKIP};
+_WSN <- ~IDENT_PART _WS ${_ => SKIP};
+_WS <- (whitespace / lineTerminatorSequence)* ${_ => SKIP};
+
+IDENT_START <- [$a-zA-Z_];
+IDENT_PART <- IDENT_START / [0-9];
 `;
 };
 
