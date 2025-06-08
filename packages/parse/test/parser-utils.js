@@ -1,5 +1,4 @@
 // @ts-check
-/* globals globalThis */
 /// <reference path="../src/peg.d.ts"/>
 import * as util from 'util';
 
@@ -152,7 +151,9 @@ const makeSerialParseWithTools = (testTag, assert) => {
     const tmpl = Object.assign([src], { raw: [src] });
     const dtag = doDebug ? testTag.options({ debug: true }) : testTag;
     const { result, tools } = dtag(tmpl);
-    assert(result.status === 'fulfilled', 'parse failed');
+    if (result.status === 'rejected') {
+      assert(false, `parse failed: ${result.reason}`);
+    }
     const parsed = result.value.ast;
     currentTestTools = tools;
     if (doDump) {
@@ -199,7 +200,7 @@ export function makeParserUtils(rawTag, testAssert) {
     return Object.assign(wrappedTag, {
       options: opts => wrapTag(baseTag.options(opts)),
       parserCreator: baseTag.parserCreator,
-      // eslint-disable-next-line no-underscore-dangle
+
       _asExtending: baseTag._asExtending,
     });
   };
