@@ -73,14 +73,14 @@ const makeJustin = peg => {
     _NO_NEWLINE <- [ \t]*     ${_ => SKIP};
 
     # Quasiliterals aka template literals
-    QCHAR <- "\\" . / ~QQUOTE .;
+    QCHAR <- "\\" . / !QQUOTE .;
     QQUOTE <- "\`";
     QHOLE <- "\${";
     QHOLE_END <- "}";
-    QUASI_ALL <- QQUOTE < (~QHOLE QCHAR)* > QQUOTE _WS;
-    QUASI_HEAD <- QQUOTE < (~QHOLE QCHAR)* > QHOLE _WS;
-    QUASI_MID <- QHOLE_END < (~QHOLE QCHAR)* > QHOLE _WS;
-    QUASI_TAIL <- QHOLE_END < (~QHOLE QCHAR)* > QQUOTE _WS;
+    QUASI_ALL <- QQUOTE < (!QHOLE QCHAR)* > QQUOTE _WS;
+    QUASI_HEAD <- QQUOTE < (!QHOLE QCHAR)* > QHOLE _WS;
+    QUASI_MID <- QHOLE_END < (!QHOLE QCHAR)* > QHOLE _WS;
+    QUASI_TAIL <- QHOLE_END < (!QHOLE QCHAR)* > QQUOTE _WS;
 
 
     # A.2 Expressions

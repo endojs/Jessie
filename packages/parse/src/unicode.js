@@ -18,7 +18,7 @@ export const codePointToHex = (n, prefix = '0x', quantum = 2) => {
  * @param {number | string} [b]
  * @returns {number}
  */
-const getByte = b => {
+const toOctet = b => {
   if (b === undefined) {
     return undefined;
   }
@@ -28,10 +28,7 @@ const getByte = b => {
     code = b.charCodeAt(0);
   }
 
-  assert(
-    code >= 0x00 && code <= 0xff,
-    `Invalid character code for byte: ${code}`,
-  );
+  assert(code >= 0x00 && code <= 0xff, `Code ${code} is not an octet`);
   return code;
 };
 
@@ -46,8 +43,8 @@ export const fromUtf8 = (b0, b1, b2, b3) => {
   let lowestValidCodePoint;
   let codePoint;
 
-  const octets = [b0, b1, b2, b3].map(getByte);
-  assert(octets[0] !== undefined, 'First argument must be a valid byte');
+  const octets = [b0, b1, b2, b3].map(toOctet);
+  assert(octets[0] !== undefined, 'First argument must be a valid octet');
   if (octets[1] === undefined) {
     lowestValidCodePoint = 0;
     codePoint = octets[0] & 0x7f;

@@ -117,13 +117,13 @@ const makeJSON5 = peg => {
 
     # Define Javascript-style comments.
     _WS <- super._WS (EOL_COMMENT / MULTILINE_COMMENT)?   ${_ => SKIP};
-    EOL_COMMENT <- "//" (~lineTerminatorSequence .)* _WS;
-    MULTILINE_COMMENT <- "/*" (~"*/" .)* "*/" _WS;
+    EOL_COMMENT <- "//" (!lineTerminatorSequence .)* _WS;
+    MULTILINE_COMMENT <- "/*" (!"*/" .)* "*/" _WS;
 
     # Add single-quoted strings.
     STRING <-
       super.STRING
-    / "'" (~"'" character)* "'" _WS  ${(_, cs) => cs.join('')};
+    / "'" (!"'" character)* "'" _WS  ${(_, cs) => cs.join('')};
 
     escape <-
       "\\'" ${_ => "'"}
@@ -167,10 +167,10 @@ const makeJSON5 = peg => {
     / IDENT_NAME ${id => ['data', id]}
     / NUMBER;
 
-    IDENT_NAME <- ~("__proto__" _WSN) (RESERVED_WORD _WSN / IDENT);
+    IDENT_NAME <- !("__proto__" _WSN) (RESERVED_WORD _WSN / IDENT);
 
     IDENT <-
-      ~RESERVED_WORD
+      !RESERVED_WORD
       IDENT_START IDENT_PART* _WSN ${(start, parts) => start + parts.join('')};
 
     # Any character in the Unicode category "Decimal number (Nd)"

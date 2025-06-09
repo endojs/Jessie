@@ -84,7 +84,7 @@ assignExpr <- primaryExpr;
 
 CR <- "\r";
 LF <- "\n";
-_EOF <- ~.;
+_EOF <- !.;
 LEFT_BRACKET <- "[" _WS;
 RIGHT_BRACKET <- "]" _WS;
 LEFT_BRACE <- "{" _WS;
@@ -94,7 +94,7 @@ COLON <- ":" _WS;
 MINUS <- "-" _WS;
 HOLE <- &${HOLE} _WS;
 
-STRING <- '"' (~'"' character)* '"' _WS ${(_, cs) => cs.join('')};
+STRING <- '"' (!'"' character)* '"' _WS ${(_, cs) => cs.join('')};
 
 # Decode UTF-8 characters.
 utf8cont <- [\x80-\xbf];
@@ -113,7 +113,7 @@ unicodeEscape <-
   }};
 
 character <-
-  ~[\\\x00-\x1f] utf8
+  ![\\\x00-\x1f] utf8
 / escape
 / unicodeEscape;
 
@@ -135,7 +135,7 @@ NUMBER <- MINUS? numeric _WSN ${(neg, num) => {
 # to be extended
 numeric <- decimal _WSN;
 
-decNat <- '0' / ~'0' digits;
+decNat <- '0' / !'0' digits;
 
 digit <- [0-9];
 digits <- digit+ ${ds => ds.join('')};
@@ -146,10 +146,10 @@ decimal <- decNat frac? exp? _WSN ${(nat, frac, exp) =>
     parseFloat(nat + (frac[0] || '') + (exp[0] || ''))};
 
 whitespace <- [\t ];
-lineTerminatorSequence <- LF / CR ~LF / CR LF;
+lineTerminatorSequence <- LF / CR !LF / CR LF;
 
 # _WSN is whitespace or a non-ident character.
-_WSN <- ~IDENT_PART _WS ${_ => SKIP};
+_WSN <- !IDENT_PART _WS ${_ => SKIP};
 _WS <- (whitespace / lineTerminatorSequence)* ${_ => SKIP};
 
 IDENT_START <- [$a-zA-Z_];

@@ -6,7 +6,6 @@
 //
 // Modified for Jessica to support:
 //   Semantic actions provided in tagged template HOLEs
-//   '~' for negative lookahead (instead of '!')
 //   ';' terminator for definitions
 //   '**' and '++' for separators
 //   'super.RULE' syntax for extended grammars
@@ -104,7 +103,7 @@ Suffix       <- Primary (STARSTAR
                     ${(patt, optQ) => [optQ[0], patt]}
               / Primary;
 Primary      <- Super
-              / Identifier ~LEFTARROW
+              / Identifier !LEFTARROW
               / OPEN Expression CLOSE
                     ${(_, e, _2) => e}
               / Literal
@@ -127,19 +126,19 @@ Super        <- 'super.' Identifier
 Identifier   <- < IdentStart IdentCont* > _Spacing;
 IdentStart   <- [a-zA-Z_];
 IdentCont    <- IdentStart / [0-9];
-Literal      <- ['] < (~['] Char )* > ['] _Spacing
-              / ["] < (~["] Char )* > ["] _Spacing;
-Class        <- '[' < (~']' Range)* > ']' _Spacing;
+Literal      <- ['] < (!['] Char )* > ['] _Spacing
+              / ["] < (!["] Char )* > ["] _Spacing;
+Class        <- '[' < (!']' Range)* > ']' _Spacing;
 Range        <- Char '-' Char / Char;
 Char         <- '\\' [abefnrtv'"\[\]\\\`$]
               / '\\x' [0-9a-fA-F][0-9a-fA-F]
               / '\\' '-'
-              / ~'\\' .;
+              / !'\\' .;
 LEFTARROW    <- '<-' _Spacing;
 _SLASH        <- '/' _Spacing              ${_ => SKIP};
 SEMI         <- ';' _Spacing;
 AND          <- '&' _Spacing;
-NOT          <- '~' _Spacing;
+NOT          <- '!' _Spacing;
 QUESTION     <- '?' _Spacing;
 STAR         <- '*' _Spacing;
 PLUS         <- '+' _Spacing;
@@ -147,10 +146,10 @@ OPEN         <- '(' _Spacing;
 CLOSE        <- ')' _Spacing;
 DOT          <- '.' _Spacing;
 _Spacing      <- (Space / Comment)*        ${_ => SKIP};
-Comment      <- '#' (~EndOfLine .)* EndOfLine;
+Comment      <- '#' (!EndOfLine .)* EndOfLine;
 Space        <- ' ' / '\t' / EndOfLine;
 EndOfLine    <- '\r\n' / '\n' / '\r';
-_EndOfFile    <- ~.;
+_EndOfFile    <- !.;
 
 HOLE         <- &${HOLE} _Spacing;
 BEGIN        <- '<' _Spacing;
