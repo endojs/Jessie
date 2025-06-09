@@ -1,4 +1,3 @@
- 
 // Subsets of JavaScript, starting from the grammar as defined at
 // http://www.ecma-international.org/ecma-262/9.0/#sec-grammar-summary
 
@@ -84,7 +83,7 @@ assignExpr <- primaryExpr;
 
 CR <- "\r";
 LF <- "\n";
-_EOF <- ~.;
+_EOF <- !.;
 LEFT_BRACKET <- "[" _WS;
 RIGHT_BRACKET <- "]" _WS;
 LEFT_BRACE <- "{" _WS;
@@ -94,13 +93,18 @@ COLON <- ":" _WS;
 MINUS <- "-" _WS;
 HOLE <- &${HOLE} _WS;
 
-STRING <- '"' (~'"' character)* '"' _WS ${(_, cs) => cs.join('')};
+STRING <- '"' (!'"' character)* '"' _WS ${(_, cs) => cs.join('')};
 
 # Decode UTF-8 characters.
-utf8cont <- [\x80-\xbf];
 utf8 <-
-  [\x00-\x7f]
-/ [\xc0-\xdf] utf8cont ${(b0, b1) => String.fromCodePoint(fromUtf8(b0, b1))}
+  ascii
+/ utf8Multi;
+
+ascii <- [\x00-\x7f];
+
+utf8cont <- [\x80-\xbf];
+utf8Multi <-
+  [\xc0-\xdf] utf8cont ${(b0, b1) => String.fromCodePoint(fromUtf8(b0, b1))}
 / [\xe0-\xef] utf8cont utf8cont ${(b0, b1, b2) =>
     String.fromCodePoint(fromUtf8(b0, b1, b2))}
 / [\xf0-\xf7] utf8cont utf8cont utf8cont ${(b0, b1, b2, b3) =>
@@ -113,8 +117,9 @@ unicodeEscape <-
   }};
 
 character <-
-  ~[\\\x00-\x1f] utf8
-/ escape
+  escape
+/ [\x20-\x7f]
+/ utf8Multi
 / unicodeEscape;
 
 escape <- '\\' (
@@ -135,7 +140,7 @@ NUMBER <- MINUS? numeric _WSN ${(neg, num) => {
 # to be extended
 numeric <- decimal _WSN;
 
-decNat <- '0' / ~'0' digits;
+decNat <- '0' / digits;
 
 digit <- [0-9];
 digits <- digit+ ${ds => ds.join('')};
@@ -146,10 +151,10 @@ decimal <- decNat frac? exp? _WSN ${(nat, frac, exp) =>
     parseFloat(nat + (frac[0] || '') + (exp[0] || ''))};
 
 whitespace <- [\t ];
-lineTerminatorSequence <- LF / CR ~LF / CR LF;
+lineTerminatorSequence <- LF / CR LF?;
 
-# _WSN is whitespace or a non-ident character.
-_WSN <- ~IDENT_PART _WS ${_ => SKIP};
+# _WSN is an optional non-ident character, consuming only whitespace.
+_WSN <- !IDENT_PART _WS ${_ => SKIP};
 _WS <- (whitespace / lineTerminatorSequence)* ${_ => SKIP};
 
 IDENT_START <- [$a-zA-Z_];

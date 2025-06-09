@@ -125,7 +125,7 @@ export default harden([
   ['def', '_SLASH', ['act', 18, ['lit', '/'], '_Spacing']],
   ['def', 'SEMI', ['val0', ['lit', ';'], '_Spacing']],
   ['def', 'AND', ['val0', ['lit', '&'], '_Spacing']],
-  ['def', 'NOT', ['val0', ['lit', '~'], '_Spacing']],
+  ['def', 'NOT', ['val0', ['lit', '!'], '_Spacing']],
   ['def', 'QUESTION', ['val0', ['lit', '?'], '_Spacing']],
   ['def', 'STAR', ['val0', ['lit', '*'], '_Spacing']],
   ['def', 'PLUS', ['val0', ['lit', '+'], '_Spacing']],
