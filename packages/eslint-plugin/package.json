@@ -15,6 +15,11 @@
     "lint-fix": "eslint '**/*.js' --fix",
     "lint": "eslint '**/*.js'"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/endojs/Jessie.git",
+    "directory": "packages/eslint-plugin"
+  },
   "dependencies": {
     "requireindex": "~1.1.0"
   },
