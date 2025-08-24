@@ -44,7 +44,7 @@ declare const NaN: number;
 /**
  * Make all properties in T optional
  */
- type Partial<T> = {
+type Partial<T> = {
   [P in keyof T]?: T[P];
 };
 
@@ -99,22 +99,32 @@ type NonNullable<T> = T extends null | undefined ? never : T;
 /**
  * Obtain the parameters of a function type in a tuple
  */
-type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
+type Parameters<T extends (...args: any) => any> = T extends (
+  ...args: infer P
+) => any
+  ? P
+  : never;
 
 /**
  * Obtain the parameters of a constructor function type in a tuple
  */
-type ConstructorParameters<T extends abstract new (...args: any) => any> = T extends abstract new (...args: infer P) => any ? P : never;
+type ConstructorParameters<T extends abstract new (...args: any) => any> =
+  T extends abstract new (...args: infer P) => any ? P : never;
 
 /**
  * Obtain the return type of a function type
  */
-type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+type ReturnType<T extends (...args: any) => any> = T extends (
+  ...args: any
+) => infer R
+  ? R
+  : any;
 
 /**
  * Obtain the return type of a constructor function type
  */
-type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;
+type InstanceType<T extends abstract new (...args: any) => any> =
+  T extends abstract new (...args: any) => infer R ? R : any;
 
 /**
  * Convert string literal type to uppercase
@@ -135,7 +145,6 @@ type Capitalize<S extends string> = intrinsic;
  * Convert first character of string literal type to lowercase
  */
 type Uncapitalize<S extends string> = intrinsic;
-
 
 interface Symbol {}
 interface SymbolConstructor {
@@ -1138,9 +1147,9 @@ interface PromiseAll {
    * @param values An array of Promises.
    * @returns A new Promise.
    */
-  <T1, T2>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<
-    [T1, T2]
-  >;
+  <T1, T2>(
+    values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>],
+  ): Promise<[T1, T2]>;
 
   /**
    * Creates a Promise that is resolved with an array of results when all of the provided Promises
@@ -1312,9 +1321,9 @@ interface PromiseRace {
    * @param values An array of Promises.
    * @returns A new Promise.
    */
-  <T1, T2>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<
-    T1 | T2
-  >;
+  <T1, T2>(
+    values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>],
+  ): Promise<T1 | T2>;
 
   /**
    * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved

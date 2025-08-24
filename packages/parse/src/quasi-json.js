@@ -16,7 +16,8 @@ const makeJSON = peg => {
   const { FAIL, HOLE, SKIP } = peg;
   return peg`
 # to be overridden or inherited
-start <- _WS assignExpr _EOF          ${ast => (...holes) => ({ ast, holes })};
+start <- _WS assignExpr _EOF          ${ast =>
+    (...holes) => ({ ast, holes })};
 
 # to be extended
 primaryExpr <- dataStructure;

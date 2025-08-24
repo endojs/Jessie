@@ -71,7 +71,8 @@ const makeJustin = peg => {
   const { SKIP } = peg;
   return peg`
     # to be overridden or inherited
-    start <- _WS assignExpr _EOF ${ast => (...holes) => ({ ast, holes })};
+    start <- _WS assignExpr _EOF ${ast =>
+      (...holes) => ({ ast, holes })};
 
     # A.1 Lexical Grammar
 

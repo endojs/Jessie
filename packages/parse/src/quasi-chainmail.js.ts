@@ -1,7 +1,8 @@
 /// <reference path="peg.d.ts"/>
 
 const transformSingleQuote = (s: string) => {
-  let i = 0, qs = '';
+  let i = 0,
+    qs = '';
   while (i < s.length) {
     const c = s.slice(i, i + 1);
     if (c === '\\') {
@@ -11,26 +12,27 @@ const transformSingleQuote = (s: string) => {
     } else if (c === '"') {
       // Quote it.
       qs += '\\"';
-      i ++;
+      i++;
     } else {
       // Add it directly.
       qs += c;
-      i ++;
+      i++;
     }
   }
   return `"${qs}"`;
 };
 
 const deopt = (opt: [] | [any[]]) => {
-  return (opt.length === 0 ? opt : opt[0])
+  return opt.length === 0 ? opt : opt[0];
 };
 
-
 const makeChainmail = (peg: IPegTag<IParserTag<any>>) => {
-    const {FAIL, HOLE, SKIP} = peg;
-    return peg`
+  const { FAIL, HOLE, SKIP } = peg;
+  return peg`
 # start production
-start <- _WS typeDecl**(_SEMI*) _EOF  ${v => (..._a: any[]) => v};
+start <- _WS typeDecl**(_SEMI*) _EOF  ${v =>
+    (..._a: any[]) =>
+      v};
 
 typeDecl <- enumDecl / structDecl / interfaceDecl / constDecl;
 
@@ -64,15 +66,18 @@ enumDecl <- ENUM type LBRACE (IDENT _SEMI)* RBRACE
 
 STRUCT <- "struct" _WS;
 structDecl <- STRUCT type LBRACE memberDecl* RBRACE
-  ${(_, stype, _2, members, _3) =>
-    ['struct', stype[1], stype[2], members]};
+  ${(_, stype, _2, members, _3) => ['struct', stype[1], stype[2], members]};
 
 memberDecl <- paramDecl _SEMI / typeDecl;
 
 INTERFACE <- "interface" _WS;
 interfaceDecl <- INTERFACE type extends? LBRACE methodDecl* RBRACE
-  ${(_, itype, ext, _2, methods, _3) =>
-    ['interface', itype, deopt(ext), methods]};
+  ${(_, itype, ext, _2, methods, _3) => [
+    'interface',
+    itype,
+    deopt(ext),
+    methods,
+  ]};
 
 EXTENDS <- "extends" _WS;
 extends <- EXTENDS LPAREN type**_COMMA RPAREN
@@ -98,14 +103,14 @@ paramDecl <- IDENT COLON type default?
   ${(id, _, type, dflt) => ['param', id, type, ...dflt]};
 
 resultDecl <- IDENT COLON type ${(id, _, type) => ['named', type, id]}
-  / type ${(type) => type};
+  / type ${type => type};
 
 CONST <- "const" _WS;
 constDecl <- CONST IDENT COLON type EQUALS expr _SEMI
   ${(_, id, _2, type, _3, expr, _4) => ['const', id, type, expr]};
 
-string <- STRING ${(s) => ['data', JSON.parse(s)]};
-number <- NUMBER ${(n) => ['data', JSON.parse(n)]};
+string <- STRING ${s => ['data', JSON.parse(s)]};
+number <- NUMBER ${n => ['data', JSON.parse(n)]};
 expr <- string / number;
 
 _EOF <- ~.;
@@ -153,7 +158,6 @@ EOL_COMMENT <- "//" (~[\n\r] .)* _WS;
 MULTILINE_COMMENT <- "/*" (~"*/" .)* "*/" _WS;
 
 `;
-
 };
 
 export default makeChainmail;
