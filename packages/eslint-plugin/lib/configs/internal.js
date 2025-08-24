@@ -17,27 +17,16 @@ module.exports = plugin => {
     '**/dist/**',
   ];
 
-  const xtends = [
-    'plugin:prettier/recommended',
-    'plugin:@endo/strict',
-    'plugin:@jessie.js/recommended',
-  ];
+  const xtends = ['plugin:@endo/strict', 'plugin:@jessie.js/recommended'];
 
   const rules = {
-    'prettier/prettier': 'off',
     'no-underscore-dangle': 'off',
     'no-unused-vars': [
       'warn',
       {
-        // args: 'after-used',
         argsIgnorePattern: '^_',
-        // caughtErrors: 'all',
         caughtErrorsIgnorePattern: '^_',
         destructuredArrayIgnorePattern: '^_',
-        // ignoreRestSiblings: false,
-        // ignoreUsingDeclarations: false,
-        //  reportUsedIgnorePattern: false,
-        // vars: 'all',
         varsIgnorePattern: '^_',
       },
     ],
@@ -54,7 +43,7 @@ module.exports = plugin => {
           '**/__tests__/**',
         ],
         optionalDependencies: false,
-        peerDependencies: false,
+        peerDependencies: ['**/test/**'],
       },
     ],
   };
