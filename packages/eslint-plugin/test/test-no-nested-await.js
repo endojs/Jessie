@@ -6,7 +6,9 @@
 const { RuleTester } = require('eslint');
 
 const ruleTester = new RuleTester({
-  parserOptions: { sourceType: 'module', ecmaVersion: 2021 },
+  languageOptions: {
+    parserOptions: { sourceType: 'module', ecmaVersion: 'latest' },
+  },
 });
 const rule = require('../lib/rules/no-nested-await.js');
 const {
@@ -23,9 +25,11 @@ ruleTester.run('no-nested-await', rule, {
   // actually valid.  We test that it fails these cases.
   invalid: [...clearlyInvalid, ...subtlyValid].map(example => ({
     ...example,
-    errors: example.errors.map(error => ({
-      ...error,
-      messageId: unexpectedNestedAwait,
-    })),
+    errors: example.errors.map(
+      ({ suggestions: _, ...errorWithoutSuggestions }) => ({
+        ...errorWithoutSuggestions,
+        messageId: unexpectedNestedAwait,
+      }),
+    ),
   })),
 });

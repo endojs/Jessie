@@ -2,16 +2,82 @@
 
 'use strict';
 
-module.exports = {
-  extends: [
-    'plugin:prettier/recommended',
-    'plugin:@endo/strict',
-    'plugin:@jessie.js/recommended',
-  ],
-  ignorePatterns: [
+const { FlatCompat } = require('@eslint/eslintrc');
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname, // optional; default: process.cwd()
+  resolvePluginsRelativeTo: __dirname, // optional
+});
+
+module.exports = plugin => {
+  const ignores = [
     '**/output/**',
     '**/bundles/**',
     '**/coverage/**',
     '**/dist/**',
-  ],
+  ];
+
+  const xtends = [
+    'plugin:prettier/recommended',
+    'plugin:@endo/strict',
+    'plugin:@jessie.js/recommended',
+  ];
+
+  const rules = {
+    'prettier/prettier': 'off',
+    'no-underscore-dangle': 'off',
+    'no-unused-vars': [
+      'warn',
+      {
+        // args: 'after-used',
+        argsIgnorePattern: '^_',
+        // caughtErrors: 'all',
+        caughtErrorsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_',
+        // ignoreRestSiblings: false,
+        // ignoreUsingDeclarations: false,
+        //  reportUsedIgnorePattern: false,
+        // vars: 'all',
+        varsIgnorePattern: '^_',
+      },
+    ],
+    'import/no-unresolved': 'off',
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: [
+          'eslint.config.*',
+          '**/test/**',
+          '**/*.test.js',
+          '**/*.spec.js',
+          '**/tests/**',
+          '**/__tests__/**',
+        ],
+        optionalDependencies: false,
+        peerDependencies: false,
+      },
+    ],
+  };
+
+  if (plugin) {
+    return [
+      ...compat.extends(...xtends),
+      {
+        // matches all files because it doesn't specify the `files` or `ignores` key
+        rules,
+        languageOptions: {
+          ecmaVersion: 'latest',
+        },
+      },
+      {
+        ignores,
+      },
+    ];
+  }
+
+  return {
+    extends: xtends,
+    rules,
+    ignorePatterns: ignores,
+  };
 };

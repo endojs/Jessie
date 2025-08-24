@@ -127,13 +127,22 @@ const clearlyInvalid = [
       }
       fn();
     }`,
-    errors: [{ line: 3 }],
-  },
-  {
-    code: `async function awaitFunctionArgument() {
-      fn(await bar());
+    errors: [
+      {
+        line: 3,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitUnbalancedThen() {
+      await null;if (baz()) {
+        await qux();
+      }
+      fn();
     }`,
-    errors: [{ line: 2 }],
+          },
+        ],
+      },
+    ],
   },
   {
     code: `async function awaitUnbalancedElse() {
@@ -144,7 +153,24 @@ const clearlyInvalid = [
       }
       fn();
     }`,
-    errors: [{ line: 5 }],
+    errors: [
+      {
+        line: 5,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitUnbalancedElse() {
+      await null;if (baz()) {
+        // empty
+      } else {
+        await zingo();
+      }
+      fn();
+    }`,
+          },
+        ],
+      },
+    ],
   },
   {
     code: `async function awaitNestedFor() {
@@ -153,7 +179,22 @@ const clearlyInvalid = [
       }
       fn();
     }`,
-    errors: [{ line: 3 }],
+    errors: [
+      {
+        line: 3,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitNestedFor() {
+      await null;for (const b of baz()) {
+        await qux();
+      }
+      fn();
+    }`,
+          },
+        ],
+      },
+    ],
   },
   {
     code: `async function awaitNestedForAwaitOf() {
@@ -164,7 +205,25 @@ const clearlyInvalid = [
       }
       fn();
     }`,
-    errors: [{ line: 3 }, { line: 4, messageId: 'unexpectedNestedAwait' }],
+    errors: [
+      {
+        line: 3,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitNestedForAwaitOf() {
+      await null;if (bingo()) {
+        for await (const b of baz()) {
+          await qux();
+        }
+      }
+      fn();
+    }`,
+          },
+        ],
+      },
+      { line: 4, messageId: 'unexpectedNestedAwait' },
+    ],
   },
   {
     code: `async function awaitNestedTryCatch() {
@@ -174,7 +233,23 @@ const clearlyInvalid = [
         fn();
       }
     }`,
-    errors: [{ line: 3 }],
+    errors: [
+      {
+        line: 3,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitNestedTryCatch() {
+      await null;try {
+        await zot();
+      } catch {
+        fn();
+      }
+    }`,
+          },
+        ],
+      },
+    ],
   },
   {
     code: `async function awaitNestedTryFinally() {
@@ -184,7 +259,23 @@ const clearlyInvalid = [
         fn();
       }
     }`,
-    errors: [{ line: 3 }],
+    errors: [
+      {
+        line: 3,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitNestedTryFinally() {
+      await null;try {
+        await zot();
+      } finally {
+        fn();
+      }
+    }`,
+          },
+        ],
+      },
+    ],
   },
   {
     code: `async function awaitNestedTryCatchFinally() {
@@ -196,7 +287,25 @@ const clearlyInvalid = [
         fn();
       }
     }`,
-    errors: [{ line: 5 }],
+    errors: [
+      {
+        line: 5,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitNestedTryCatchFinally() {
+      await null;try {
+        zot();
+      } catch {
+        await boo();
+      } finally {
+        fn();
+      }
+    }`,
+          },
+        ],
+      },
+    ],
   },
 ];
 
@@ -206,6 +315,24 @@ const clearlyInvalid = [
 // precise future rule may accept them without error.
 const subtlyValid = [
   {
+    code: `async function awaitFunctionArgumentBeforeCall() {
+      fn(await bar());
+    }`,
+    errors: [
+      {
+        line: 2,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitFunctionArgumentBeforeCall() {
+      await null;fn(await bar());
+    }`,
+          },
+        ],
+      },
+    ],
+  },
+  {
     code: `async function awaitBalancedIf() {
       if (baz()) {
         await qux();
@@ -214,43 +341,122 @@ const subtlyValid = [
       }
       zot();
     }`,
-    errors: [{ line: 3 }, { line: 5, messageId: 'unexpectedNestedAwait' }],
+    errors: [
+      {
+        line: 3,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitBalancedIf() {
+      await null;if (baz()) {
+        await qux();
+      } else {
+        await quux();
+      }
+      zot();
+    }`,
+          },
+        ],
+      },
+      { line: 5, messageId: 'unexpectedNestedAwait' },
+    ],
   },
   {
-    code: `async function awaitUnbalancedThen() {
+    code: `async function awaitUnbalancedThenAtTail() {
       if (baz()) {
         await qux();
       }
     }`,
-    errors: [{ line: 3 }],
+    errors: [
+      {
+        line: 3,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitUnbalancedThenAtTail() {
+      await null;if (baz()) {
+        await qux();
+      }
+    }`,
+          },
+        ],
+      },
+    ],
   },
   {
-    code: `async function awaitUnbalancedElse() {
+    code: `async function awaitUnbalancedElseAtTail() {
       if (baz()) {
         // empty
       } else {
         await zingo();
       }
     }`,
-    errors: [{ line: 5 }],
+    errors: [
+      {
+        line: 5,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitUnbalancedElseAtTail() {
+      await null;if (baz()) {
+        // empty
+      } else {
+        await zingo();
+      }
+    }`,
+          },
+        ],
+      },
+    ],
   },
   {
-    code: `async function awaitNestedFor() {
+    code: `async function awaitNestedForAtTail() {
       for (const b of baz()) {
         await qux();
       }
     }`,
-    errors: [{ line: 3 }],
+    errors: [
+      {
+        line: 3,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitNestedForAtTail() {
+      await null;for (const b of baz()) {
+        await qux();
+      }
+    }`,
+          },
+        ],
+      },
+    ],
   },
   {
-    code: `async function awaitNestedForAwaitOf() {
+    code: `async function awaitNestedForAwaitOfAtTail() {
       if (bingo()) {
         for await (const b of baz()) {
           await qux();
         }
       }
     }`,
-    errors: [{ line: 3 }, { line: 4, messageId: 'unexpectedNestedAwait' }],
+    errors: [
+      {
+        line: 3,
+        suggestions: [
+          {
+            messageId: 'insertAwaitNull',
+            output: `async function awaitNestedForAwaitOfAtTail() {
+      await null;if (bingo()) {
+        for await (const b of baz()) {
+          await qux();
+        }
+      }
+    }`,
+          },
+        ],
+      },
+      { line: 4, messageId: 'unexpectedNestedAwait' },
+    ],
   },
 ];
 

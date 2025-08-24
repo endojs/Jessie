@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle,func-names,no-use-before-define */
+/* eslint-disable func-names,no-use-before-define */
 // @ts-check
 // A lot of this code is lifted from:
 // https://github.com/erights/quasiParserGenerator/tree/master/src/bootbnf.js
