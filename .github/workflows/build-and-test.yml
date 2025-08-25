@@ -14,12 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['18.x']
+        node-version: ['node-old', 'node-new']
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: 'true'
-      - uses: actions/setup-node@v3
+      - uses: ./.github/actions/setup-node
+        id: setup-node
         with:
           node-version: ${{ matrix.node-version }}
       - name: cache node modules
@@ -37,16 +38,18 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .
-          key: ${{ runner.os }}-${{ matrix.node-version }}-built-${{ github.sha }}
+          key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-built-${{ github.sha }}
 
   lint:
     needs: build
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['18.x']
+        node-version: ['node-old']
     steps:
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-node
+        id: setup-node
         with:
           node-version: ${{ matrix.node-version }}
       # BEGIN-RESTORE-BOILERPLATE
@@ -55,7 +58,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .
-          key: ${{ runner.os }}-${{ matrix.node-version }}-built-${{ github.sha }}
+          key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-built-${{ github.sha }}
       - uses: actions/checkout@v3
         with:
           submodules: 'true'
@@ -74,9 +77,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['18.x']
+        node-version: ['node-old', 'node-new']
     steps:
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-node
+        id: setup-node
         with:
           node-version: ${{ matrix.node-version }}
       # END-TEST-BOILERPLATE
@@ -86,7 +91,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .
-          key: ${{ runner.os }}-${{ matrix.node-version }}-built-${{ github.sha }}
+          key: ${{ runner.os }}-${{ steps.setup-node.outputs.node-version }}-built-${{ github.sha }}
       - uses: actions/checkout@v3
         with:
           submodules: 'true'
