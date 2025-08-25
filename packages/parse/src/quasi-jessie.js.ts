@@ -30,12 +30,16 @@ const terminatedBlock = (manyBodies: TerminatedBody[]) => {
   return ['block', stmts];
 };
 
-const makeJessie = (peg: IPegTag<IParserTag<any>>, justinPeg: IPegTag<IParserTag<any>>) => {
-    const {FAIL, SKIP} = justinPeg;
-    const jessieTag = justinPeg`
+const makeJessie = (
+  peg: IPegTag<IParserTag<any>>,
+  justinPeg: IPegTag<IParserTag<any>>,
+) => {
+  const { FAIL, SKIP } = justinPeg;
+  const jessieTag = justinPeg`
     # Override rather than inherit start production.
     # Only module syntax is permitted.
-    start <- _WS moduleBody _EOF               ${b => (..._a: any[]) => ['module', b]};
+    start <- _WS moduleBody _EOF               ${b =>
+      (..._a: any[]) => ['module', b]};
 
     # A.1 Lexical Grammar
 
@@ -225,7 +229,7 @@ const makeJessie = (peg: IPegTag<IParserTag<any>>, justinPeg: IPegTag<IParserTag
     / "class" / "let" / "[") _WSN;
 
     # to be overridden
-    terminatedBody <- ((~terminator statementItem)* terminator)+   ${(tb) => terminatedBlock(tb)};
+    terminatedBody <- ((~terminator statementItem)* terminator)+   ${tb => terminatedBlock(tb)};
     clause <-
       caseLabel+ LEFT_BRACE terminatedBody RIGHT_BRACE ${(cs, _, b, _2) => ['clause', cs, b]};
     caseLabel <-
@@ -285,8 +289,12 @@ const makeJessie = (peg: IPegTag<IParserTag<any>>, justinPeg: IPegTag<IParserTag
     hardenedExpr <-
       dataLiteral                                     ${d => ['data', JSON.parse(d)]}
     / undefined
-    / "harden" _WS LEFT_PAREN (pureExpr / useImport) RIGHT_PAREN  ${(fname, _2, expr, _3) =>
-        ['call', ['use', fname], [expr]]}
+    / "harden" _WS LEFT_PAREN (pureExpr / useImport) RIGHT_PAREN  ${(
+      fname,
+      _2,
+      expr,
+      _3,
+    ) => ['call', ['use', fname], [expr]]}
     / useVar;
 
     # Jessie modules only allow hardened module-level bindings.
@@ -297,23 +305,28 @@ const makeJessie = (peg: IPegTag<IParserTag<any>>, justinPeg: IPegTag<IParserTag
 
     importClause <-
       STAR AS defImport                         ${(_, _2, d) => ['importBind', [['as', '*', d[1]]]]}
-    / namedImports                              ${(n) => ['importBind', n]}
-    / defImport _COMMA STAR AS defImport        ${(d, _, _2, d2) => ['importBind', [['as', 'default', d[1]],
-                                                  ['as', '*', d2[1]]]]}
+    / namedImports                              ${n => ['importBind', n]}
+    / defImport _COMMA STAR AS defImport        ${(d, _, _2, d2) => [
+      'importBind',
+      [
+        ['as', 'default', d[1]],
+        ['as', '*', d2[1]],
+      ],
+    ]}
     / defImport _COMMA namedImports             ${(d, n) => ['importBind', [['as', 'default', d[1]], ...n]]}
-    / defImport                                 ${(d) => ['importBind', [['as', 'default', d[1]]]]};
+    / defImport                                 ${d => ['importBind', [['as', 'default', d[1]]]]};
 
     safeImportClause <-
-      safeNamedImports                          ${(n) => ['importBind', n]};
+      safeNamedImports                          ${n => ['importBind', n]};
 
     importSpecifier <-
       IDENT_NAME AS defImport                   ${(i, _, d) => ['as', i, d[1]]}
-    / defImport                                 ${(d) => ['as', d[1], d[1]]};
+    / defImport                                 ${d => ['as', d[1], d[1]]};
 
     # Safe imports don't need to be prefixed.
     safeImportSpecifier <-
       IDENT_NAME AS defVar                 ${(i, _, d) => ['as', i, d[1]]}
-    / defVar                               ${(d) => ['as', d[1], d[1]]};
+    / defVar                               ${d => ['as', d[1], d[1]]};
 
     namedImports <-
       LEFT_BRACE importSpecifier ** _COMMA _COMMA? RIGHT_BRACE ${(_, s, _2) => s};
@@ -322,7 +335,7 @@ const makeJessie = (peg: IPegTag<IParserTag<any>>, justinPeg: IPegTag<IParserTag
       LEFT_BRACE safeImportSpecifier ** _COMMA _COMMA? RIGHT_BRACE ${(_, s, _2) => s};
 
     safeModule <-
-      STRING ${(s) => JSON.parse(s)};
+      STRING ${s => JSON.parse(s)};
 
     importDecl <-
       IMPORT importClause FROM STRING SEMI  ${(_, v, _2, s, _3) => ['import', v, JSON.parse(s)]}
@@ -365,12 +378,14 @@ const makeJessie = (peg: IPegTag<IParserTag<any>>, justinPeg: IPegTag<IParserTag
     STAR <- "*" _WS;
     `;
 
-    const jessieExprTag = peg.extends(jessieTag)`
+  const jessieExprTag = peg.extends(jessieTag)`
     # Jump to the expr production.
-    start <- _WS expr _EOF              ${e => (..._a: any[]) => e};
+    start <- _WS expr _EOF              ${e =>
+      (..._a: any[]) =>
+        e};
     `;
 
-    return [jessieTag, jessieExprTag];
+  return [jessieTag, jessieExprTag];
 };
 
 export default makeJessie;

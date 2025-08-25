@@ -2,8 +2,10 @@
 
 'use strict';
 
-const USE_JESSIE_BEFORE_FIRST_STATEMENT_REGEXP = /^\s*\/\/\s*@jessie-check\s*$/m;
-const USE_JESSIE_FIRST_STATEMENT_REGEXP = /^('use\s+jessie'|"use\s+jessie"|import\s+('@jessie.js\/transform-this-module'|"jessie.js\/transform-this-module"))/;
+const USE_JESSIE_BEFORE_FIRST_STATEMENT_REGEXP =
+  /^\s*\/\/\s*@jessie-check\s*$/m;
+const USE_JESSIE_FIRST_STATEMENT_REGEXP =
+  /^('use\s+jessie'|"use\s+jessie"|import\s+('@jessie.js\/transform-this-module'|"jessie.js\/transform-this-module"))/;
 
 const { jessieRules } = require('../use-jessie-rules.js');
 

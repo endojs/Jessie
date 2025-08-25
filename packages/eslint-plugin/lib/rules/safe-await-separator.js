@@ -17,8 +17,7 @@ module.exports = {
       description: `ensure the first \`await\` in an \`async\` function is non-nested so that it is clear when the synchronous portion of the function is finished`,
       category: 'Possible Errors',
       recommended: true,
-      url:
-        'https://github.com/endojs/Jessie/blob/main/packages/eslint-plugin/lib/rules/safe-await-separator',
+      url: 'https://github.com/endojs/Jessie/blob/main/packages/eslint-plugin/lib/rules/safe-await-separator',
     },
     type: 'problem',
     fixable: null,

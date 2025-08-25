@@ -48,11 +48,11 @@ interface ErrorConstructor {
 
 declare var Error: ErrorConstructor;
 interface PartialConsole {
-  readonly debug(...args: any[]): void;
-  readonly log(...args: any[]): void;
-  readonly info(...args: any[]): void;
-  readonly warn(...args: any[]): void;
-  readonly error(...args: any[]): void;
+  debug(...args: any[]): void;
+  log(...args: any[]): void;
+  info(...args: any[]): void;
+  warn(...args: any[]): void;
+  error(...args: any[]): void;
 }
 
 declare global {

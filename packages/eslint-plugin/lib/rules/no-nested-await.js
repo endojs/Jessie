@@ -17,8 +17,7 @@ module.exports = {
       description: `ensure all \`await\`s in an \`async\` function are not nested`,
       category: 'Possible Errors',
       recommended: true,
-      url:
-        'https://github.com/endojs/Jessie/blob/main/packages/eslint-plugin/lib/rules/no-nested-await.js',
+      url: 'https://github.com/endojs/Jessie/blob/main/packages/eslint-plugin/lib/rules/no-nested-await.js',
     },
     type: 'problem',
     fixable: null,

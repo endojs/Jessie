@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle,func-names,no-use-before-define */
+/* eslint-disable func-names,no-use-before-define */
 // @ts-check
 // A lot of this code is lifted from:
 // https://github.com/erights/quasiParserGenerator/tree/master/src/bootbnf.js
@@ -486,7 +486,7 @@ if (value !== FAIL) {
        * @param {PegExpr} patt
        * @param {PegExpr} sep
        */
-      '**': function(patt, sep) {
+      '**': function (patt, sep) {
         // for backtracking
         const posSrc = nextVar('pos');
         // a non-advancing success only repeats once.
@@ -521,22 +521,22 @@ value = ${sSrc};`;
        * @param {PegExpr} patt
        * @param {PegExpr} sep
        */
-      '++': function(patt, sep) {
+      '++': function (patt, sep) {
         const starSrc = vtable['**'](patt, sep);
         return indent`
 ${starSrc}
 if (value.length === 0) value = FAIL;`;
       },
       /** @param {PegExpr} patt */
-      '?': function(patt) {
+      '?': function (patt) {
         return vtable['**'](patt, ['fail']);
       },
       /** @param {PegExpr} patt */
-      '*': function(patt) {
+      '*': function (patt) {
         return vtable['**'](patt, ['empty']);
       },
       /** @param {PegExpr} patt */
-      '+': function(patt) {
+      '+': function (patt) {
         return vtable['++'](patt, ['empty']);
       },
       /** @param {string} ident */
@@ -571,7 +571,7 @@ if (beginPos !== undefined) {
         // Character class.
         let classStr = '';
         let i = 0;
-        const invert = (cs[+i] === '^');
+        const invert = cs[+i] === '^';
         if (invert) {
           i += 1;
         }
@@ -870,7 +870,12 @@ pos = ${posSrc};`;
   const bootPegTag = compiledAst(...bootPegActions);
 
   // Use the parser tag to create another parser tag that returns the AST.
-  const astExtractorTag = makePeg(bootPegTag, defs => (..._) => defs);
+  const astExtractorTag = makePeg(
+    bootPegTag,
+    defs =>
+      (..._) =>
+        defs,
+  );
   const reparsedPegAst = makePeg(astExtractorTag, undefined);
 
   // Compare our bootPegTag output to bootPegAst, to help ensure it is

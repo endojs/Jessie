@@ -1,5 +1,4 @@
 // @ts-check
-/* globals globalThis */
 /// <reference path="../src/peg.d.ts"/>
 import * as util from 'util';
 
@@ -199,7 +198,6 @@ export function makeParserUtils(rawTag, testAssert) {
     return Object.assign(wrappedTag, {
       options: opts => wrapTag(baseTag.options(opts)),
       parserCreator: baseTag.parserCreator,
-      // eslint-disable-next-line no-underscore-dangle
       _asExtending: baseTag._asExtending,
     });
   };

@@ -4,10 +4,11 @@
 /// <reference path="peg.d.ts"/>
 
 const makeJessieModule = (jessiePeg: IPegTag<IParserTag<any>>) => {
-    return jessiePeg`
+  return jessiePeg`
     # Override rather than inherit start production.
     # Only module syntax is permitted.
-    start <- _WS moduleBody _EOF               ${b => (..._a: any[]) => ['moduleX', b]};
+    start <- _WS moduleBody _EOF               ${b =>
+      (..._a: any[]) => ['moduleX', b]};
 
     # A.5 Scripts and Modules
 

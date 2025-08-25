@@ -1,4 +1,4 @@
-/* global exports */
+/* eslint-env node */
 
 'use strict';
 

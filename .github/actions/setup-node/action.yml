@@ -1,0 +1,40 @@
+name: Set up Node.js
+description: 'Set up Node.js environment'
+
+inputs:
+  node-version:
+    description: 'The version or identifier (node-old, node-new, and xs supported) of Node.js to use'
+    required: true
+
+outputs:
+  node-version:
+    description: 'The version of Node.js that was set up'
+    value: ${{ steps.set-node-version.outputs.NODE_VERSION }}
+
+runs:
+  using: composite
+  steps:
+    - id: set-node-version
+      name: Set correct node version
+      shell: bash
+      env:
+        VERSION_IDENTIFIER: ${{ inputs.node-version }}
+      run: |
+        set -o xtrace
+
+        # By default, treat the version identifier as a semantic version.
+        OUTPUT_NODE_VERSION="$VERSION_IDENTIFIER"
+        case $VERSION_IDENTIFIER in
+          node-old | xs)
+            OUTPUT_NODE_VERSION="20"
+            ;;
+          node-new)
+            OUTPUT_NODE_VERSION="22"
+            ;;
+        esac
+
+        echo "NODE_VERSION=$OUTPUT_NODE_VERSION" >> "$GITHUB_OUTPUT"
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ steps.set-node-version.outputs.NODE_VERSION }}

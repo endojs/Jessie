@@ -2,10 +2,21 @@
 
 'use strict';
 
-module.exports = {
-  plugins: ['@jessie.js'],
-  processor: '@jessie.js/use-jessie',
-  rules: {
-    '@jessie.js/safe-await-separator': 'warn',
-  },
+module.exports = plugin => {
+  const config = {
+    rules: {
+      '@jessie.js/safe-await-separator': 'warn',
+    },
+  };
+  if (plugin) {
+    config.plugins = {
+      '@jessie.js': plugin,
+    };
+  } else {
+    config.plugins = ['@jessie.js'];
+  }
+  if (plugin) {
+    return [config];
+  }
+  return config;
 };

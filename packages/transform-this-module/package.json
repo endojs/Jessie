@@ -32,9 +32,7 @@
   },
   "devDependencies": {
     "ava": "^3.12.1",
-    "eslint": "^7.23.0",
     "nyc": "^15.1.0",
-    "prettier": "^1.19.1",
     "typescript": "^4.6.4"
   },
   "files": [
@@ -44,15 +42,6 @@
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:@jessie.js/internal"
-    ]
-  },
-  "prettier": {
-    "trailingComma": "all",
-    "singleQuote": true
   },
   "ava": {
     "files": [

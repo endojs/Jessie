@@ -31,17 +31,15 @@
     "test": "ava"
   },
   "dependencies": {
-    "@endo/far": "^1.0.0"
+    "@endo/far": "^1.1.14"
   },
   "devDependencies": {
-    "@endo/init": "^1.0.0",
-    "@endo/ses-ava": "^1.0.0",
-    "ava": "^3.12.1",
-    "eslint": "^7.23.0",
+    "@endo/init": "^1.1.12",
+    "@endo/ses-ava": "^1.3.2",
+    "ava": "^6.4.1",
     "nyc": "^15.1.0",
-    "prettier": "^1.19.1",
-    "ses": "^1.0.0",
-    "typescript": "^4.6.4"
+    "ses": "^1.14.0",
+    "typescript": "^5.9.2"
   },
   "files": [
     "LICENSE*",
@@ -50,15 +48,6 @@
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:@jessie.js/internal"
-    ]
-  },
-  "prettier": {
-    "trailingComma": "all",
-    "singleQuote": true
   },
   "ava": {
     "files": [

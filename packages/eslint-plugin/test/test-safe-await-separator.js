@@ -6,7 +6,9 @@
 const { RuleTester } = require('eslint');
 
 const ruleTester = new RuleTester({
-  parserOptions: { sourceType: 'module', ecmaVersion: 2021 },
+  languageOptions: {
+    parserOptions: { sourceType: 'module', ecmaVersion: 'latest' },
+  },
 });
 const rule = require('../lib/rules/safe-await-separator.js');
 const {
@@ -27,6 +29,7 @@ ruleTester.run('safe-await-separator', rule, {
           !error.messageId || error.messageId !== 'unexpectedNestedAwait',
       )
       .map(error => ({
+        suggestions: [{ messageId: 'insertAwaitNull', output: `zazzatat;` }],
         ...error,
         messageId: 'unsafeAwaitSeparator',
       })),

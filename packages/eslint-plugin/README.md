@@ -20,21 +20,25 @@ $ npm install @jessie.js/eslint-plugin --save-dev
 
 ## Usage
 
-Add `@jessie.js` to the plugins section of your `.eslintrc` configuration file. You can omit the `eslint-plugin-` prefix:
+1. Add `@jessie.js` to the plugins section of your `.eslint.config.js` configuration file,
+2. extend your config from `'@jessie.js/recommended'`, and
+3. add the `'@jessie.js/use-jessie` processor
 
-```json
-{
-    "plugins": [
-        "@jessie.js"
-    ]
-}
-```
+As an example:
 
+```js
+// eslint.config.js
+import { defineConfig } from 'eslint/config';
+import jessie from '@jessie.js/eslint-plugin';
 
-Then configure the Jessie parser under the processor section.
-
-```json
-{
-    "processor": "@jessie.js/use-jessie"
-}
+export default defineConfig([
+  {
+    files: ['*.js', '**/*.js'],
+    plugins: {
+      '@jessie.js': jessie,
+    },
+    extends: ['@jessie.js/recommended'],
+    processor: '@jessie.js/use-jessie',
+  },
+]);
 ```
