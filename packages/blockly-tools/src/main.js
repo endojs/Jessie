@@ -21,9 +21,9 @@ import { jessieToolbox } from './toolbox/jessie-toolbox.js';
  * Initialize a Blockly workspace with blocks and generator.
  * @param {string} containerId - DOM element ID for the workspace
  * @param {Array} blocks - Block definitions
- * @param {Object} toolbox - Toolbox configuration
+ * @param {object} toolbox - Toolbox configuration
  * @param {Function} generatorFactory - Function to create code generator
- * @returns {Object} Workspace and generator
+ * @returns {object} Workspace and generator
  */
 const initializeWorkspace = (containerId, blocks, toolbox, generatorFactory) => {
   // Register blocks
@@ -57,8 +57,9 @@ const initializeWorkspace = (containerId, blocks, toolbox, generatorFactory) => 
 
 /**
  * Set up tab switching functionality.
+ * @param {object} workspaces - Map of workspace objects
  */
-const setupTabSwitching = () => {
+const setupTabSwitching = workspaces => {
   const tabs = document.querySelectorAll('.tab');
   const containers = document.querySelectorAll('.tool-container');
 
@@ -85,7 +86,7 @@ const setupTabSwitching = () => {
  * Set up code generation for a workspace.
  * @param {string} tool - Tool name (json, justin, or jessie)
  * @param {Blockly.WorkspaceSvg} workspace - The workspace
- * @param {Object} generator - The code generator
+ * @param {object} generator - The code generator
  */
 const setupCodeGeneration = (tool, workspace, generator) => {
   const outputElement = document.getElementById(`${tool}-output`);
@@ -114,7 +115,7 @@ const setupCopyButtons = () => {
 
   copyButtons.forEach(button => {
     button.addEventListener('click', () => {
-      const outputId = button.dataset.output + '-output';
+      const outputId = `${button.dataset.output  }-output`;
       const outputElement = document.getElementById(outputId);
       const code = outputElement.textContent;
 
@@ -151,7 +152,7 @@ Object.entries(workspaces).forEach(([tool, { workspace, generator }]) => {
 });
 
 // Set up UI interactions
-setupTabSwitching();
+setupTabSwitching(workspaces);
 setupCopyButtons();
 
 // Handle window resize
