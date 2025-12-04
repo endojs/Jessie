@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jessie Blockly Tools</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f5f5;
+    }
+    
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    header h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 0;
+      background: white;
+      border-bottom: 2px solid #ddd;
+    }
+    
+    .tab {
+      padding: 1rem 2rem;
+      cursor: pointer;
+      background: white;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .tab:hover {
+      background: #f8f9fa;
+    }
+    
+    .tab.active {
+      border-bottom-color: #3498db;
+      color: #3498db;
+    }
+    
+    .tool-container {
+      display: none;
+      height: calc(100vh - 140px);
+    }
+    
+    .tool-container.active {
+      display: flex;
+    }
+    
+    .workspace-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: white;
+    }
+    
+    .workspace-header {
+      padding: 0.75rem 1rem;
+      background: #ecf0f1;
+      border-bottom: 1px solid #ddd;
+      font-weight: 500;
+    }
+    
+    .blockly-workspace {
+      flex: 1;
+      position: relative;
+    }
+    
+    .output-container {
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      background: #2c3e50;
+      border-left: 1px solid #ddd;
+    }
+    
+    .output-header {
+      padding: 0.75rem 1rem;
+      background: #34495e;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .copy-button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    
+    .copy-button:hover {
+      background: #2980b9;
+    }
+    
+    .output-code {
+      flex: 1;
+      padding: 1rem;
+      overflow: auto;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.9rem;
+      color: #ecf0f1;
+      white-space: pre;
+    }
+    
+    @media (max-width: 768px) {
+      .tool-container {
+        flex-direction: column;
+      }
+      
+      .output-container {
+        width: 100%;
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Jessie Blockly Tools</h1>
+    <p>Visual programming tools for JSON, Justin, and Jessie languages</p>
+  </header>
+  
+  <div class="tabs">
+    <button class="tab active" data-tool="json">JSON</button>
+    <button class="tab" data-tool="justin">Justin</button>
+    <button class="tab" data-tool="jessie">Jessie</button>
+  </div>
+  
+  <div id="json-tool" class="tool-container active">
+    <div class="workspace-container">
+      <div class="workspace-header">JSON - Data Structures</div>
+      <div id="json-blockly" class="blockly-workspace"></div>
+    </div>
+    <div class="output-container">
+      <div class="output-header">
+        <span>Generated Code</span>
+        <button class="copy-button" data-output="json">Copy</button>
+      </div>
+      <div id="json-output" class="output-code">// Drag blocks to generate code...</div>
+    </div>
+  </div>
+  
+  <div id="justin-tool" class="tool-container">
+    <div class="workspace-container">
+      <div class="workspace-header">Justin - Pure Expressions</div>
+      <div id="justin-blockly" class="blockly-workspace"></div>
+    </div>
+    <div class="output-container">
+      <div class="output-header">
+        <span>Generated Code</span>
+        <button class="copy-button" data-output="justin">Copy</button>
+      </div>
+      <div id="justin-output" class="output-code">// Drag blocks to generate code...</div>
+    </div>
+  </div>
+  
+  <div id="jessie-tool" class="tool-container">
+    <div class="workspace-container">
+      <div class="workspace-header">Jessie - Full Language</div>
+      <div id="jessie-blockly" class="blockly-workspace"></div>
+    </div>
+    <div class="output-container">
+      <div class="output-header">
+        <span>Generated Code</span>
+        <button class="copy-button" data-output="jessie">Copy</button>
+      </div>
+      <div id="jessie-output" class="output-code">// Drag blocks to generate code...</div>
+    </div>
+  </div>
+  
+  <script type="module" src="../src/main.js"></script>
+</body>
+</html>
