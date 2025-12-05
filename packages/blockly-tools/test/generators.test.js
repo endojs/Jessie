@@ -141,4 +141,6 @@ describe('Jessie Generator', () => {
       testCase(workspace, generator, tc);
     });
   });
+
+  it.todo('makeMint - complete electronic rights example with purses and payments');
 });
