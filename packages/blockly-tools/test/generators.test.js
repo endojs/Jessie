@@ -34,14 +34,21 @@ function createBlockFromJson(workspace, blockDef) {
     });
   }
 
-  // Set input values (value inputs)
+  // Set input values (value inputs) and statement inputs
   if (blockDef.inputs) {
     Object.entries(blockDef.inputs).forEach(([name, inputDef]) => {
       if (inputDef.block) {
         const childBlock = createBlockFromJson(workspace, inputDef.block);
         const input = block.getInput(name);
-        if (input && childBlock.outputConnection) {
-          input.connection.connect(childBlock.outputConnection);
+        if (input) {
+          // Check if it's a value input or statement input
+          if (input.connection && childBlock.outputConnection) {
+            // Value input
+            input.connection.connect(childBlock.outputConnection);
+          } else if (input.connection && childBlock.previousConnection) {
+            // Statement input
+            input.connection.connect(childBlock.previousConnection);
+          }
         }
       }
     });

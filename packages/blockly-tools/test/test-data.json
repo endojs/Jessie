@@ -502,6 +502,119 @@
         }
       },
       "expected": "(a, b) => a + b"
+    },
+    {
+      "name": "Slides: dog emoji with unicode escape",
+      "block": {
+        "type": "json_string",
+        "fields": {
+          "VALUE": "emoji: \\uD83D\\uDC36"
+        }
+      },
+      "expected": "\"emoji: \\\\uD83D\\\\uDC36\""
+    },
+    {
+      "name": "Slides: dog emoji direct",
+      "block": {
+        "type": "json_string",
+        "fields": {
+          "VALUE": "🐶"
+        }
+      },
+      "expected": "\"🐶\""
+    },
+    {
+      "name": "Slides: array with mixed types",
+      "block": {
+        "type": "json_array",
+        "inputs": {
+          "ELEMENTS": {
+            "block": {
+              "type": "json_array_element",
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "json_number",
+                    "fields": {
+                      "VALUE": 1
+                    }
+                  }
+                }
+              },
+              "next": {
+                "type": "json_array_element",
+                "inputs": {
+                  "VALUE": {
+                    "block": {
+                      "type": "json_boolean",
+                      "fields": {
+                        "VALUE": "true"
+                      }
+                    }
+                  }
+                },
+                "next": {
+                  "type": "json_array_element",
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "json_string",
+                        "fields": {
+                          "VALUE": "three"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "expected": "[\n  1,\n  true,\n  \"three\"\n]"
+    },
+    {
+      "name": "Slides: object with size and color",
+      "block": {
+        "type": "json_object",
+        "inputs": {
+          "PROPERTIES": {
+            "block": {
+              "type": "json_property",
+              "fields": {
+                "KEY": "size"
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "json_number",
+                    "fields": {
+                      "VALUE": 5
+                    }
+                  }
+                }
+              },
+              "next": {
+                "type": "json_property",
+                "fields": {
+                  "KEY": "color"
+                },
+                "inputs": {
+                  "VALUE": {
+                    "block": {
+                      "type": "json_string",
+                      "fields": {
+                        "VALUE": "blue"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "expected": "{\n  \"size\": 5,\n  \"color\": \"blue\"\n}"
     }
   ]
 }
