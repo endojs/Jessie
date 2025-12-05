@@ -143,4 +143,5 @@ describe('Jessie Generator', () => {
   });
 
   it.todo('makeMint - complete electronic rights example with purses and payments');
+  it.todo('makeCounter - full implementation with return statement (block chain issue)');
 });
