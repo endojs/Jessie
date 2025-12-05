@@ -18,6 +18,48 @@ yarn dev
 
 The dev server will start at `http://localhost:5173` with hot module reloading enabled.
 
+## Testing
+
+### Running Tests
+
+```bash
+yarn test
+```
+
+### Test Coverage
+
+The test suite validates:
+- Block definitions for all three languages (JSON, Justin, Jessie)
+- Code generation accuracy
+- Edge cases (special characters, escaping, etc.)
+
+### Testing Convention
+
+**All contributions must include tests.** When adding new blocks or modifying generators:
+
+1. **Add a failing test** - Write a test that fails with the current implementation
+2. **Fix the implementation** - Make the code changes to pass the test
+3. **Verify** - Ensure all tests pass with `yarn test`
+
+The test suite (`test/test-generators.js`) follows this pattern:
+- Browse grammar productions in `quasi-json.js`, `quasi-justin.js`, `quasi-jessie.js`
+- For each production (especially those we didn't get right the first time), choose a handful of correct usages
+- Create test blocks and assert the generated code matches expected syntax
+
+### Test Example
+
+```javascript
+// Test a new block type
+const block = workspace.newBlock('my_new_block');
+block.setFieldValue('value', 'FIELD_NAME');
+
+assertEqual(
+  generator.blockToCode(block),
+  'expected code',
+  'Test description'
+);
+```
+
 ## Project Structure
 
 ```

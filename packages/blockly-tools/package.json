@@ -20,7 +20,7 @@
     "preview": "vite preview",
     "lint": "eslint 'src/**/*.js'",
     "lint-fix": "eslint --fix 'src/**/*.js'",
-    "test": "exit 0"
+    "test": "node test/test-generators.js"
   },
   "dependencies": {
     "blockly": "^11.1.1"
