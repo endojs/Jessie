@@ -36,8 +36,17 @@ export const createJessieGenerator = workspace => {
 
   generator.forBlock.jessie_assign = function (block) {
     const varName = block.getFieldValue('VAR');
+    const op = block.getFieldValue('OP') || '=';
     const value = generator.valueToCode(block, 'VALUE', generator.ORDER_NONE) || 'null';
-    return `${varName  } = ${  value  };`;
+    return `${varName  } ${  op  } ${  value  };`;
+  };
+
+  generator.forBlock.jessie_assign_expr = function (block) {
+    const varName = block.getFieldValue('VAR');
+    const op = block.getFieldValue('OP') || '=';
+    const value = generator.valueToCode(block, 'VALUE', generator.ORDER_NONE) || 'null';
+    // Assignment expressions need parentheses due to low precedence
+    return [`(${varName  } ${  op  } ${  value  })`, generator.ORDER_ATOMIC];
   };
 
   generator.forBlock.jessie_function = function (block) {

@@ -77,6 +77,7 @@ export const jessieToolbox = {
         { kind: 'block', type: 'justin_binary_op' },
         { kind: 'block', type: 'justin_unary_op' },
         { kind: 'block', type: 'justin_ternary' },
+        { kind: 'block', type: 'jessie_assign_expr' },
       ],
     },
     {

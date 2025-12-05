@@ -131,5 +131,13 @@ export const createJustinGenerator = workspace => {
     return `\${${  expr  }}`;
   };
 
+  // Override JSON property to generate unquoted keys for Justin/Jessie
+  generator.forBlock.json_property = function (block) {
+    const key = block.getFieldValue('KEY');
+    const value = generator.valueToCode(block, 'VALUE', generator.ORDER_NONE) || 'null';
+    // Justin/Jessie use unquoted keys for object literals
+    return `${key}: ${value}`;
+  };
+
   return generator;
 };

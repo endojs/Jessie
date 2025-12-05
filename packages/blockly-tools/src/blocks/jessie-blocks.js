@@ -86,7 +86,7 @@ export const jessieBlocks = [
   },
   {
     type: 'jessie_assign',
-    message0: '%1 = %2',
+    message0: '%1 %2 %3',
     args0: [
       {
         type: 'field_input',
@@ -94,15 +94,60 @@ export const jessieBlocks = [
         text: 'x',
       },
       {
+        type: 'field_dropdown',
+        name: 'OP',
+        options: [
+          ['=', '='],
+          ['+=', '+='],
+          ['-=', '-='],
+          ['*=', '*='],
+          ['/=', '/='],
+          ['%=', '%='],
+        ],
+      },
+      {
         type: 'input_value',
         name: 'VALUE',
         check: 'Value',
       },
     ],
+    inputsInline: true,
     previousStatement: 'Statement',
     nextStatement: 'Statement',
     colour: 330,
-    tooltip: 'Assign to variable',
+    tooltip: 'Assign to variable (with optional compound operator)',
+  },
+  {
+    type: 'jessie_assign_expr',
+    message0: '%1 %2 %3',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'VAR',
+        text: 'x',
+      },
+      {
+        type: 'field_dropdown',
+        name: 'OP',
+        options: [
+          ['=', '='],
+          ['+=', '+='],
+          ['-=', '-='],
+          ['*=', '*='],
+          ['/=', '/='],
+          ['%=', '%='],
+        ],
+      },
+      {
+        type: 'input_value',
+        name: 'VALUE',
+        check: 'Value',
+      },
+    ],
+    inputsInline: true,
+    output: 'Value',
+    colour: 330,
+    tooltip: 'Assignment expression (returns the assigned value)',
   },
   {
     type: 'jessie_function',
