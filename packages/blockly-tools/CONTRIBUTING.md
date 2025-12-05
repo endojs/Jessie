@@ -23,20 +23,22 @@ The dev server will start at `http://localhost:5173` with hot module reloading e
 ### Running Tests
 
 ```bash
-yarn test
+yarn test           # Run all tests once
+yarn test:watch     # Run tests in watch mode
 ```
 
 ### Test Structure
 
-Tests are data-driven and use JSON block definitions:
+Tests use **Vitest** (Vite's test framework) with data-driven test cases:
 - **Test data**: `test/test-data.json` contains test cases with block JSON and expected output
-- **Test runner**: `test/test-data-driven.js` loads test data and validates code generation
+- **Test runner**: `test/generators.test.js` uses Vitest to load data and validate code generation
 
 ### Test Coverage
 
 The test suite validates:
 - Block definitions for all three languages (JSON, Justin, Jessie)
 - Code generation accuracy
+- Examples from the Hardened JavaScript intro slides
 - Edge cases (special characters, escaping, etc.)
 
 ### Testing Convention
@@ -86,6 +88,12 @@ From `test/test-data.json`:
 ```
 
 This tests that a JSON number block with value 42 generates the code `42`.
+
+Tests run with Vitest, which provides:
+- Fast execution with Vite's transform pipeline
+- Watch mode for development
+- Clear error messages
+- Standard test framework conventions
 
 ## Project Structure
 

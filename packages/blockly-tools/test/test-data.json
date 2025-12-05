@@ -413,6 +413,95 @@
         }
       },
       "expected": "harden({})"
+    },
+    {
+      "name": "Simple object with arrow functions (origin.getX)",
+      "block": {
+        "type": "jessie_const",
+        "fields": {
+          "VAR": "origin"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "expected": "const origin = {};"
+    },
+    {
+      "name": "Arrow function returning 0",
+      "block": {
+        "type": "jessie_arrow",
+        "fields": {
+          "PARAMS": ""
+        },
+        "inputs": {
+          "EXPR": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 0
+              }
+            }
+          }
+        }
+      },
+      "expected": "() => 0"
+    },
+    {
+      "name": "Hardened object",
+      "block": {
+        "type": "jessie_harden",
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "expected": "harden({})"
+    },
+    {
+      "name": "Function with two parameters",
+      "block": {
+        "type": "jessie_arrow",
+        "fields": {
+          "PARAMS": "a, b"
+        },
+        "inputs": {
+          "EXPR": {
+            "block": {
+              "type": "justin_binary_op",
+              "fields": {
+                "OP": "+"
+              },
+              "inputs": {
+                "LEFT": {
+                  "block": {
+                    "type": "justin_variable",
+                    "fields": {
+                      "NAME": "a"
+                    }
+                  }
+                },
+                "RIGHT": {
+                  "block": {
+                    "type": "justin_variable",
+                    "fields": {
+                      "NAME": "b"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "expected": "(a, b) => a + b"
     }
   ]
 }
