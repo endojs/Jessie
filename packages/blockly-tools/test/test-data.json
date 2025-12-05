@@ -414,7 +414,7 @@
           }
         }
       },
-      "expected": "(x) => x"
+      "expected": "x => x"
     },
     {
       "name": "Jessie return statement",
@@ -704,6 +704,206 @@
         }
       },
       "expected": "typeof thing === \"string\""
+    },
+    {
+      "name": "makeCounter from slides",
+      "block": {
+        "type": "jessie_const",
+        "fields": {
+          "VAR": "makeCounter"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "jessie_arrow_block",
+              "fields": {
+                "PARAMS": "init"
+              },
+              "inputs": {
+                "BODY": {
+                  "block": {
+                    "type": "jessie_let",
+                    "fields": {
+                      "VAR": "value"
+                    },
+                    "inputs": {
+                      "VALUE": {
+                        "block": {
+                          "type": "justin_variable",
+                          "fields": {
+                            "NAME": "init"
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "block": {
+                        "type": "jessie_return",
+                        "inputs": {
+                          "VALUE": {
+                            "block": {
+                              "type": "json_object",
+                              "inputs": {
+                                "PROPERTIES": {
+                                  "block": {
+                                    "type": "json_property",
+                                    "fields": {
+                                      "KEY": "increment"
+                                    },
+                                    "inputs": {
+                                      "VALUE": {
+                                        "block": {
+                                          "type": "jessie_arrow",
+                                          "fields": {
+                                            "PARAMS": ""
+                                          },
+                                          "inputs": {
+                                            "EXPR": {
+                                              "block": {
+                                                "type": "jessie_assign_expr",
+                                                "fields": {
+                                                  "VAR": "value",
+                                                  "OP": "+="
+                                                },
+                                                "inputs": {
+                                                  "VALUE": {
+                                                    "block": {
+                                                      "type": "json_number",
+                                                      "fields": {
+                                                        "VALUE": 1
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "next": {
+                                      "block": {
+                                        "type": "json_property",
+                                        "fields": {
+                                          "KEY": "decrement"
+                                        },
+                                        "inputs": {
+                                          "VALUE": {
+                                            "block": {
+                                              "type": "jessie_arrow",
+                                              "fields": {
+                                                "PARAMS": ""
+                                              },
+                                              "inputs": {
+                                                "EXPR": {
+                                                  "block": {
+                                                    "type": "jessie_assign_expr",
+                                                    "fields": {
+                                                      "VAR": "value",
+                                                      "OP": "-="
+                                                    },
+                                                    "inputs": {
+                                                      "VALUE": {
+                                                        "block": {
+                                                          "type": "json_number",
+                                                          "fields": {
+                                                            "VALUE": 1
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "next": {
+                                          "block": {
+                                            "type": "json_property",
+                                            "fields": {
+                                              "KEY": "makeOffsetCounter"
+                                            },
+                                            "inputs": {
+                                              "VALUE": {
+                                                "block": {
+                                                  "type": "jessie_arrow",
+                                                  "fields": {
+                                                    "PARAMS": "delta"
+                                                  },
+                                                  "inputs": {
+                                                    "EXPR": {
+                                                      "block": {
+                                                        "type": "justin_call",
+                                                        "inputs": {
+                                                          "FUNCTION": {
+                                                            "block": {
+                                                              "type": "justin_variable",
+                                                              "fields": {
+                                                                "NAME": "makeCounter"
+                                                              }
+                                                            }
+                                                          },
+                                                          "ARGS": {
+                                                            "block": {
+                                                              "type": "justin_argument",
+                                                              "inputs": {
+                                                                "VALUE": {
+                                                                  "block": {
+                                                                    "type": "justin_binary_op",
+                                                                    "fields": {
+                                                                      "OP": "+"
+                                                                    },
+                                                                    "inputs": {
+                                                                      "LEFT": {
+                                                                        "block": {
+                                                                          "type": "justin_variable",
+                                                                          "fields": {
+                                                                            "NAME": "value"
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      "RIGHT": {
+                                                                        "block": {
+                                                                          "type": "justin_variable",
+                                                                          "fields": {
+                                                                            "NAME": "delta"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "expected": "const makeCounter = init => {\n  let value = init;\n  return {\n    increment: () => (value += 1),\n    decrement: () => (value -= 1),\n    makeOffsetCounter: delta => makeCounter(value + delta),\n  };\n};"
     }
   ]
 }

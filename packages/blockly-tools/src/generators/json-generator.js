@@ -12,6 +12,9 @@ import * as Blockly from 'blockly';
  */
 export const createJsonGenerator = workspace => {
   const generator = new Blockly.Generator('JSON');
+  
+  // Use 2-space indentation instead of default 4
+  generator.INDENT = '  ';
 
   generator.scrub_ = function (block, code, thisOnly) {
     const nextBlock = block.nextConnection && block.nextConnection.targetBlock();

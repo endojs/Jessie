@@ -67,14 +67,20 @@ export const createJessieGenerator = workspace => {
   generator.forBlock.jessie_arrow = function (block) {
     const params = block.getFieldValue('PARAMS');
     const expr = generator.valueToCode(block, 'EXPR', generator.ORDER_NONE) || 'null';
-    return [`(${  params  }) => ${  expr}`, generator.ORDER_ATOMIC];
+    // Only add parentheses if there are 0 params, multiple params (comma), or empty string
+    const needsParens = !params || params.includes(',');
+    const formattedParams = needsParens ? `(${params})` : params;
+    return [`${formattedParams} => ${expr}`, generator.ORDER_ATOMIC];
   };
 
   generator.forBlock.jessie_arrow_block = function (block) {
     const params = block.getFieldValue('PARAMS');
     const body = generator.statementToCode(block, 'BODY') || '';
+    // Only add parentheses if there are 0 params, multiple params (comma), or empty string
+    const needsParens = !params || params.includes(',');
+    const formattedParams = needsParens ? `(${params})` : params;
     return [
-      `(${  params  }) => {\n${  generator.prefixLines(body, generator.INDENT)  }\n}`,
+      `${formattedParams} => {\n${body}}`,
       generator.ORDER_ATOMIC,
     ];
   };
@@ -87,43 +93,27 @@ export const createJessieGenerator = workspace => {
   generator.forBlock.jessie_if = function (block) {
     const condition = generator.valueToCode(block, 'CONDITION', generator.ORDER_NONE) || 'false';
     const then = generator.statementToCode(block, 'THEN') || '';
-    return `if (${  condition  }) {\n${  generator.prefixLines(then, generator.INDENT)  }\n}`;
+    return `if (${condition}) {\n${then}}`;
   };
 
   generator.forBlock.jessie_if_else = function (block) {
     const condition = generator.valueToCode(block, 'CONDITION', generator.ORDER_NONE) || 'false';
     const then = generator.statementToCode(block, 'THEN') || '';
     const elseBranch = generator.statementToCode(block, 'ELSE') || '';
-    return (
-      `if (${ 
-      condition 
-      }) {\n${ 
-      generator.prefixLines(then, generator.INDENT) 
-      }\n} else {\n${ 
-      generator.prefixLines(elseBranch, generator.INDENT) 
-      }\n}`
-    );
+    return `if (${condition}) {\n${then}} else {\n${elseBranch}}`;
   };
 
   generator.forBlock.jessie_for = function (block) {
     const varName = block.getFieldValue('VAR');
     const iterable = generator.valueToCode(block, 'ITERABLE', generator.ORDER_NONE) || '[]';
     const body = generator.statementToCode(block, 'BODY') || '';
-    return (
-      `for (const ${ 
-      varName 
-      } of ${ 
-      iterable 
-      }) {\n${ 
-      generator.prefixLines(body, generator.INDENT) 
-      }\n}`
-    );
+    return `for (const ${varName} of ${iterable}) {\n${body}}`;
   };
 
   generator.forBlock.jessie_while = function (block) {
     const condition = generator.valueToCode(block, 'CONDITION', generator.ORDER_NONE) || 'false';
     const body = generator.statementToCode(block, 'BODY') || '';
-    return `while (${  condition  }) {\n${  generator.prefixLines(body, generator.INDENT)  }\n}`;
+    return `while (${condition}) {\n${body}}`;
   };
 
   generator.forBlock.jessie_break = function () {
@@ -143,15 +133,7 @@ export const createJessieGenerator = workspace => {
     const tryBody = generator.statementToCode(block, 'TRY') || '';
     const errorVar = block.getFieldValue('ERROR');
     const catchBody = generator.statementToCode(block, 'CATCH') || '';
-    return (
-      `try {\n${ 
-      generator.prefixLines(tryBody, generator.INDENT) 
-      }\n} catch (${ 
-      errorVar 
-      }) {\n${ 
-      generator.prefixLines(catchBody, generator.INDENT) 
-      }\n}`
-    );
+    return `try {\n${tryBody}} catch (${errorVar}) {\n${catchBody}}`;
   };
 
   generator.forBlock.jessie_harden = function (block) {
