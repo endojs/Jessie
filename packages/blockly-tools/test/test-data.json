@@ -38,6 +38,26 @@
       "expected": "42"
     },
     {
+      "name": "JSON number 123",
+      "block": {
+        "type": "json_number",
+        "fields": {
+          "VALUE": 123
+        }
+      },
+      "expected": "123"
+    },
+    {
+      "name": "JSON number 12345",
+      "block": {
+        "type": "json_number",
+        "fields": {
+          "VALUE": 12345
+        }
+      },
+      "expected": "12345"
+    },
+    {
       "name": "JSON string",
       "block": {
         "type": "json_string",
@@ -46,6 +66,16 @@
         }
       },
       "expected": "\"hello\""
+    },
+    {
+      "name": "JSON string abc",
+      "block": {
+        "type": "json_string",
+        "fields": {
+          "VALUE": "abc"
+        }
+      },
+      "expected": "\"abc\""
     },
     {
       "name": "JSON string with quotes",
@@ -118,6 +148,16 @@
       "expected": "999n"
     },
     {
+      "name": "Justin BigInt 9898",
+      "block": {
+        "type": "justin_bigint",
+        "fields": {
+          "VALUE": "9898"
+        }
+      },
+      "expected": "9898n"
+    },
+    {
       "name": "Justin template literal",
       "block": {
         "type": "justin_template_literal",
@@ -136,6 +176,100 @@
         }
       },
       "expected": "myVar"
+    },
+    {
+      "name": "Justin variable argv",
+      "block": {
+        "type": "justin_variable",
+        "fields": {
+          "NAME": "argv"
+        }
+      },
+      "expected": "argv"
+    },
+    {
+      "name": "Justin binary op 2 === 2",
+      "block": {
+        "type": "justin_binary_op",
+        "fields": {
+          "OP": "==="
+        },
+        "inputs": {
+          "LEFT": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 2
+              }
+            }
+          },
+          "RIGHT": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 2
+              }
+            }
+          }
+        }
+      },
+      "expected": "2 === 2"
+    },
+    {
+      "name": "Justin binary op 2 < argv",
+      "block": {
+        "type": "justin_binary_op",
+        "fields": {
+          "OP": "<"
+        },
+        "inputs": {
+          "LEFT": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 2
+              }
+            }
+          },
+          "RIGHT": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "argv"
+              }
+            }
+          }
+        }
+      },
+      "expected": "2 < argv"
+    },
+    {
+      "name": "Justin binary op argv < 2",
+      "block": {
+        "type": "justin_binary_op",
+        "fields": {
+          "OP": "<"
+        },
+        "inputs": {
+          "LEFT": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "argv"
+              }
+            }
+          },
+          "RIGHT": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 2
+              }
+            }
+          }
+        }
+      },
+      "expected": "argv < 2"
     }
   ],
   "jessie": [
