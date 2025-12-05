@@ -26,6 +26,12 @@ The dev server will start at `http://localhost:5173` with hot module reloading e
 yarn test
 ```
 
+### Test Structure
+
+Tests are data-driven and use JSON block definitions:
+- **Test data**: `test/test-data.json` contains test cases with block JSON and expected output
+- **Test runner**: `test/test-data-driven.js` loads test data and validates code generation
+
 ### Test Coverage
 
 The test suite validates:
@@ -37,28 +43,49 @@ The test suite validates:
 
 **All contributions must include tests.** When adding new blocks or modifying generators:
 
-1. **Add a failing test** - Write a test that fails with the current implementation
-2. **Fix the implementation** - Make the code changes to pass the test
-3. **Verify** - Ensure all tests pass with `yarn test`
+1. **Add test data** - Add a new entry to `test/test-data.json` with:
+   ```json
+   {
+     "name": "Test description",
+     "block": {
+       "type": "block_type",
+       "fields": { "FIELD_NAME": "value" },
+       "inputs": {
+         "INPUT_NAME": {
+           "block": { "type": "nested_block" }
+         }
+       }
+     },
+     "expected": "generated code"
+   }
+   ```
 
-The test suite (`test/test-generators.js`) follows this pattern:
-- Browse grammar productions in `quasi-json.js`, `quasi-justin.js`, `quasi-jessie.js`
-- For each production (especially those we didn't get right the first time), choose a handful of correct usages
-- Create test blocks and assert the generated code matches expected syntax
+2. **Verify the test fails** - Run `yarn test` to ensure the test fails before fixing
+3. **Fix the implementation** - Make code changes to pass the test
+4. **Verify all tests pass** - Run `yarn test` again
+
+The test suite uses Blockly's [JSON serialization format](https://developers.google.com/blockly/guides/configure/web/serialization) for block definitions, making tests:
+- Easy to read and maintain
+- Separate from implementation code
+- Simple to add new test cases
 
 ### Test Example
 
-```javascript
-// Test a new block type
-const block = workspace.newBlock('my_new_block');
-block.setFieldValue('value', 'FIELD_NAME');
-
-assertEqual(
-  generator.blockToCode(block),
-  'expected code',
-  'Test description'
-);
+From `test/test-data.json`:
+```json
+{
+  "name": "JSON number",
+  "block": {
+    "type": "json_number",
+    "fields": {
+      "VALUE": 42
+    }
+  },
+  "expected": "42"
+}
 ```
+
+This tests that a JSON number block with value 42 generates the code `42`.
 
 ## Project Structure
 

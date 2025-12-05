@@ -1,0 +1,284 @@
+{
+  "json": [
+    {
+      "name": "JSON null",
+      "block": {
+        "type": "json_null"
+      },
+      "expected": "null"
+    },
+    {
+      "name": "JSON boolean true",
+      "block": {
+        "type": "json_boolean",
+        "fields": {
+          "VALUE": "true"
+        }
+      },
+      "expected": "true"
+    },
+    {
+      "name": "JSON boolean false",
+      "block": {
+        "type": "json_boolean",
+        "fields": {
+          "VALUE": "false"
+        }
+      },
+      "expected": "false"
+    },
+    {
+      "name": "JSON number",
+      "block": {
+        "type": "json_number",
+        "fields": {
+          "VALUE": 42
+        }
+      },
+      "expected": "42"
+    },
+    {
+      "name": "JSON string",
+      "block": {
+        "type": "json_string",
+        "fields": {
+          "VALUE": "hello"
+        }
+      },
+      "expected": "\"hello\""
+    },
+    {
+      "name": "JSON string with quotes",
+      "block": {
+        "type": "json_string",
+        "fields": {
+          "VALUE": "hello \"world\""
+        }
+      },
+      "expected": "\"hello \\\"world\\\"\""
+    },
+    {
+      "name": "JSON empty array",
+      "block": {
+        "type": "json_array"
+      },
+      "expected": "[]"
+    },
+    {
+      "name": "JSON empty object",
+      "block": {
+        "type": "json_object"
+      },
+      "expected": "{}"
+    }
+  ],
+  "justin": [
+    {
+      "name": "Justin undefined",
+      "block": {
+        "type": "justin_undefined"
+      },
+      "expected": "undefined"
+    },
+    {
+      "name": "Justin NaN",
+      "block": {
+        "type": "justin_nan"
+      },
+      "expected": "NaN"
+    },
+    {
+      "name": "Justin Infinity",
+      "block": {
+        "type": "justin_infinity",
+        "fields": {
+          "SIGN": ""
+        }
+      },
+      "expected": "Infinity"
+    },
+    {
+      "name": "Justin -Infinity",
+      "block": {
+        "type": "justin_infinity",
+        "fields": {
+          "SIGN": "-"
+        }
+      },
+      "expected": "-Infinity"
+    },
+    {
+      "name": "Justin BigInt",
+      "block": {
+        "type": "justin_bigint",
+        "fields": {
+          "VALUE": "999"
+        }
+      },
+      "expected": "999n"
+    },
+    {
+      "name": "Justin template literal",
+      "block": {
+        "type": "justin_template_literal",
+        "fields": {
+          "TEXT": "hello world"
+        }
+      },
+      "expected": "`hello world`"
+    },
+    {
+      "name": "Justin variable",
+      "block": {
+        "type": "justin_variable",
+        "fields": {
+          "NAME": "myVar"
+        }
+      },
+      "expected": "myVar"
+    }
+  ],
+  "jessie": [
+    {
+      "name": "Jessie const declaration",
+      "block": {
+        "type": "jessie_const",
+        "fields": {
+          "VAR": "x"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 42
+              }
+            }
+          }
+        }
+      },
+      "expected": "const x = 42;"
+    },
+    {
+      "name": "Jessie let declaration",
+      "block": {
+        "type": "jessie_let",
+        "fields": {
+          "VAR": "count"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 0
+              }
+            }
+          }
+        }
+      },
+      "expected": "let count = 0;"
+    },
+    {
+      "name": "Jessie object destructuring",
+      "block": {
+        "type": "jessie_const_destructure",
+        "fields": {
+          "PROPS": "a, b"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "obj"
+              }
+            }
+          }
+        }
+      },
+      "expected": "const { a, b } = obj;"
+    },
+    {
+      "name": "Jessie array destructuring",
+      "block": {
+        "type": "jessie_const_array_destructure",
+        "fields": {
+          "ITEMS": "x, y"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "arr"
+              }
+            }
+          }
+        }
+      },
+      "expected": "const [ x, y ] = arr;"
+    },
+    {
+      "name": "Jessie arrow function expression",
+      "block": {
+        "type": "jessie_arrow",
+        "fields": {
+          "PARAMS": "x"
+        },
+        "inputs": {
+          "EXPR": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "x"
+              }
+            }
+          }
+        }
+      },
+      "expected": "(x) => x"
+    },
+    {
+      "name": "Jessie return statement",
+      "block": {
+        "type": "jessie_return",
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 10
+              }
+            }
+          }
+        }
+      },
+      "expected": "return 10;"
+    },
+    {
+      "name": "Jessie import statement",
+      "block": {
+        "type": "jessie_import",
+        "fields": {
+          "MODULE": "./module.js"
+        }
+      },
+      "expected": "import {} from './module.js';"
+    },
+    {
+      "name": "Jessie harden",
+      "block": {
+        "type": "jessie_harden",
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "expected": "harden({})"
+    }
+  ]
+}
