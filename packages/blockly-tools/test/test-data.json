@@ -615,6 +615,92 @@
         }
       },
       "expected": "{\n  \"size\": 5,\n  \"color\": \"blue\"\n}"
+    },
+    {
+      "name": "Slides: ternary operator a > b ? a : b",
+      "block": {
+        "type": "justin_ternary",
+        "inputs": {
+          "CONDITION": {
+            "block": {
+              "type": "justin_binary_op",
+              "fields": {
+                "OP": ">"
+              },
+              "inputs": {
+                "LEFT": {
+                  "block": {
+                    "type": "justin_variable",
+                    "fields": {
+                      "NAME": "a"
+                    }
+                  }
+                },
+                "RIGHT": {
+                  "block": {
+                    "type": "justin_variable",
+                    "fields": {
+                      "NAME": "b"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "TRUE": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "a"
+              }
+            }
+          },
+          "FALSE": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "b"
+              }
+            }
+          }
+        }
+      },
+      "expected": "(a > b) ? a : b"
+    },
+    {
+      "name": "Slides: typeof check typeof thing === \"string\"",
+      "block": {
+        "type": "justin_binary_op",
+        "fields": {
+          "OP": "==="
+        },
+        "inputs": {
+          "LEFT": {
+            "block": {
+              "type": "justin_typeof",
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "justin_variable",
+                    "fields": {
+                      "NAME": "thing"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "RIGHT": {
+            "block": {
+              "type": "json_string",
+              "fields": {
+                "VALUE": "string"
+              }
+            }
+          }
+        }
+      },
+      "expected": "(typeof thing) === \"string\""
     }
   ]
 }
