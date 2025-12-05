@@ -118,8 +118,11 @@ export const createJustinGenerator = workspace => {
 
   generator.forBlock.justin_template_text = function (block) {
     const text = block.getFieldValue('TEXT');
-    // Escape backticks and backslashes in template literals
-    const escaped = text.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+    // Escape backticks, backslashes, and ${  in template literals
+    const escaped = text
+      .replace(/\\/g, '\\\\')
+      .replace(/`/g, '\\`')
+      .replace(/\${/g, '\\${');
     return escaped;
   };
 

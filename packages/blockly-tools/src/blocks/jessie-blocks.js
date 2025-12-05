@@ -414,6 +414,7 @@ export const jessieBlocks = [
       },
     ],
     previousStatement: 'ImportItem',
+    nextStatement: 'ImportItem',
     colour: 160,
     tooltip: 'Import everything as namespace',
   },
