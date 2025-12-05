@@ -155,5 +155,43 @@ export const createJessieGenerator = workspace => {
     return name;
   };
 
+  generator.forBlock.jessie_const_destructure = function (block) {
+    const props = block.getFieldValue('PROPS');
+    const value = generator.valueToCode(block, 'VALUE', generator.ORDER_NONE) || 'null';
+    return `const { ${  props  } } = ${  value  };`;
+  };
+
+  generator.forBlock.jessie_const_array_destructure = function (block) {
+    const items = block.getFieldValue('ITEMS');
+    const value = generator.valueToCode(block, 'VALUE', generator.ORDER_NONE) || 'null';
+    return `const [ ${  items  } ] = ${  value  };`;
+  };
+
+  generator.forBlock.jessie_import = function (block) {
+    const imports = generator.statementToCode(block, 'IMPORTS');
+    const module = block.getFieldValue('MODULE');
+    if (imports) {
+      const importList = imports.split(',\n').join(', ');
+      return `import { ${  importList  } } from '${  module  }';`;
+    }
+    return `import {} from '${  module  }';`;
+  };
+
+  generator.forBlock.jessie_import_item = function (block) {
+    const name = block.getFieldValue('NAME');
+    return name;
+  };
+
+  generator.forBlock.jessie_import_as = function (block) {
+    const name = block.getFieldValue('NAME');
+    const alias = block.getFieldValue('ALIAS');
+    return `${name  } as ${  alias}`;
+  };
+
+  generator.forBlock.jessie_import_star = function (block) {
+    const name = block.getFieldValue('NAME');
+    return `* as ${  name}`;
+  };
+
   return generator;
 };

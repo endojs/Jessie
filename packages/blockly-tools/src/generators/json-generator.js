@@ -65,10 +65,9 @@ export const createJsonGenerator = workspace => {
   generator.forBlock.json_property = function (block) {
     const key = block.getFieldValue('KEY');
     const value = generator.valueToCode(block, 'VALUE', generator.ORDER_NONE) || 'null';
-    // Use quotes if key contains special characters
-    const needsQuotes = !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key);
-    const keyStr = needsQuotes ? `"${  key  }"` : key;
-    return `${keyStr  }: ${  value}`;
+    // JSON requires all keys to be quoted
+    const escaped = key.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    return `"${  escaped  }": ${  value}`;
   };
 
   generator.ORDER_ATOMIC = 0;

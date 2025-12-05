@@ -19,6 +19,17 @@ export const justinToolbox = {
         { kind: 'block', type: 'justin_nan' },
         { kind: 'block', type: 'justin_infinity' },
         { kind: 'block', type: 'justin_bigint' },
+        { kind: 'block', type: 'justin_template_literal' },
+      ],
+    },
+    {
+      kind: 'category',
+      name: 'Template Literals',
+      colour: '210',
+      contents: [
+        { kind: 'block', type: 'justin_template_with_holes' },
+        { kind: 'block', type: 'justin_template_text' },
+        { kind: 'block', type: 'justin_template_expr' },
       ],
     },
     {

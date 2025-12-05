@@ -51,6 +51,64 @@ export const justinBlocks = [
     tooltip: 'BigInt literal',
   },
   {
+    type: 'justin_template_literal',
+    message0: '` %1 `',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'TEXT',
+        text: 'template text',
+      },
+    ],
+    output: 'Value',
+    colour: 210,
+    tooltip: 'Template literal string',
+  },
+  {
+    type: 'justin_template_with_holes',
+    message0: 'template literal %1',
+    args0: [
+      {
+        type: 'input_statement',
+        name: 'PARTS',
+        check: 'TemplatePart',
+      },
+    ],
+    output: 'Value',
+    colour: 210,
+    tooltip: 'Template literal with interpolated expressions',
+  },
+  {
+    type: 'justin_template_text',
+    message0: 'text %1',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'TEXT',
+        text: '',
+      },
+    ],
+    previousStatement: 'TemplatePart',
+    nextStatement: 'TemplatePart',
+    colour: 210,
+    tooltip: 'Text part of template literal',
+  },
+  {
+    type: 'justin_template_expr',
+    message0: '${ %1 }',
+    args0: [
+      {
+        type: 'input_value',
+        name: 'EXPR',
+        check: 'Value',
+      },
+    ],
+    previousStatement: 'TemplatePart',
+    nextStatement: 'TemplatePart',
+    colour: 210,
+    tooltip: 'Expression interpolation in template literal',
+  },
+  {
     type: 'justin_variable',
     message0: '%1',
     args0: [

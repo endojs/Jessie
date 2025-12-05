@@ -12,6 +12,8 @@ export const jessieToolbox = {
       colour: '330',
       contents: [
         { kind: 'block', type: 'jessie_const' },
+        { kind: 'block', type: 'jessie_const_destructure' },
+        { kind: 'block', type: 'jessie_const_array_destructure' },
         { kind: 'block', type: 'jessie_let' },
         { kind: 'block', type: 'jessie_assign' },
         { kind: 'block', type: 'justin_variable' },
@@ -102,6 +104,10 @@ export const jessieToolbox = {
       name: 'Module',
       colour: '160',
       contents: [
+        { kind: 'block', type: 'jessie_import' },
+        { kind: 'block', type: 'jessie_import_item' },
+        { kind: 'block', type: 'jessie_import_as' },
+        { kind: 'block', type: 'jessie_import_star' },
         { kind: 'block', type: 'jessie_export' },
         { kind: 'block', type: 'jessie_export_item' },
       ],

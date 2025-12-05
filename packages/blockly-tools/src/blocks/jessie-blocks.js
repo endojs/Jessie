@@ -25,6 +25,46 @@ export const jessieBlocks = [
     tooltip: 'Declare a constant',
   },
   {
+    type: 'jessie_const_destructure',
+    message0: 'const { %1 } = %2',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'PROPS',
+        text: 'x, y',
+      },
+      {
+        type: 'input_value',
+        name: 'VALUE',
+        check: 'Value',
+      },
+    ],
+    previousStatement: 'Statement',
+    nextStatement: 'Statement',
+    colour: 330,
+    tooltip: 'Declare constants with object destructuring',
+  },
+  {
+    type: 'jessie_const_array_destructure',
+    message0: 'const [ %1 ] = %2',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'ITEMS',
+        text: 'x, y',
+      },
+      {
+        type: 'input_value',
+        name: 'VALUE',
+        check: 'Value',
+      },
+    ],
+    previousStatement: 'Statement',
+    nextStatement: 'Statement',
+    colour: 330,
+    tooltip: 'Declare constants with array destructuring',
+  },
+  {
     type: 'jessie_let',
     message0: 'let %1 = %2',
     args0: [
@@ -307,5 +347,74 @@ export const jessieBlocks = [
     nextStatement: 'ExportItem',
     colour: 160,
     tooltip: 'Export item',
+  },
+  {
+    type: 'jessie_import',
+    message0: 'import %1 from %2',
+    args0: [
+      {
+        type: 'input_statement',
+        name: 'IMPORTS',
+        check: 'ImportItem',
+      },
+      {
+        type: 'field_input',
+        name: 'MODULE',
+        text: './module.js',
+      },
+    ],
+    previousStatement: 'Statement',
+    nextStatement: 'Statement',
+    colour: 160,
+    tooltip: 'Import from module',
+  },
+  {
+    type: 'jessie_import_item',
+    message0: '%1',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'NAME',
+        text: 'myFunction',
+      },
+    ],
+    previousStatement: 'ImportItem',
+    nextStatement: 'ImportItem',
+    colour: 160,
+    tooltip: 'Named import',
+  },
+  {
+    type: 'jessie_import_as',
+    message0: '%1 as %2',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'NAME',
+        text: 'originalName',
+      },
+      {
+        type: 'field_input',
+        name: 'ALIAS',
+        text: 'newName',
+      },
+    ],
+    previousStatement: 'ImportItem',
+    nextStatement: 'ImportItem',
+    colour: 160,
+    tooltip: 'Import with alias',
+  },
+  {
+    type: 'jessie_import_star',
+    message0: '* as %1',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'NAME',
+        text: 'module',
+      },
+    ],
+    previousStatement: 'ImportItem',
+    colour: 160,
+    tooltip: 'Import everything as namespace',
   },
 ];

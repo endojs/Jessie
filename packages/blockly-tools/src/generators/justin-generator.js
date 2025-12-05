@@ -101,5 +101,32 @@ export const createJustinGenerator = workspace => {
     return [`${object  }[${  index  }]`, generator.ORDER_ATOMIC];
   };
 
+  generator.forBlock.justin_template_literal = function (block) {
+    const text = block.getFieldValue('TEXT');
+    // Escape backticks and backslashes
+    const escaped = text.replace(/\\/g, '\\\\').replace(/`/g, '\\`');
+    return [`\`${  escaped  }\``, generator.ORDER_ATOMIC];
+  };
+
+  generator.forBlock.justin_template_with_holes = function (block) {
+    const parts = generator.statementToCode(block, 'PARTS');
+    if (parts) {
+      return [`\`${  parts  }\``, generator.ORDER_ATOMIC];
+    }
+    return ['``', generator.ORDER_ATOMIC];
+  };
+
+  generator.forBlock.justin_template_text = function (block) {
+    const text = block.getFieldValue('TEXT');
+    // Escape backticks and backslashes in template literals
+    const escaped = text.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+    return escaped;
+  };
+
+  generator.forBlock.justin_template_expr = function (block) {
+    const expr = generator.valueToCode(block, 'EXPR', generator.ORDER_NONE) || '';
+    return `\${${  expr  }}`;
+  };
+
   return generator;
 };
