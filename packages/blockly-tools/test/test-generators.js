@@ -360,6 +360,43 @@ console.log('\n=== Jessie Generator Tests ===\n');
     'Jessie harden'
   );
   
+  // Test arrow function with block body (empty)
+  const arrowBlockFunc = workspace.newBlock('jessie_arrow_block');
+  arrowBlockFunc.setFieldValue('', 'PARAMS');
+  
+  const arrowBlockCode = generator.blockToCode(arrowBlockFunc)[0];
+  const expectedArrowBlock = arrowBlockCode.includes('\n  \n') 
+    ? '() => {\n  \n}' 
+    : '() => {\n}';
+  assertEqual(
+    arrowBlockCode,
+    expectedArrowBlock,
+    'Jessie arrow function with block body (empty)'
+  );
+  
+  // Test arrow function expression returning binary operation
+  // Example: () => (value + 1)
+  const valueVar = workspace.newBlock('justin_variable');
+  valueVar.setFieldValue('value', 'NAME');
+  
+  const one = workspace.newBlock('json_number');
+  one.setFieldValue('1', 'VALUE');
+  
+  const addOp = workspace.newBlock('justin_binary_op');
+  addOp.setFieldValue('+', 'OP');
+  addOp.getInput('LEFT').connection.connect(valueVar.outputConnection);
+  addOp.getInput('RIGHT').connection.connect(one.outputConnection);
+  
+  const exprArrow = workspace.newBlock('jessie_arrow');
+  exprArrow.setFieldValue('', 'PARAMS');
+  exprArrow.getInput('EXPR').connection.connect(addOp.outputConnection);
+  
+  assertEqual(
+    generator.blockToCode(exprArrow)[0],
+    '() => value + 1',
+    'Jessie arrow function with expression body'
+  );
+  
   workspace.dispose();
 }
 

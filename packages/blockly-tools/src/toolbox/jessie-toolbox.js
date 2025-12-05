@@ -26,6 +26,7 @@ export const jessieToolbox = {
       contents: [
         { kind: 'block', type: 'jessie_function' },
         { kind: 'block', type: 'jessie_arrow' },
+        { kind: 'block', type: 'jessie_arrow_block' },
         { kind: 'block', type: 'jessie_return' },
         { kind: 'block', type: 'justin_call' },
         { kind: 'block', type: 'justin_argument' },

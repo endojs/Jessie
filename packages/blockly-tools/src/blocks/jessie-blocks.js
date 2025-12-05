@@ -149,6 +149,25 @@ export const jessieBlocks = [
     tooltip: 'Arrow function expression',
   },
   {
+    type: 'jessie_arrow_block',
+    message0: '( %1 ) => %2',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'PARAMS',
+        text: 'x',
+      },
+      {
+        type: 'input_statement',
+        name: 'BODY',
+        check: 'Statement',
+      },
+    ],
+    output: 'Value',
+    colour: 290,
+    tooltip: 'Arrow function with block body',
+  },
+  {
     type: 'jessie_return',
     message0: 'return %1',
     args0: [

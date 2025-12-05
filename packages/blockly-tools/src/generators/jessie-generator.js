@@ -61,6 +61,15 @@ export const createJessieGenerator = workspace => {
     return [`(${  params  }) => ${  expr}`, generator.ORDER_ATOMIC];
   };
 
+  generator.forBlock.jessie_arrow_block = function (block) {
+    const params = block.getFieldValue('PARAMS');
+    const body = generator.statementToCode(block, 'BODY') || '';
+    return [
+      `(${  params  }) => {\n${  generator.prefixLines(body, generator.INDENT)  }\n}`,
+      generator.ORDER_ATOMIC,
+    ];
+  };
+
   generator.forBlock.jessie_return = function (block) {
     const value = generator.valueToCode(block, 'VALUE', generator.ORDER_NONE) || '';
     return `return ${  value  };`;
