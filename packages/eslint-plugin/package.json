@@ -21,6 +21,10 @@
     "url": "git+https://github.com/endojs/Jessie.git",
     "directory": "packages/eslint-plugin"
   },
+  "homepage": "https://github.com/endojs/Jessie/tree/main/packages/eslint-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/endojs/Jessie/issues"
+  },
   "dependencies": {
     "@endo/eslint-plugin": "^2.4.0",
     "@eslint/eslintrc": "^3.3.1",
