@@ -27,7 +27,7 @@
     "requireindex": "~1.1.0"
   },
   "peerDependencies": {
-    "eslint": "^8 || ^9"
+    "eslint": "^8 || ^9 || ^10"
   },
   "devDependencies": {
     "mocha": "^10.2.0"
