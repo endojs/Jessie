@@ -1,6 +1,10 @@
 {
   "name": "@jessie.js/eslint-plugin",
   "version": "0.4.3",
+  "homepage": "https://github.com/endojs/Jessie",
+  "bugs": {
+    "url": "https://github.com/endojs/Jessie/issues"
+  },
   "description": "Jessie-specific ESLint plugin",
   "keywords": [
     "eslint",
