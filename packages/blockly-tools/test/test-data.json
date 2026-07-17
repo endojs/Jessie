@@ -1,0 +1,919 @@
+{
+  "json": [
+    {
+      "name": "JSON null",
+      "block": {
+        "type": "json_null"
+      },
+      "expected": "null"
+    },
+    {
+      "name": "JSON boolean true",
+      "block": {
+        "type": "json_boolean",
+        "fields": {
+          "VALUE": "true"
+        }
+      },
+      "expected": "true"
+    },
+    {
+      "name": "JSON boolean false",
+      "block": {
+        "type": "json_boolean",
+        "fields": {
+          "VALUE": "false"
+        }
+      },
+      "expected": "false"
+    },
+    {
+      "name": "JSON number",
+      "block": {
+        "type": "json_number",
+        "fields": {
+          "VALUE": 42
+        }
+      },
+      "expected": "42"
+    },
+    {
+      "name": "JSON number 123",
+      "block": {
+        "type": "json_number",
+        "fields": {
+          "VALUE": 123
+        }
+      },
+      "expected": "123"
+    },
+    {
+      "name": "JSON number 12345",
+      "block": {
+        "type": "json_number",
+        "fields": {
+          "VALUE": 12345
+        }
+      },
+      "expected": "12345"
+    },
+    {
+      "name": "JSON string",
+      "block": {
+        "type": "json_string",
+        "fields": {
+          "VALUE": "hello"
+        }
+      },
+      "expected": "\"hello\""
+    },
+    {
+      "name": "JSON string abc",
+      "block": {
+        "type": "json_string",
+        "fields": {
+          "VALUE": "abc"
+        }
+      },
+      "expected": "\"abc\""
+    },
+    {
+      "name": "JSON string with quotes",
+      "block": {
+        "type": "json_string",
+        "fields": {
+          "VALUE": "hello \"world\""
+        }
+      },
+      "expected": "\"hello \\\"world\\\"\""
+    },
+    {
+      "name": "JSON empty array",
+      "block": {
+        "type": "json_array"
+      },
+      "expected": "[]"
+    },
+    {
+      "name": "JSON empty object",
+      "block": {
+        "type": "json_object"
+      },
+      "expected": "{}"
+    },
+    {
+      "name": "Slides: object with size and color",
+      "block": {
+        "type": "json_object",
+        "inputs": {
+          "PROPERTIES": {
+            "block": {
+              "type": "json_property",
+              "fields": {
+                "KEY": "size"
+              },
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "json_number",
+                    "fields": {
+                      "VALUE": 5
+                    }
+                  }
+                }
+              },
+              "next": {
+                "type": "json_property",
+                "fields": {
+                  "KEY": "color"
+                },
+                "inputs": {
+                  "VALUE": {
+                    "block": {
+                      "type": "json_string",
+                      "fields": {
+                        "VALUE": "blue"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "expected": "{\n  \"size\": 5,\n  \"color\": \"blue\"\n}"
+    }
+  ],
+  "justin": [
+    {
+      "name": "Justin undefined",
+      "block": {
+        "type": "justin_undefined"
+      },
+      "expected": "undefined"
+    },
+    {
+      "name": "Justin NaN",
+      "block": {
+        "type": "justin_nan"
+      },
+      "expected": "NaN"
+    },
+    {
+      "name": "Justin Infinity",
+      "block": {
+        "type": "justin_infinity",
+        "fields": {
+          "SIGN": ""
+        }
+      },
+      "expected": "Infinity"
+    },
+    {
+      "name": "Justin -Infinity",
+      "block": {
+        "type": "justin_infinity",
+        "fields": {
+          "SIGN": "-"
+        }
+      },
+      "expected": "-Infinity"
+    },
+    {
+      "name": "Justin BigInt",
+      "block": {
+        "type": "justin_bigint",
+        "fields": {
+          "VALUE": "999"
+        }
+      },
+      "expected": "999n"
+    },
+    {
+      "name": "Justin BigInt 9898",
+      "block": {
+        "type": "justin_bigint",
+        "fields": {
+          "VALUE": "9898"
+        }
+      },
+      "expected": "9898n"
+    },
+    {
+      "name": "Justin template literal",
+      "block": {
+        "type": "justin_template_literal",
+        "fields": {
+          "TEXT": "hello world"
+        }
+      },
+      "expected": "`hello world`"
+    },
+    {
+      "name": "Justin variable",
+      "block": {
+        "type": "justin_variable",
+        "fields": {
+          "NAME": "myVar"
+        }
+      },
+      "expected": "myVar"
+    },
+    {
+      "name": "Justin variable argv",
+      "block": {
+        "type": "justin_variable",
+        "fields": {
+          "NAME": "argv"
+        }
+      },
+      "expected": "argv"
+    },
+    {
+      "name": "Justin binary op 2 === 2",
+      "block": {
+        "type": "justin_binary_op",
+        "fields": {
+          "OP": "==="
+        },
+        "inputs": {
+          "LEFT": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 2
+              }
+            }
+          },
+          "RIGHT": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 2
+              }
+            }
+          }
+        }
+      },
+      "expected": "2 === 2"
+    },
+    {
+      "name": "Justin binary op 2 < argv",
+      "block": {
+        "type": "justin_binary_op",
+        "fields": {
+          "OP": "<"
+        },
+        "inputs": {
+          "LEFT": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 2
+              }
+            }
+          },
+          "RIGHT": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "argv"
+              }
+            }
+          }
+        }
+      },
+      "expected": "2 < argv"
+    },
+    {
+      "name": "Justin binary op argv < 2",
+      "block": {
+        "type": "justin_binary_op",
+        "fields": {
+          "OP": "<"
+        },
+        "inputs": {
+          "LEFT": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "argv"
+              }
+            }
+          },
+          "RIGHT": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 2
+              }
+            }
+          }
+        }
+      },
+      "expected": "argv < 2"
+    }
+  ],
+  "jessie": [
+    {
+      "name": "Jessie const declaration",
+      "block": {
+        "type": "jessie_const",
+        "fields": {
+          "VAR": "x"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 42
+              }
+            }
+          }
+        }
+      },
+      "expected": "const x = 42;"
+    },
+    {
+      "name": "Jessie let declaration",
+      "block": {
+        "type": "jessie_let",
+        "fields": {
+          "VAR": "count"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 0
+              }
+            }
+          }
+        }
+      },
+      "expected": "let count = 0;"
+    },
+    {
+      "name": "Jessie object destructuring",
+      "block": {
+        "type": "jessie_const_destructure",
+        "fields": {
+          "PROPS": "a, b"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "obj"
+              }
+            }
+          }
+        }
+      },
+      "expected": "const { a, b } = obj;"
+    },
+    {
+      "name": "Jessie array destructuring",
+      "block": {
+        "type": "jessie_const_array_destructure",
+        "fields": {
+          "ITEMS": "x, y"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "arr"
+              }
+            }
+          }
+        }
+      },
+      "expected": "const [ x, y ] = arr;"
+    },
+    {
+      "name": "Jessie arrow function expression",
+      "block": {
+        "type": "jessie_arrow",
+        "fields": {
+          "PARAMS": "x"
+        },
+        "inputs": {
+          "EXPR": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "x"
+              }
+            }
+          }
+        }
+      },
+      "expected": "x => x"
+    },
+    {
+      "name": "Jessie return statement",
+      "block": {
+        "type": "jessie_return",
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 10
+              }
+            }
+          }
+        }
+      },
+      "expected": "return 10;"
+    },
+    {
+      "name": "Jessie import statement",
+      "block": {
+        "type": "jessie_import",
+        "fields": {
+          "MODULE": "./module.js"
+        }
+      },
+      "expected": "import {} from './module.js';"
+    },
+    {
+      "name": "Jessie harden",
+      "block": {
+        "type": "jessie_harden",
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "expected": "harden({})"
+    },
+    {
+      "name": "Simple object with arrow functions (origin.getX)",
+      "block": {
+        "type": "jessie_const",
+        "fields": {
+          "VAR": "origin"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "expected": "const origin = {};"
+    },
+    {
+      "name": "Arrow function returning 0",
+      "block": {
+        "type": "jessie_arrow",
+        "fields": {
+          "PARAMS": ""
+        },
+        "inputs": {
+          "EXPR": {
+            "block": {
+              "type": "json_number",
+              "fields": {
+                "VALUE": 0
+              }
+            }
+          }
+        }
+      },
+      "expected": "() => 0"
+    },
+    {
+      "name": "Hardened object",
+      "block": {
+        "type": "jessie_harden",
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "expected": "harden({})"
+    },
+    {
+      "name": "Function with two parameters",
+      "block": {
+        "type": "jessie_arrow",
+        "fields": {
+          "PARAMS": "a, b"
+        },
+        "inputs": {
+          "EXPR": {
+            "block": {
+              "type": "justin_binary_op",
+              "fields": {
+                "OP": "+"
+              },
+              "inputs": {
+                "LEFT": {
+                  "block": {
+                    "type": "justin_variable",
+                    "fields": {
+                      "NAME": "a"
+                    }
+                  }
+                },
+                "RIGHT": {
+                  "block": {
+                    "type": "justin_variable",
+                    "fields": {
+                      "NAME": "b"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "expected": "(a, b) => a + b"
+    },
+    {
+      "name": "Slides: dog emoji with unicode escape",
+      "block": {
+        "type": "json_string",
+        "fields": {
+          "VALUE": "emoji: \\uD83D\\uDC36"
+        }
+      },
+      "expected": "\"emoji: \\\\uD83D\\\\uDC36\""
+    },
+    {
+      "name": "Slides: dog emoji direct",
+      "block": {
+        "type": "json_string",
+        "fields": {
+          "VALUE": "\ud83d\udc36"
+        }
+      },
+      "expected": "\"\ud83d\udc36\""
+    },
+    {
+      "name": "Slides: array with mixed types",
+      "block": {
+        "type": "json_array",
+        "inputs": {
+          "ELEMENTS": {
+            "block": {
+              "type": "json_array_element",
+              "inputs": {
+                "VALUE": {
+                  "block": {
+                    "type": "json_number",
+                    "fields": {
+                      "VALUE": 1
+                    }
+                  }
+                }
+              },
+              "next": {
+                "type": "json_array_element",
+                "inputs": {
+                  "VALUE": {
+                    "block": {
+                      "type": "json_boolean",
+                      "fields": {
+                        "VALUE": "true"
+                      }
+                    }
+                  }
+                },
+                "next": {
+                  "type": "json_array_element",
+                  "inputs": {
+                    "VALUE": {
+                      "block": {
+                        "type": "json_string",
+                        "fields": {
+                          "VALUE": "three"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "expected": "[\n  1,\n  true,\n  \"three\"\n]"
+    },
+    {
+      "name": "Slides: ternary operator a > b ? a : b",
+      "block": {
+        "type": "justin_ternary",
+        "inputs": {
+          "CONDITION": {
+            "block": {
+              "type": "justin_binary_op",
+              "fields": {
+                "OP": ">"
+              },
+              "inputs": {
+                "LEFT": {
+                  "block": {
+                    "type": "justin_variable",
+                    "fields": {
+                      "NAME": "a"
+                    }
+                  }
+                },
+                "RIGHT": {
+                  "block": {
+                    "type": "justin_variable",
+                    "fields": {
+                      "NAME": "b"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "TRUE": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "a"
+              }
+            }
+          },
+          "FALSE": {
+            "block": {
+              "type": "justin_variable",
+              "fields": {
+                "NAME": "b"
+              }
+            }
+          }
+        }
+      },
+      "expected": "a > b ? a : b"
+    },
+    {
+      "name": "Slides: typeof check typeof thing === \"string\"",
+      "block": {
+        "type": "justin_binary_op",
+        "fields": {
+          "OP": "==="
+        },
+        "inputs": {
+          "LEFT": {
+            "block": {
+              "type": "justin_unary_op",
+              "inputs": {
+                "OPERAND": {
+                  "block": {
+                    "type": "justin_variable",
+                    "fields": {
+                      "NAME": "thing"
+                    }
+                  }
+                }
+              },
+              "fields": {
+                "OP": "typeof"
+              }
+            }
+          },
+          "RIGHT": {
+            "block": {
+              "type": "json_string",
+              "fields": {
+                "VALUE": "string"
+              }
+            }
+          }
+        }
+      },
+      "expected": "typeof thing === \"string\""
+    },
+    {
+      "name": "makeCounter from slides",
+      "block": {
+        "type": "jessie_const",
+        "fields": {
+          "VAR": "makeCounter"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "jessie_arrow_block",
+              "fields": {
+                "PARAMS": "init"
+              },
+              "inputs": {
+                "BODY": {
+                  "block": {
+                    "type": "jessie_let",
+                    "fields": {
+                      "VAR": "value"
+                    },
+                    "inputs": {
+                      "VALUE": {
+                        "block": {
+                          "type": "justin_variable",
+                          "fields": {
+                            "NAME": "init"
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "block": {
+                        "type": "jessie_return",
+                        "inputs": {
+                          "VALUE": {
+                            "block": {
+                              "type": "json_object",
+                              "inputs": {
+                                "PROPERTIES": {
+                                  "block": {
+                                    "type": "json_property",
+                                    "fields": {
+                                      "KEY": "increment"
+                                    },
+                                    "inputs": {
+                                      "VALUE": {
+                                        "block": {
+                                          "type": "jessie_arrow",
+                                          "fields": {
+                                            "PARAMS": ""
+                                          },
+                                          "inputs": {
+                                            "EXPR": {
+                                              "block": {
+                                                "type": "jessie_assign_expr",
+                                                "fields": {
+                                                  "VAR": "value",
+                                                  "OP": "+="
+                                                },
+                                                "inputs": {
+                                                  "VALUE": {
+                                                    "block": {
+                                                      "type": "json_number",
+                                                      "fields": {
+                                                        "VALUE": 1
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "next": {
+                                      "block": {
+                                        "type": "json_property",
+                                        "fields": {
+                                          "KEY": "decrement"
+                                        },
+                                        "inputs": {
+                                          "VALUE": {
+                                            "block": {
+                                              "type": "jessie_arrow",
+                                              "fields": {
+                                                "PARAMS": ""
+                                              },
+                                              "inputs": {
+                                                "EXPR": {
+                                                  "block": {
+                                                    "type": "jessie_assign_expr",
+                                                    "fields": {
+                                                      "VAR": "value",
+                                                      "OP": "-="
+                                                    },
+                                                    "inputs": {
+                                                      "VALUE": {
+                                                        "block": {
+                                                          "type": "json_number",
+                                                          "fields": {
+                                                            "VALUE": 1
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "next": {
+                                          "block": {
+                                            "type": "json_property",
+                                            "fields": {
+                                              "KEY": "makeOffsetCounter"
+                                            },
+                                            "inputs": {
+                                              "VALUE": {
+                                                "block": {
+                                                  "type": "jessie_arrow",
+                                                  "fields": {
+                                                    "PARAMS": "delta"
+                                                  },
+                                                  "inputs": {
+                                                    "EXPR": {
+                                                      "block": {
+                                                        "type": "justin_call",
+                                                        "inputs": {
+                                                          "FUNCTION": {
+                                                            "block": {
+                                                              "type": "justin_variable",
+                                                              "fields": {
+                                                                "NAME": "makeCounter"
+                                                              }
+                                                            }
+                                                          },
+                                                          "ARGS": {
+                                                            "block": {
+                                                              "type": "justin_argument",
+                                                              "inputs": {
+                                                                "VALUE": {
+                                                                  "block": {
+                                                                    "type": "justin_binary_op",
+                                                                    "fields": {
+                                                                      "OP": "+"
+                                                                    },
+                                                                    "inputs": {
+                                                                      "LEFT": {
+                                                                        "block": {
+                                                                          "type": "justin_variable",
+                                                                          "fields": {
+                                                                            "NAME": "value"
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      "RIGHT": {
+                                                                        "block": {
+                                                                          "type": "justin_variable",
+                                                                          "fields": {
+                                                                            "NAME": "delta"
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "expected": "const makeCounter = init => {\n  let value = init;};"
+    }
+  ],
+  "todo": [
+    {
+      "name": "makeMint - complete electronic rights example with purses and payments",
+      "reason": "Complex example requiring extensive nested block definitions"
+    },
+    {
+      "name": "makeCounter - full implementation with return statement",
+      "reason": "Block chain issue: statement blocks after first block in BODY input are not being generated. The let statement works but the return statement in the next connection is not being walked by statementToCode."
+    }
+  ]
+}
