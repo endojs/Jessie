@@ -1,0 +1,45 @@
+{
+  "name": "@jessie.js/repl",
+  "version": "0.1.0",
+  "description": "Interactive REPL for Jessie",
+  "type": "module",
+  "author": "Agoric",
+  "license": "Apache-2.0",
+  "main": "./src/main.js",
+  "exports": {
+    ".": "./src/main.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "jessie-repl": "./bin/jessie-repl.js"
+  },
+  "scripts": {
+    "start": "node ./bin/jessie-repl.js",
+    "lint": "tsc && eslint '**/*.js'",
+    "test": "ava"
+  },
+  "dependencies": {
+    "@jessie.js/eslint-plugin": "^0.4.3",
+    "acorn": "^8.16.0",
+    "eslint": "^9.33.0",
+    "ses": "^1.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "ava": "^6.4.1",
+    "typescript": "^6.0.3"
+  },
+  "files": [
+    "LICENSE*",
+    "bin",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "ava": {
+    "files": [
+      "test/**/test-*.js"
+    ]
+  }
+}
